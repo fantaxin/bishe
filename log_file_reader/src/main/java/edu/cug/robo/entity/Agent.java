@@ -18,8 +18,11 @@ public class Agent {
     //agent's team side
     TeamSide side;
 
-    //A list of player type indices, used by this agent
-    //球员size
+    /**
+     * A list of player type indices, used by this agent
+     * 球员size
+     * 感觉应该使用  Map playerTypes;
+     */
     Map[] playerTypes;
 
     //The index of the last used player type of this agent.

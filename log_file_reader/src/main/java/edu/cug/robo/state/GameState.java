@@ -16,7 +16,7 @@ public class GameState {
 
     /**
      * The play mode string.
-     * @type {string}
+     * kick_off, play_on, foul_charge, free_kick, kick_in, goal, offside, time_over
      */
     String playMode;
 }

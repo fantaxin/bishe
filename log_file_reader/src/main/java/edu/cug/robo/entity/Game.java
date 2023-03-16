@@ -25,7 +25,10 @@ public class Game {
     // 比分改变时刻
     List<GameScore> gameScoreList;
 
-    // 比赛状态改变时刻
+    /**
+     * 比赛状态改变时刻
+     * kick_off, play_on, foul_charge, free_kick, kick_in, goal, offside, time_over
+     */
     List<GameState> gameStateList;
 
     // 比赛时刻
@@ -45,7 +48,7 @@ public class Game {
 
 
     Map[] environmentParams;
-    boolean fullyLoaded;
+    boolean fullyLoaded; //true
 
     /**
      * map{player_types: 1}
@@ -56,5 +59,8 @@ public class Game {
      * map{player_size: 0.3}
      */
     Map playerTypes;
+
+    String url;
+    String version;
 
 }

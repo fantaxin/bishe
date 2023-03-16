@@ -6,7 +6,7 @@ package edu.cug.robo.state;
  * @author wangxin
  * @version [1.0.0, 2023/03/14]
  */
-public class BallState {
+public class BallState implements ObjectState{
 
 
 }
