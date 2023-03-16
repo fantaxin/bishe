@@ -15,5 +15,16 @@ public enum GameType {
     /**
      * 3D game type.
      */
-    THREE_D
+    THREE_D;
+
+    public static GameType getGameType(String gameType) {
+        switch (gameType) {
+            case "2D":
+                return TWO_D;
+            case "3D":
+                return THREE_D;
+            default:
+                return null;
+        }
+    }
 }

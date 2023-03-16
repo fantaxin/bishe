@@ -1,12 +1,16 @@
 package edu.cug.robo.enums;
 
+import lombok.ToString;
+
 /**
  * edu.cug.robo.enums.PlayMode
  *
  * @author wangxin
  * @version [1.0.0, 2023/03/15]
  */
+@ToString
 public enum PlayMode {
+    kick_off, play_on, foul_charge, free_kick, kick_in, goal, offside, time_over,
     PM_Null,
     PM_BeforeKickOff,
     PM_TimeOver,
@@ -26,7 +30,6 @@ public enum PlayMode {
     PM_Drop_Ball,
     PM_OffSide_Left,
     PM_OffSide_Right,
-    // [I.Noda:00/05/13] added for 3D viewer/commentator/small league
     PM_PK_Left,
     PM_PK_Right,
     PM_FirstHalfOver,

@@ -1,0 +1,15 @@
+EP {
+  "goal_width": 14.02,
+  "team_actuator_noise": false
+}
+PP {
+  "player_types": 18
+}
+PT 0 {
+  "foul_detect_probability": 0.5,
+  "catchable_area_l_stretch": 1
+}
+PT 1 {
+  "id": 1,
+  "player_speed_max": 1.05
+}
