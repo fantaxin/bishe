@@ -8,35 +8,45 @@ import lombok.ToString;
  * @author wangxin
  * @version [1.0.0, 2023/03/14]
  */
-@ToString()
 public enum TeamSide {
-    /**
-     * Left team side.
-     */
-    LEFT{
-        @Override
-        public String toString() {
-            return "L";
-        }
-    },
+
+    LEFT,
+    RIGHT,
+    NEUTRAL;
+
 
     /**
-     * Right team side.
+     * 根据 String or LineType 获取 TeamSide
+     *
+     * @param teamSide String or LineType
+     * @return TeamSide
      */
-    RIGHT{
-        @Override
-        public String toString() {
-            return "R";
-        }
-    },
+    public static TeamSide getTeamSide(Object teamSide) {
 
-    /**
-     * Neutral team side.
-     */
-    NEUTRAL {
-        @Override
-        public String toString() {
-            return "N";
+        if (teamSide instanceof String) {
+            switch ((String) teamSide) {
+                case "l":
+                case "L":
+                    return LEFT;
+                case "r":
+                case "R":
+                    return RIGHT;
+                case "n":
+                case "N":
+                    return NEUTRAL;
+                default:
+                    return null;
+            }
+        } else if (teamSide instanceof LineType) {
+            switch ((LineType) teamSide) {
+                case Left:
+                    return LEFT;
+                case Right:
+                    return RIGHT;
+                default:
+                    return NEUTRAL;
+            }
         }
+        return null;
     }
 }

@@ -1,5 +1,8 @@
 package edu.cug.robo.enums;
 
+import edu.cug.robo.LogUtil;
+import java.io.IOException;
+
 /**
  * edu.cug.robo.enums.LogType
  *
@@ -9,5 +12,20 @@ package edu.cug.robo.enums;
 public enum LogType {
 
     REPLAY,
-    ROG
+    SERVER,
+    UNKNOWN;
+
+    public static LogType getType(String type) throws IOException {
+
+        switch (type) {
+            case "replay":
+            case LogUtil.LOG_REPLAY:
+                return REPLAY;
+            case "rcg":
+            case LogUtil.LOG_RCG:
+                return SERVER;
+            default:
+                return UNKNOWN;
+        }
+    }
 }

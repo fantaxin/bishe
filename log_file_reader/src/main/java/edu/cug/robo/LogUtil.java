@@ -8,24 +8,30 @@ package edu.cug.robo;
  */
 public class LogUtil {
 
-    public static int ASCII_UPPER2LOWER = 32;
+    public static final int ASCII_UPPER2LOWER = 32;
 
-    public static int ASCII_LOWER2UPPER = -32;
+    public static final int ASCII_LOWER2UPPER = -32;
 
-    public static String REPLAY_FILE_SUFFIX = ".replay";
+    public static final String REPLAY_FILE_SUFFIX = ".replay";
 
-    public static String ROG_FILE_SUFFIX = ".rog";
+    public static final String RCG_FILE_SUFFIX = ".rcg";
 
-    public static String LOG_REPLAY = "RPL";
+    public static final String LOG_RCG = "ULG";
 
-    public static String LOG_REPLAY_ENVIRONMENT_PARAM = "EP";
+    public static final String LOG_REPLAY = "RPL";
 
-    public static String LOG_REPLAY_PLAYER_PARAM = "PP";
+    public static final int REPLAY_VERSION_MAX = 1;
 
-    public static String LOG_REPLAY_PLAYER_TYPE = "PT";
+    public static final int RCG_VERSION_MAX = 1;
 
-    public static String LOG_REPLAY_TEAM = "T";
+    public static final String LOG_REPLAY_ENVIRONMENT_PARAM = "EP";
 
-    public static String LOG_REPLAY_SERVER = "S";
+    public static final String LOG_REPLAY_PLAYER_PARAM = "PP";
+
+    public static final String LOG_REPLAY_PLAYER_TYPE = "PT";
+
+    public static final String LOG_REPLAY_TEAM = "T";
+
+    public static final String LOG_REPLAY_SERVER = "S";
 
 }

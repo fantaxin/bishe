@@ -1,12 +1,19 @@
 package edu.cug.robo.state;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
- * edu.cug.robo.state.State
+ * edu.cug.robo.state.Frame
  *
  * @author wangxin
  * @version [1.0.0, 2023/03/14]
  */
-public class State {
+@Getter
+@Setter
+@ToString
+public class Frame {
     /**
      * 达到此状态的全局时间
      */
@@ -27,7 +34,6 @@ public class State {
      */
     GameState gameState;
 
-
-
+    Frame nextFrame;
 
 }

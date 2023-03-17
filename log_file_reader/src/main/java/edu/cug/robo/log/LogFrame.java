@@ -1,6 +1,9 @@
 package edu.cug.robo.log;
 
 import edu.cug.robo.enums.PlayMode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * edu.cug.robo.log.LogFrame
@@ -8,6 +11,9 @@ import edu.cug.robo.enums.PlayMode;
  * @author wangxin
  * @version [1.0.0, 2023/03/16]
  */
+@Getter
+@Setter
+@ToString
 public class LogFrame {
 
     // 当前帧的全局时间
@@ -21,11 +27,11 @@ public class LogFrame {
     int rightScore = -1;
 
     // 当前帧的球状态
-    LBallState ballState;
+    LogBallState ballState;
 
     // 当前帧的球员状态
-    LPlayerState[] l_playerStates;
-    LPlayerState[] r_playerStates;
+    LogPlayerState[] l_playerStates;
+    LogPlayerState[] r_playerStates;
 
 }
 

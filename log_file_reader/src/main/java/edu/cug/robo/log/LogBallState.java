@@ -6,7 +6,7 @@ import lombok.ToString;
 import lombok.Value;
 
 /**
- * edu.cug.robo.log.LBallState
+ * edu.cug.robo.log.LogBallState
  *
  * @author wangxin
  * @version [1.0.0, 2023/03/16]
@@ -15,8 +15,7 @@ import lombok.Value;
 @Setter
 @Getter
 @ToString
-@Value
-public class LBallState {
+public class LogBallState {
 
     double x = 0.0;
 

@@ -1,6 +1,6 @@
 package edu.cug.robo.log;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * edu.cug.robo.log.LogParams
@@ -10,14 +10,34 @@ import java.util.HashMap;
  */
 public class LogParams {
 
-    private final HashMap<String, String> params = new HashMap<>();
+    private final Map<String, Object> params;
 
-    public void addParam(String key, String value) {
+    public LogParams(Map<String, Object> params) {
+        this.params = params;
+    }
+
+    public void addParam(String key, Object value) {
         params.put(key, value);
     }
 
-    public String getParam(String key) {
+    public Object getParam(String key) {
+
+        if (!params.containsKey(key)) {
+            return null;
+        }
         return params.get(key);
     }
+
+    public <T> T getParam(String key, Class<T> clazz) {
+
+        if (!params.containsKey(key)) {
+            return null;
+        }
+        if(!clazz.isInstance(params.get(key))) {
+            return null;
+        }
+        return clazz.cast(params.get(key));
+    }
+
 }
 

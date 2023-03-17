@@ -19,9 +19,11 @@ public class LogLoaderTest {
         new Thread(futureTask).start();
 
         try {
+            //TODO: 在此处进行处理，以便能够防止futureTask.get()阻塞主线程
             GameLog gameLog = futureTask.get();
+
             System.out.println(gameLog.getLogVersion());
-            Thread.sleep(1000);
+            Thread.sleep(1000);//
             System.out.println(gameLog.getLogVersion());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();

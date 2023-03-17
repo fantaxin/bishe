@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * edu.cug.robo.log.LPlayerState
+ * edu.cug.robo.log.LogPlayerState
  *
  * @author wangxin
  * @version [1.0.0, 2023/03/16]
@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class LPlayerState {
+public class LogPlayerState {
 
     TeamSide side;
     int number = 0;

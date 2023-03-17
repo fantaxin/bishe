@@ -29,17 +29,17 @@ public class LogParser implements Runnable{
     public void run() {
         // TODO: 进行日志头的解析
         System.out.println("日志头解析完成");
-        gameLog.setLogVersion("1");
+        gameLog.setLogVersion(1);
 
         // TODO: 进行第一部分日志体的解析
         System.out.println("第一部分日志体解析完成");
-        gameLog.setLogVersion("2");
+        gameLog.setLogVersion(2);
 
         semaphore.release();
 
         // TODO: 进行剩余日志体的解析
         System.out.println("剩余日志体解析完成");
-        gameLog.setLogVersion("3");
+        gameLog.setLogVersion(3);
 
     }
 

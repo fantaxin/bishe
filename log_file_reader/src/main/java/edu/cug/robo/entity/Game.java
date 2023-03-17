@@ -2,7 +2,7 @@ package edu.cug.robo.entity;
 
 import edu.cug.robo.state.GameScore;
 import edu.cug.robo.state.GameState;
-import edu.cug.robo.state.State;
+import edu.cug.robo.state.Frame;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public class Game {
     List<GameState> gameStateList;
 
     // 比赛时刻
-    List<State> stateList;
+    List<Frame> stateList;
 
     // 比赛队伍
     Team leftTeam;
