@@ -1,23 +1,12 @@
 package edu.cug.robo.log.parse;
 
-import static edu.cug.robo.LogUtil.LOG_REPLAY_ENVIRONMENT_PARAM;
-import static edu.cug.robo.LogUtil.LOG_REPLAY_PLAYER_PARAM;
-import static edu.cug.robo.LogUtil.LOG_REPLAY_PLAYER_TYPE;
-import static edu.cug.robo.LogUtil.LOG_REPLAY_TEAM;
+import static edu.cug.robo.LogUtil.*;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import edu.cug.robo.LogUtil;
-import edu.cug.robo.enums.GameType;
-import edu.cug.robo.enums.LineType;
-import edu.cug.robo.enums.LogType;
-import edu.cug.robo.enums.PlayMode;
-import edu.cug.robo.log.GameLog;
-import edu.cug.robo.log.LogBallState;
-import edu.cug.robo.log.LogFrame;
-import edu.cug.robo.log.LogTeam;
-import edu.cug.robo.log.LogParams;
-import edu.cug.robo.state.Frame;
+import edu.cug.robo.enums.*;
+import edu.cug.robo.log.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,8 +22,8 @@ import java.util.Map;
  */
 public class LogParseUtil {
 
-    public static String parseFileHeader(GameLog gameLog, String line, BufferedReader br) throws IOException {
-        line = readValidLine(line, br, false);
+    public static String parseFileHeader(GameLog gameLog, BufferedReader br) throws IOException {
+        String line = readValidLine("", br, false);
 
         // 第3部分之后的数据，不需要进行解析，全部存入other中(包含空格)
         String[] lineSplit = line.split(" ", 4);
@@ -88,9 +77,9 @@ public class LogParseUtil {
     //private static String parseServerBody(GameLog gameLog, String line, BufferedReader br, int limit) {return null;}
 
     // line 为 null 时，代表文件已经读取完毕
-    public static String parseReplayBody(GameLog gameLog, String line, BufferedReader br, int limit) throws IOException {
+    private static String parseReplayBody(GameLog gameLog, String line, BufferedReader br, int limit) throws IOException {
 
-        while (limit > 0) {
+        while (limit > 0||line==null) {
             line = readValidLine(line, br, false);
 
             String[] lineSplit = line.split(" ");
@@ -117,7 +106,7 @@ public class LogParseUtil {
                     throw new IllegalArgumentException("log format error!");
             }
         }
-        return "";
+        return line;
     }
 
     /**
@@ -194,13 +183,13 @@ public class LogParseUtil {
     //{l|L|r|R} <unum> <x> <y> <heading-angle>[ <neck-angle> <stamina>]
     //L 1 0 0x9 -52 0 1.46 (j 0) (s 8000)
     private static String parseReplayFrame(GameLog gameLog, String line, BufferedReader br) throws IOException {
-        line = readValidLine(line, br, true);
+        //line = readValidLine(line, br, true);
 
         // 初始化 frames
         if (gameLog.getFrames() == null) {
             //TODO: 后续实现文件倒读，获取文件行数，初始化 frames
 
-            List<LogFrame> frames = new LinkedList<>();
+            gameLog.setFrames(new LinkedList<>());
         }
 
         //TODO: 实现为一个方法
@@ -218,9 +207,10 @@ public class LogParseUtil {
             //TODO: 应该在哪里处理
             throw new IllegalArgumentException("frame error!");
         }
+        line = "";
 
         //TODO: 实现为一个方法
-        line = readValidLine("", br, true);
+        line = readValidLine(line, br, true);
         lineSplit = line.split(" ");
         LogBallState ballState = new LogBallState();
         frame.setBallState(ballState);
@@ -235,18 +225,69 @@ public class LogParseUtil {
             //TODO: 应该在哪里处理
             throw new IllegalArgumentException("frame error!");
         }
+        line = "";
 
-/*        while(true) {
+        List<LogPlayerState> l_playerStates = new ArrayList<>();
+        List<LogPlayerState> r_playerStates = new ArrayList<>();
 
-            line = parseReplayPlayerState(gameLog, line, br);
-        }*/
+        frame.setL_playerStates(l_playerStates);
+        frame.setR_playerStates(r_playerStates);
+
+        while(true) {
+            line = readValidLine(line, br, true);
+            if(line==null){
+                break;
+            }
+            LogPlayerState playerState = new LogPlayerState();
+            LineType lineType = LineType.getType(line.split(" ")[0]);
+            if(lineType.equals(LineType.Left)){
+                l_playerStates.add(playerState);
+            }else if(lineType.equals(LineType.Right)) {
+                r_playerStates.add(playerState);
+            }else{
+                break;
+            }
+            line = parseReplayPlayerState(gameLog, playerState, line);
+        }
 
         return line;
     }
 
-    private static String parseReplayPlayerState(GameLog gameLog, String line, BufferedReader br) throws IOException {
-        line = readValidLine(line, br, true);
-        return line;
+    private static String parseReplayPlayerState(GameLog gameLog, LogPlayerState playerState, String line) {
+        boolean version1 = gameLog.getLogVersion()==1;
+
+        //LogPlayerState playerState = new LogPlayerState();
+        String[] lineSplit = line.split("\\(");
+        String[] paramSplit = lineSplit[0].split(" ");
+
+        int index = 0;
+        int indexOffset = 0;
+
+        playerState.setSide(TeamSide.getTeamSide(paramSplit[index++]));
+        playerState.setNumber(Integer.parseInt(paramSplit[index++]));
+
+        if(version1){
+            playerState.setPlayerTypeIdx(Integer.parseInt(paramSplit[index+indexOffset++]));
+            playerState.setFlag(Integer.parseInt(paramSplit[index+indexOffset]));
+        }else if(paramSplit[0].equals("R") || paramSplit[0].equals("L")){
+            // 现在还不知道这什么意思
+            playerState.setFlag(0x9);
+        }
+
+        playerState.setX(Double.parseDouble(paramSplit[index++]));
+        playerState.setY(Double.parseDouble(paramSplit[index++]));
+        playerState.setHeading_angle(Double.parseDouble(paramSplit[index++]));
+
+        if(version1){
+            playerState.setJoint_angle(Double.parseDouble(lineSplit[1].split("\\)")[0].split(" ")[1]));
+            playerState.setStamina(Double.parseDouble(lineSplit[1].split("\\)")[0].split(" ")[1]));
+        }else{
+            playerState.setNeck_angle(Double.parseDouble(paramSplit[index++]));
+            playerState.setStamina(Double.parseDouble(paramSplit[index].split("#")[1]));
+        }
+
+
+        return "";
     }
 
     /**
@@ -265,11 +306,10 @@ public class LogParseUtil {
 
     private static Map<String, Object> parseJsonAsMap(String jsonStr) {
         JSONObject json = JSON.parseObject(jsonStr);
-        Map<String, Object> map = json.getInnerMap();
-        return map;
+        return json.getInnerMap();
     }
 
-
+/*
     // 如果未进行处理，则返回改行
     private static String parseLog(GameLog gameLog, String line, BufferedReader br) throws IOException {
 
@@ -359,5 +399,7 @@ public class LogParseUtil {
 
         throw new IOException("不支持3D游戏日志解析");
     }
+
+*/
 
 }

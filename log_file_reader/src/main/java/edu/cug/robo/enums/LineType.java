@@ -28,6 +28,7 @@ public enum LineType {
                 return PlayerType;
             case "T":
                 return Team;
+            // 下面四个感觉用不到
             case "S":
                 return Server;
             case "B":

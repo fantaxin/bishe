@@ -25,6 +25,7 @@ public class LogPlayerState {
     double vx = 0.0;
     double vy = 0.0;
     double heading_angle = 0.0;
+    double neck_angle = 0.0;
     double joint_angle = 0.0;
-    int stamina = 0;
+    double stamina = 0;
 }
