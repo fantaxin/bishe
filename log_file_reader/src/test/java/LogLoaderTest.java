@@ -14,7 +14,7 @@ public class LogLoaderTest {
 
     @Test
     public void testLoadLog() {
-        LogLoader logLoader = new LogLoader("E:\\wangxin\\file\\bishe\\log\\test2d.replay");
+        LogLoader logLoader = new LogLoader("D:\\a11406\\project2\\bishe\\log\\2012final.replay");
         FutureTask<GameLog> futureTask = new FutureTask<>(logLoader);
         new Thread(futureTask).start();
 
