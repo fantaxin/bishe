@@ -1,7 +1,5 @@
 package edu.cug.robo.enums;
 
-import lombok.ToString;
-
 /**
  * edu.cug.robo.enums.PlayMode
  *
@@ -19,10 +17,10 @@ public enum PlayMode {
     PM_PenaltyReady_Left, PM_PenaltyReady_Right, PM_PenaltyTaken_Left, PM_PenaltyTaken_Right, PM_PenaltyMiss_Left, PM_PenaltyMiss_Right,
     PM_PenaltyScore_Left, PM_PenaltyScore_Right, PM_Illegal_Defense_Left, PM_Illegal_Defense_Right, PM_MAX,
 
-    play_on, offside, time_over,
+    play_on, offside, offside_l, offside_r, time_over,
     kick_off_r, foul_charge_r, free_kick_r, kick_in_r, goal_r, corner_kick_l, goal_kick_r,
     kick_off_l, foul_charge_l, free_kick_l, kick_in_l, goal_l, corner_kick_r, goal_kick_l,
-    PLAY_ON, OFFSIDE, TIME_OVER,
+    PLAY_ON, OFFSIDE, OFFSIDE_L, OFFSIDE_R, TIME_OVER,
     KICK_OFF_L, FOUL_CHARGE_L, FREE_KICK_L, KICK_IN_L, GOAL_L, CORNER_KICK_L, GOAL_KICK_L,
     KICK_OFF_R, FOUL_CHARGE_R, FREE_KICK_R, KICK_IN_R, GOAL_R, CORNER_KICK_R, GOAL_KICK_R;
 
@@ -31,8 +29,10 @@ public enum PlayMode {
         switch (str) {
             case "play_on":
                 return PLAY_ON;
-            case "offside":
-                return OFFSIDE;
+            case "offside_l":
+                return OFFSIDE_L;
+            case "offside_r":
+                return OFFSIDE_R;
             case "time_over":
                 return TIME_OVER;
             case "kick_off_l":
@@ -69,4 +69,4 @@ public enum PlayMode {
     }
 
 
-};
+}

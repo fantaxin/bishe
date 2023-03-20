@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * edu.cug.robo.log.LogFrame
  *
@@ -30,8 +32,8 @@ public class LogFrame {
     LogBallState ballState;
 
     // 当前帧的球员状态
-    LogPlayerState[] l_playerStates;
-    LogPlayerState[] r_playerStates;
+    List<LogPlayerState> l_playerStates;
+    List<LogPlayerState> r_playerStates;
 
 }
 

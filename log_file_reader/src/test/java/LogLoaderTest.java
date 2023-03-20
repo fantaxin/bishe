@@ -14,7 +14,7 @@ public class LogLoaderTest {
 
     @Test
     public void testLoadLog() {
-        LogLoader logLoader = new LogLoader("D:\\a11406\\project2\\bishe\\log_file_reader\\src\\test\\resources\\a.replay");
+        LogLoader logLoader = new LogLoader("E:\\wangxin\\file\\bishe\\log\\test2d.replay");
         FutureTask<GameLog> futureTask = new FutureTask<>(logLoader);
         new Thread(futureTask).start();
 
@@ -23,7 +23,7 @@ public class LogLoaderTest {
             GameLog gameLog = futureTask.get();
 
             System.out.println(gameLog.getLogVersion());
-            Thread.sleep(1000);//
+            Thread.sleep(2000);//
             System.out.println(gameLog.getLogVersion());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
