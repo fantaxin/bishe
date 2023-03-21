@@ -63,3 +63,11 @@ fxgl lwjgl
 - 图形与图形最好能够方便地组合
 - 可以插入汉字
 - 可以插入控件（或者绘制，或者在web中显示）
+
+three.js
+- https://threejs.org/docs/index.html#api/zh
+- http://www.webgl3d.cn/pages/1c3a1a/
+
+javascript
+- https://www.runoob.com/js/js-tutorial.html
+- https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference

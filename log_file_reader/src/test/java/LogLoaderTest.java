@@ -1,4 +1,7 @@
+import edu.cug.robo.enums.PlayMode;
 import edu.cug.robo.log.GameLog;
+import edu.cug.robo.log.LogFrame;
+import edu.cug.robo.log.LogPlayerState;
 import edu.cug.robo.log.parse.LogLoader;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -25,6 +28,19 @@ public class LogLoaderTest {
             System.out.println(gameLog.getLogVersion());
             Thread.sleep(2000);//
             System.out.println(gameLog.getLogVersion());
+            for (LogFrame f : gameLog.getFrames()) {
+                if(f.getGameState()== PlayMode.play_on){
+                    continue;
+                }
+                for (LogPlayerState playerState : f.getL_playerStates()) {
+                    if(playerState.getFlag() != 9 && playerState.getFlag() != 1)
+                        System.out.println(playerState.getFlag());
+                }
+                for (LogPlayerState playerState : f.getR_playerStates()) {
+                    if(playerState.getFlag() != 9 && playerState.getFlag() != 1)
+                        System.out.println(playerState.getFlag());
+                }
+            }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
