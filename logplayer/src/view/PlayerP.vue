@@ -8,15 +8,15 @@
       </div>
       <div>
         <!-- title -->
-      </div>
-
+      </div>  
+ 
     </div>
     <div>
       <!-- video list -->
 
     </div>
     <div>
-      <!-- video player -->
+      <!-- video player --> 
       <div id="viewport">
         <span id="welcome-text">Loading JaSMIn player...</span>
       </div>

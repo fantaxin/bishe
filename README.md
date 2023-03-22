@@ -71,3 +71,148 @@ three.js
 javascript
 - https://www.runoob.com/js/js-tutorial.html
 - https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference
+
+vscode: 
+- JavaScript (ES6) code snippets
+- koroFileHeader
+- Tabnine AI Autocomplete for Javascript
+- --TODO Highlight--
+- Todo Tree
+- Vue 3 Snippets
+- Vue Language Features (Volar)
+``` json
+{
+    "tabnine.experimentalAutoImports": true,
+    "git.confirmSync": false,
+    "fileheader.customMade": {
+        "FilePath": "no item name", // 设置后，默认生成文件相对于项目的路径
+        "Description": "",
+        "Author": "wangxin",
+        "Date": "Do not edit",
+        "LastEditTime": "Do not edit", // 设置后，保存文件更改默认更新最后编辑时间
+    },
+    "fileheader.configObj": {
+        "createFileTime": true,
+        "language": {
+            "js": {
+                "head": "/**",
+                "middle": "* @",
+                "end": " */",
+            },
+            "languagetest": {
+                "head": "/$$",
+                "middle": " $ @",
+                "end": " $/",
+                "functionSymbol": {
+                    "head": "/** ",
+                    "middle": " * @",
+                    "end": " */"
+                },
+                "functionParams": ""
+            }
+        },
+        "autoAdd": true,
+        "autoAddLine": 3,
+        "autoAlready": true,
+        "annotationStr": {
+            "head": "/*",
+            "middle": " * @",
+            "end": " */",
+            "use": false
+        },
+        "headInsertLine": {
+            "php": 2,
+            "sh": 2
+        },
+        "beforeAnnotation": {
+            //"js": "123"
+        },
+        "afterAnnotation": {
+            "文件后缀": "该文件后缀的头部注释之后添加某些内容",
+            "js": "export {} \n"
+        },
+        "specialOptions": {
+            "特殊字段": "自定义比如LastEditTime/LastEditors"
+        },
+        "switch": {
+            "newlineAddAnnotation": true
+        },
+        "supportAutoLanguage": [
+            "js"
+        ],
+        "prohibitAutoAdd": [
+            "json"
+        ],
+        "folderBlacklist": [
+            "node_modules",
+            "文件夹禁止自动添加头部注释"
+        ],
+        "prohibitItemAutoAdd": [
+            "项目的全称, 整个项目禁止自动添加头部注释, 可以使用快捷键添加"
+        ],
+        "moveCursor": true,
+        "dateFormat": "YYYY-MM-DD HH:mm:ss",
+        "atSymbol": [
+            " ",
+            "@"
+        ],
+        "atSymbolObj": {
+            "文件后缀": [
+                "头部注释@符号",
+                "函数注释@符号"
+            ]
+        },
+        "colon": [
+            " ",
+            ": "
+        ],
+        "colonObj": {
+            "文件后缀": [
+                "头部注释冒号",
+                "函数注释冒号"
+            ]
+        },
+        "filePathColon": "/",
+        "showErrorMessage": false,
+        "writeLog": false,
+        "wideSame": false,
+        "wideNum": 13,
+        "functionWideNum": 0,
+        "CheckFileChange": false,
+        "createHeader": false,
+        "useWorker": false,
+        "designAddHead": false,
+        "headDesignName": "random",
+        "headDesign": false,
+        "cursorModeInternalAll": {},
+        "openFunctionParamsCheck": true,
+        "functionParamsShape": [
+            "{",
+            "}"
+        ],
+        "functionBlankSpaceAll": {},
+        "functionTypeSymbol": "*",
+        "typeParamOrder": "type param",
+        "customHasHeadEnd": {},
+        "throttleTime": 60000,
+        "functionParamAddStr": "",
+        "NoMatchParams": "no show param"
+    },
+    "editor.formatOnSave": true,
+    "todohighlight.isEnable": false,
+    "todohighlight.keywords": [
+        {
+            "text": "TODO:",
+            "color": "#eeee00",
+            "backgroundColor": "#000000",
+        }
+    ],
+    "todo-tree.highlights.customHighlight": {
+        "TODO": {
+            "foreground": "#A8C023",
+            "opacity": 0,
+            "type": "line"
+        },
+    },
+}
+```
