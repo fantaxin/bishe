@@ -7,15 +7,17 @@
  */
 export { Agent }
 
-import { ObjState } from "@/js/state/ObjState";
+import { ObjState } from "@/js/game/state/ObjState";
+import { MovableObject } from "./MovableObj";
 
 class Agent extends MovableObject {
-    constructor(num, side) {
+    constructor(name, num, side, stamina) {
+        super(name);
         this.num = num;
         this.side = side;
-        this.stamina;
-        let objState = new ObjState();
-        objState.x
+        this.stamina = stamina;
     }
+
+
 
 }
