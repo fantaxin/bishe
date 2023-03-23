@@ -7,8 +7,8 @@
  */
 export { Ball }
 
-import { MovableObject } from './MovableObject.js';
-import { ConstUtil } from '../../util/ConstUtil.js';
+import { MovableObject } from './MovableObj.js';
+import { Entity } from '../../util/Constants.js';
 
 class Ball extends MovableObject {
     /**
@@ -18,7 +18,7 @@ class Ball extends MovableObject {
      */
     constructor(radius) {
         super('ball');
-        this.radius = radius !== undefined ? radius : ConstUtil.DEFAULT_BALL_RADIUS;
+        this.radius = radius !== undefined ? radius : Entity.DEFAULT_BALL_RADIUS;
 
         //默认的球的半径是1，现在半径为r，相当于缩放为原来的r倍
         this.group.scale.setScalar(this.radius);

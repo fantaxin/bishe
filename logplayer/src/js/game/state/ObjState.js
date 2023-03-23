@@ -3,9 +3,11 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-22 16:16:29
-* @LastEditTime 2023-03-22 16:59:21
+* @LastEditTime 2023-03-23 15:44:42
  */
 export { ObjState };
+
+import { Vector3, Quaternion } from "three";
 
 class ObjState {
     /**
@@ -29,7 +31,7 @@ class ObjState {
     }
 
     get position() {
-        return new THREE.Vector3(this.x, this.y, this.z);
+        return new Vector3(this.x, this.y, this.z);
     }
 
     set position(pos) {
@@ -39,7 +41,7 @@ class ObjState {
     }
 
     get quaternion() {
-        return new THREE.Quaternion(this.qx, this.qy, this.qz, this.qw);
+        return new Quaternion(this.qx, this.qy, this.qz, this.qw);
     }
 
     set quaternion(quat) {

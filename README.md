@@ -67,6 +67,7 @@ fxgl lwjgl
 three.js
 - https://threejs.org/docs/index.html#api/zh
 - http://www.webgl3d.cn/pages/1c3a1a/
+- https://discoverthreejs.com/zh/#main
 
 javascript
 - https://www.runoob.com/js/js-tutorial.html

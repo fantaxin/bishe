@@ -1,0 +1,24 @@
+{
+    "root": true,
+    "env": {
+        "node": true
+    },
+    "extends": [
+        "plugin:vue/vue3-essential",
+        "eslint:recommended"
+    ],
+    "parserOptions": {
+        "parser": "@babel/eslint-parser"
+    },
+    "rules": {
+        "no-empty": "warn",
+        "class-methods-use-this": "warn",
+        "curly": "warn",
+        "no-extra-bind": "warn",
+        "no-unused-vars": "warn",
+        "semi-style": [
+            "error",
+            "last"
+        ]
+    }
+}

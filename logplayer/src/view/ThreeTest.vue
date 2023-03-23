@@ -1,5 +1,6 @@
 <template>
-  <div class="wrap">
+  <div>
+    123
   </div>
 </template>
 <script>
@@ -106,7 +107,7 @@ export default {
       requestAnimationFrame(this.animate);
       //const loader = new THREE.ObjectLoader();
       //let scene = loader.parse(this.scene.toJSON())
-      //let cube = loader.parse(this.cube.toJSON())
+      //let cube2 = loader.parse(this.cube.toJSON())
 
       //this.cube.rotation.x += 0.01;
       //this.cube.rotation.y += 0.01;

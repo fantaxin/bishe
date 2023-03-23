@@ -1,9 +1,9 @@
 /**
-* @FilePath /src/js/state/AgentState.js
+* @FilePath /src/js/game/state/AgentState.js
 * @Description 
 * @Author wangxin
 * @Date 2023-03-22 15:50:06
-* @LastEditTime 2023-03-22 17:02:06
+* @LastEditTime 2023-03-23 17:32:07
  */
 export { AgentState }
 
@@ -24,14 +24,8 @@ class AgentState extends ObjState {
     * @param {number} stamina 耐力值
      */
     constructor(flag = 0, x = 0, y = 0, z = 0, qx = 0, qy = 0, qz = 0, qw = 0, angles, stamina = 0) {
+        super(x, y, z, qx, qy, qz, qw);
         this.flag = flag;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.qx = qx;
-        this.qy = qy;
-        this.qz = qz;
-        this.qw = qw;
         this.angles = angles;
         this.stamina = stamina;
     }
