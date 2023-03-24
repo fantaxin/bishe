@@ -10,6 +10,9 @@ import { toRaw } from 'vue';
 //const scenel = reactive({ count: 0 })
 import { Player } from "../js/player.js";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { TeamDescription } from "@/js/game/description/TeamDescription.js";
+import { EntityName, TeamSide } from "@/js/util/Constants.js";
+
 let controls;
 export default {
   name: "ThreeTest",
@@ -33,8 +36,27 @@ export default {
   },
   mounted() {
     this.load();
+    this.test();
   },
   methods: {
+    test() {
+      let map1 = new Map();
+      map1.set(1.1, "string1");
+      map1.set(2.1, "string2");
+      map1.set(3.1, "string3");
+      map1.forEach(element => {
+        console.log(element);
+      });
+
+      let world = EntityName.World;
+      console.log(world);
+
+      let agent = EntityName.Agent(TeamSide.LEFT, "10");
+      console.log(agent);
+
+      let teamDescription = new TeamDescription("team1", "team2", "team3");
+      console.log(teamDescription.color);
+    },
     init() {
       this.scene = new THREE.Scene();
       //scenel =this.scene;

@@ -9,7 +9,7 @@ export { World }
 
 import { Group } from "three"
 import { GameDescription } from "../game/description/GameDescription";
-import { TeamDescription } from "../game/description/TeamDescription";
+import { TeamDescription } from "../game/description/TeamDescription.js";
 import { EntityName } from "../util/Constants.js";
 import { Ball } from "./entity/Ball";
 import { Field } from "./entity/Field";
@@ -28,25 +28,27 @@ class World {
         this.gameDescription = gameDescription;
         this.teamDescription = teamDescription;
 
+        this.field = new Field(gameDescription);
+        this.ball = new Ball();
+        this.leftTeam = new Team(teamDescription);
+        this.rightTeam = new Team(teamDescription);
+
         //TODO: 创建world
         this.addField();
         this.addBall();
-        this.addTeam();
-        this.addTeam(EntityName.Agent());
+        this.addTeam(this.leftTeam);
+        this.addTeam(this.rightTeam);
     }
 
-    addField() {
-        const field = new Field();
+    addField(field) {
         this.group.add(field);
     }
 
-    addBall() {
-        const ball = new Ball();
+    addBall(ball) {
         this.group.add(ball);
     }
 
-    addTeam() {
-        const team = new Team();
+    addTeam(team) {
         this.group.add(team);
     }
 
