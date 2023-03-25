@@ -42,6 +42,11 @@ future：
 - 客户端的panel，web端不用考虑
 - 多线程
 
+- 后端存储日志文件，前端接收json数据并进行解析，在网络传输时首先传输文件描述信息，
+frame信息需要从当前播放时间开始进行传输，这需要后端在第一次接收该文件的传输请求时，
+将该文件转换为json文件，并设置索引（json文件中第几行是第几个frame）
+- 前端可以播放本地日志文件，也可以下载后端的日志文件，或者直接在网页上面进行播放
+
 - processing/java -> P5.js
 	http://jonathan.dahlberg.media/processing2js/
 	
@@ -81,6 +86,8 @@ vscode:
 - Todo Tree
 - Vue 3 Snippets
 - Vue Language Features (Volar)
+- quokka
+
 ``` json
 {
     "tabnine.experimentalAutoImports": true,

@@ -8,7 +8,7 @@ export const TeamSide = {
 /**
  * @enum {string}
  */
-const EntityName = {
+export const EntityName = {
     World: 'world',
     Field: 'field',
     Ball: 'ball',
@@ -18,7 +18,6 @@ const EntityName = {
         return "agent_" + teamSide + "_" + agentNum;
     }
 }
-export { EntityName }
 
 /**
  * @enum {number}

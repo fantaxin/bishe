@@ -1,14 +1,14 @@
 /**
-* @FilePath /src/js/state/Game.js
+* @FilePath /src/js/game/Game.js
 * @Description 
 * @Author wangxin
 * @Date 2023-03-23 13:46:32
-* @LastEditTime 2023-03-23 14:24:43
+* @LastEditTime 2023-03-24 13:38:40
  */
 export { Game }
 
 import { Frame } from "./state/Frame";
-import { TeamDescription } from "./description/TeamDescription";
+import { TeamDescription } from "./description/TeamDescription.js";
 import { LogDescription } from "./description/logDescription";
 import { GameDescription } from "./description/GameDescription";
 import { ScoreState } from "./state/ScoreState";
