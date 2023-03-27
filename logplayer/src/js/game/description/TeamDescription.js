@@ -3,11 +3,11 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-23 14:16:52
-* @LastEditTime 2023-03-24 09:49:23
+* @LastEditTime 2023-03-27 15:19:51
  */
 
 import { AgentDescription } from "./AgentDescription";
-import { TeamSide } from "@/js/util/Constants.mjs";
+import { TeamSide } from "@/js/util/Constants.js";
 
 export { TeamDescription }
 class TeamDescription {
