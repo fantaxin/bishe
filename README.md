@@ -47,9 +47,12 @@ frame信息需要从当前播放时间开始进行传输，这需要后端在第
 将该文件转换为json文件，并设置索引（json文件中第几行是第几个frame）
 - 前端可以播放本地日志文件，也可以下载后端的日志文件，或者直接在网页上面进行播放
 
+- 切换场景，白天/黑夜
+
 - processing/java -> P5.js
 	http://jonathan.dahlberg.media/processing2js/
 	
+
 https://github.com/xdlumia/vue3-video-play
 https://github.com/darkylmnx/vue-youtube-iframe-api
 https://github.com/py-kkh/bilibili-ui
@@ -58,7 +61,7 @@ https://github.com/algoz098/vue-player
 https://github.com/core-player/vue-core-video-player
 https://github.com/vmllab-js/vue-frame-player
 
-	
+
 **p5.js** **creat.js** three.js **two.js** fabric.js 
 javafx jfoenix jxbrowser 
 fxgl lwjgl 

@@ -12,6 +12,7 @@ import { Player } from "../js/player.js";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TeamDescription } from "@/js/game/description/TeamDescription.js";
 import { EntityName, TeamSide } from "@/js/util/Constants.js";
+import { ObjectFactory } from "@/js/model/loader/ObjectFactory";
 
 let controls;
 export default {
@@ -59,8 +60,13 @@ export default {
     },
     init() {
       this.scene = new THREE.Scene();
+
       //scenel =this.scene;
-      this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10);
+      this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
+
+      this.camera.position.set(20, 15, 15);
+      this.camera.lookAt(new THREE.Vector3());
+      this.camera.updateMatrix();
       //this.camera = new THREE.OrthographicCamera( -window.innerWidth/50, window.innerWidth/50, window.innerHeight/50, -window.innerHeight/50, 0.1, 100 )
       this.renderer = new THREE.WebGLRenderer();
       this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -110,15 +116,20 @@ export default {
       this.scene.add(lineb);
       this.scene.add(linec);
 
+      this.scene.add(ObjectFactory.createSkyBox());
+      this.scene.add(ObjectFactory.createAmbientLight("light", new THREE.Color("#FFFFFF")));
+      this.scene.add(ObjectFactory.createDirectonalLight("sun", new THREE.Color("#FFFFFF")));
+
       controls = new OrbitControls(this.camera, this.renderer.domElement);
       this.camera.position.z = 5;
       this.camera.position.x = 5;
       this.camera.position.y = 5;
       controls.enableRotate = true; //启用旋转
       controls.enablePan = true; //启用平移
-      controls.enableZoom = true;//启用缩放//是否自动旋转 
-      controls.autoRotate = true;
+      controls.enableZoom = true;//启用缩放
+      controls.autoRotate = false;//是否自动旋转 
       controls.update();
+
 
     },
     load() {
@@ -127,20 +138,7 @@ export default {
     },
     animate() {
       requestAnimationFrame(this.animate);
-      //const loader = new THREE.ObjectLoader();
-      //let scene = loader.parse(this.scene.toJSON())
-      //let cube2 = loader.parse(this.cube.toJSON())
-
-      //this.cube.rotation.x += 0.01;
-      //this.cube.rotation.y += 0.01;
       let scene = toRaw(this.scene);
-      let cube = toRaw(this.cube);
-      /*      cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;*/
-      //cube.rotation.z -= 0.001;
-      //const loader = new THREE.ObjectLoader();
-      // object 指 场景中的某个模型对象
-      //loader.parse(this.scene.toJSON())
       controls.update();
       this.renderer.render(scene, this.camera);
     }
