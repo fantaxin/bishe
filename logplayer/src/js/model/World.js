@@ -4,7 +4,7 @@
 *              可以递归创建Entity，但不涉及对Object3D的更新和创建
 * @Author wangxin
 * @Date 2023-03-22 13:32:13
-* @LastEditTime 2023-03-27 16:14:14
+* @LastEditTime 2023-03-28 11:10:13
  */
 export { World }
 
@@ -73,7 +73,9 @@ class World {
 
     createField() {
         this.field = new Field(this.gameDescription);
-        this.group.add(this.field);
+        this.group.add(this.field.obj);
+
+
     }
 
     createBall() {
@@ -86,6 +88,13 @@ class World {
         this.rightTeam = new Team(this.rightTeamDescription);
         this.group.add(this.leftTeam);
         this.group.add(this.rightTeam);
+
+        this.leftTeam.agents.forEach(agent => {
+            agent.agentType(this.gameDescription.playerTypes);
+        });
+        this.rightTeam.agents.forEach(agent => {
+            agent.agentType(this.gameDescription.playerTypes);
+        });
     }
 
     //TODO: 对world进行状态更新

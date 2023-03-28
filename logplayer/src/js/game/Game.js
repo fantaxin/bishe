@@ -15,16 +15,13 @@ import { ScoreState } from "./state/ScoreState";
 import { PlayMode } from "../util/Constants.js";
 
 class Game {
-    constructor(logDescription, gameDescription, teamDescription, leftTeam, rightTeam, frames, scoreMoment, stateMoment) {
+    constructor(logDescription, gameDescription, leftTeam, rightTeam, frames, scoreMoment, stateMoment) {
 
         /**@type {LogDescription} */
         this.logDescription = logDescription;
 
         /**@type {GameDescription} */
         this.gameDescription = gameDescription;
-
-        /**@type {TeamDescription} */
-        this.teamDescription = teamDescription;
 
         /**@type {TeamDescription} */
         this.leftTeam = leftTeam;

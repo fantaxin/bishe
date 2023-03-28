@@ -3,14 +3,14 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-22 09:50:35
-* @LastEditTime 2023-03-24 17:30:42
+* @LastEditTime 2023-03-28 11:09:41
  */
 export { Team }
 
 import { TeamDescription } from "@/js/game/description/TeamDescription.js"
 import { AgentDiscription } from "@/js/game/description/AgentDescription.js"
 import { TeamSide } from "@/js/util/Constants.js";
-import { Object3D } from "three";
+import { Group } from "three";
 import { Agent } from "./Agent";
 
 class Team {
@@ -20,8 +20,10 @@ class Team {
      */
     constructor(description) {
         this.description = description;
-        this.group = new Object3D();
-        this.group.name = this.getName();
+        this.group = new Group();
+        this.group.name = this.name();
+
+        /**@type {Array<Agent>} */
         this.agents;
         this.createAgents(description.agentDiscriptions);
 
@@ -29,25 +31,24 @@ class Team {
 
     /**
     * @description: 
-    * @param {Array<AgentDiscription>} agentDiscription
+    * @param {Array<AgentDiscription>} agentDiscriptions
      */
-    createAgents(agentDiscriptions){
+    createAgents(agentDiscriptions) {
         let length = agentDiscriptions.length;
         this.agents = new Array(length);
-        let agent; 
-        for (let i = 0; i < length; i++) {
-            agent = new Agent(agentDiscriptions[i]);
-            this.agents[i] = agent;
-        }
+        let i = 0;
+        agentDiscriptions.forEach(ad => {
+            this.agents[i++] = new Agent(ad);
+        })
     }
 
-    get getName(){
+    get name() {
         return this.description.name;
     }
-    get getSide(){
+    get side() {
         return this.description.side;
     }
-    get getGroupName(){
+    get groupName() {
         return this.group.name;
     }
 

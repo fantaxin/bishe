@@ -1,9 +1,9 @@
 /**
-* @FilePath /src/js/model/entity/MovableObject.js
+* @FilePath /src/js/model/entity/MovableObj.js
 * @Description 
 * @Author wangxin
 * @Date 2023-03-22 10:15:44
-* @LastEditTime 2023-03-23 11:45:07
+* @LastEditTime 2023-03-28 11:10:09
  */
 export { MovableObject }
 
@@ -16,9 +16,9 @@ class MovableObject {
      */
     constructor(name) {
 
-        /** @type {THREE.Group} */
-        this.group = new THREE.Group();
-        this.group.name = name;
+        /** @type {THREE.Object3D} */
+        this.obj = new THREE.Object3D();
+        this.obj.name = name;
 
         //TODO: 可以选择某个对象进行特殊显示
         //this.selectObj = createSelectMesh(radius, halfLineWidth);

@@ -62,12 +62,12 @@ export default {
       this.scene = new THREE.Scene();
 
       //scenel =this.scene;
-      this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
+      //this.camera = new THREE.OrthographicCamera(-window.innerWidth, window.innerWidth, window.innerHeight, -window.innerHeight, 0.1, 5000)
+      this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 5000);
 
       this.camera.position.set(20, 15, 15);
       this.camera.lookAt(new THREE.Vector3());
-      this.camera.updateMatrix();
-      //this.camera = new THREE.OrthographicCamera( -window.innerWidth/50, window.innerWidth/50, window.innerHeight/50, -window.innerHeight/50, 0.1, 100 )
+      //this.camera.updateMatrix();
       this.renderer = new THREE.WebGLRenderer();
       this.renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -116,9 +116,11 @@ export default {
       this.scene.add(lineb);
       this.scene.add(linec);
 
-      this.scene.add(ObjectFactory.createSkyBox());
+      this.scene.add(ObjectFactory.createSkyBox(512, 512, 512));
       this.scene.add(ObjectFactory.createAmbientLight("light", new THREE.Color("#FFFFFF")));
       this.scene.add(ObjectFactory.createDirectonalLight("sun", new THREE.Color("#FFFFFF")));
+      this.scene.add(ObjectFactory.createField());
+      this.scene.add(ObjectFactory.createBorder());
 
       controls = new OrbitControls(this.camera, this.renderer.domElement);
       this.camera.position.z = 5;
@@ -130,6 +132,7 @@ export default {
       controls.autoRotate = false;//是否自动旋转 
       controls.update();
 
+      this.scene.background = new THREE.Color("skyblue")
 
     },
     load() {
@@ -140,6 +143,8 @@ export default {
       requestAnimationFrame(this.animate);
       let scene = toRaw(this.scene);
       controls.update();
+      let cube = toRaw(this.cube);
+      cube.rotation.x += 0.01;
       this.renderer.render(scene, this.camera);
     }
   }

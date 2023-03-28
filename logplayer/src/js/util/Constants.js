@@ -23,7 +23,8 @@ export const EntityName = {
  * @enum {number}
  */
 export const Entity = {
-    DEFAULT_BALL_RADIUS: 0.2
+    DEFAULT_BALL_RADIUS: 0.2,
+    DEFAULT_LINE_WIDTH: 0.15
 }
 
 /**
