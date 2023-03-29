@@ -1,3 +1,12 @@
+/**
+* @FilePath /src/js/test/test.js
+* @Description 
+* @Author wangxin
+* @Date 2023-03-24 10:07:25
+* @LastEditTime 2023-03-29 14:10:02
+ */
+export { }
+
 import { TeamDescription } from "@/js/game/description/TeamDescription.js";
 import { EntityName, TeamSide } from "@/js/util/Constants.js";
 
@@ -17,3 +26,7 @@ console.log(agent);
 
 let teamDescription = new TeamDescription("team1", "team2", "team3");
 console.log(teamDescription.color);
+
+let radius = 16;
+let thetaSegments = 8 * Math.pow(2, Math.floor(Math.log2(radius)));
+console.log(thetaSegments);

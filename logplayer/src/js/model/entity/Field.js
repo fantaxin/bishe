@@ -8,7 +8,7 @@ import { GameDescription } from "@/js/game/description/GameDescription";
 * @LastEditTime 2023-03-28 16:42:38
  */
 import { Object3D } from "three"
-import { ObjectFactory } from "../loader/ObjectFactory"
+import { ObjectFactory } from "../loader/MeshFactory"
 
 export { Field }
 

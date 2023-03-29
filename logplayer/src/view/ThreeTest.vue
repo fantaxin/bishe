@@ -12,9 +12,11 @@ import { Player } from "../js/player.js";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TeamDescription } from "@/js/game/description/TeamDescription.js";
 import { EntityName, TeamSide } from "@/js/util/Constants.js";
-import { ObjectFactory } from "@/js/model/loader/ObjectFactory";
+import { MeshFactory } from "@/js/model/loader/MeshFactory";
 
 let controls;
+let geometry;
+let n = 0.1;
 export default {
   name: "ThreeTest",
   data() {
@@ -29,6 +31,8 @@ export default {
       light: null,
       //
       cube: null,
+
+      cube2: null,
 
     };
   },
@@ -65,67 +69,72 @@ export default {
       //this.camera = new THREE.OrthographicCamera(-window.innerWidth, window.innerWidth, window.innerHeight, -window.innerHeight, 0.1, 5000)
       this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 5000);
 
-      this.camera.position.set(20, 15, 15);
-      this.camera.lookAt(new THREE.Vector3());
+      this.camera.position.set(0, 50, 70);
+      this.camera.lookAt(new THREE.Vector3(0, 0, -30));
       //this.camera.updateMatrix();
-      this.renderer = new THREE.WebGLRenderer();
+      this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       this.renderer.setSize(window.innerWidth, window.innerHeight);
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+      this.renderer.gammaOutput = true;
+      this.renderer.gammaFactor = 2.2;
+      this.renderer.autoClear = false;
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      this.renderer.shadowMapSoft = true;
+      this.renderer.shadowMapAutoUpdate = true;
+      this.renderer.sortObjects = false;
+      this.renderer.localClippingEnabled = true;
+      this.renderer.physicallyCorrectLights = true;
+      this.renderer.setClearColor(new THREE.Color(0x000000), 0);
+      //this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      //this.renderer.toneMappingExposure = 1.25;
+      //this.renderer.toneMappingWhitePoint = 1.0;
 
       document.body.appendChild(this.renderer.domElement);
       //this.$refs.container.appendChild(this.renderer.domElement);
 
-      const geometry = new THREE.BoxGeometry(1, 1, 1);
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
       const x = new THREE.MeshBasicMaterial({ color: "rgb(255, 0, 0)" });
       const y = new THREE.MeshBasicMaterial({ color: "rgb(0, 255, 0)" });
       const z = new THREE.MeshBasicMaterial({ color: "rgb(0, 0, 255)" });
+      geometry = new THREE.BoxGeometry(1, 1, 1);
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
       this.cube = new THREE.Mesh(geometry, material);
-      this.cube.position.set(0, 0, 0);
+      this.cube2 = new THREE.Mesh(geometry, material);
+      this.cube.position.set(10, 0, 0);
+      this.cube2.position.set(0, 0, 10);
+      //this.cube.rotation.x = 1;
+      //this.cube2.rotation.x = 1;
       //cube = this.cube;
       //cube = new THREE.Mesh(geometry, material);
       this.scene.add(this.cube);
+      this.scene.add(this.cube2);
 
-
-      let p = new Player(1, 0x00ff00, 2, 2, 0);
-      let p2 = new Player(1, 0x00ff00, 2, 0, 2);
-      let p3 = new Player(1, 0x00ff00, 0, 2, 2);
-      this.scene.add(p.playerModel);
-      this.scene.add(p2.playerModel);
-      this.scene.add(p3.playerModel);
-
-      let o = new Float32Array([0, 0, 0,]);
       let a = new Float32Array([0, 0, 0, 10, 0, 0]);
       let b = new Float32Array([0, 0, 0, 0, 10, 0]);
       let c = new Float32Array([0, 0, 0, 0, 0, 10]);
-
       var line1 = new THREE.BufferGeometry();
-      //line1.setAttribute("position", new THREE.BufferAttribute(o, 3));
       line1.setAttribute("position", new THREE.BufferAttribute(a, 3));
       var line2 = new THREE.BufferGeometry();
-      //line2.setAttribute("position", new THREE.BufferAttribute(o, 3));
       line2.setAttribute("position", new THREE.BufferAttribute(b, 3));
       var line3 = new THREE.BufferGeometry();
-      //line3.setAttribute("position", new THREE.BufferAttribute(o, 3));
       line3.setAttribute("position", new THREE.BufferAttribute(c, 3));
-
       var linea = new THREE.Line(line1, x);
       var lineb = new THREE.Line(line2, y);
       var linec = new THREE.Line(line3, z);
-
       this.scene.add(linea);
       this.scene.add(lineb);
       this.scene.add(linec);
 
-      this.scene.add(ObjectFactory.createSkyBox(512, 512, 512));
-      this.scene.add(ObjectFactory.createAmbientLight("light", new THREE.Color("#FFFFFF")));
-      this.scene.add(ObjectFactory.createDirectonalLight("sun", new THREE.Color("#FFFFFF")));
-      this.scene.add(ObjectFactory.createField());
-      this.scene.add(ObjectFactory.createBorder());
+      this.scene.add(MeshFactory.createSkyBox(512, 512, 512));
+      this.scene.add(MeshFactory.createAmbientLight("light", new THREE.Color("#FFFFFF")));
+      this.scene.add(MeshFactory.createDirectonalLight("sun", new THREE.Color("#FFFFFF")));
+      this.scene.add(MeshFactory.createField());
+      this.scene.add(MeshFactory.createBorder());
+      //this.scene.add(MeshFactory.createFieldLines());
+      this.scene.add(MeshFactory.createFieldLine());
 
       controls = new OrbitControls(this.camera, this.renderer.domElement);
-      this.camera.position.z = 5;
-      this.camera.position.x = 5;
-      this.camera.position.y = 5;
+
       controls.enableRotate = true; //启用旋转
       controls.enablePan = true; //启用平移
       controls.enableZoom = true;//启用缩放
@@ -144,7 +153,16 @@ export default {
       let scene = toRaw(this.scene);
       controls.update();
       let cube = toRaw(this.cube);
-      cube.rotation.x += 0.01;
+      let cube2 = toRaw(this.cube2);
+      //cube.rotation.y += 0.01;
+      cube2.rotation.y += 0.1;
+      cube.rotateY(0.1);
+      //cube2.rotateY(+0.1);
+      //cube.position.x += 0.1;
+      //cube2.position.z += 0.1;
+      //cube.translateX(+0.1);
+      //cube2.translateZ(+0.1);
+      geometry.position;
       this.renderer.render(scene, this.camera);
     }
   }
