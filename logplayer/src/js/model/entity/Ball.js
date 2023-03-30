@@ -3,12 +3,12 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-22 09:50:13
-* @LastEditTime 2023-03-22 17:01:35
+* @LastEditTime 2023-03-30 17:11:50
  */
 export { Ball }
 
 import { MovableObject } from './MovableObj.js';
-import { Entity } from '../../util/Constants.js';
+import { EntityDefaultConfig, EntityName } from '../../util/Constants.js';
 
 class Ball extends MovableObject {
     /**
@@ -17,18 +17,14 @@ class Ball extends MovableObject {
     * @return {void}
      */
     constructor(radius) {
-        super('ball');
-        this.radius = radius !== undefined ? radius : Entity.DEFAULT_BALL_RADIUS;
+        super(EntityName.Ball);
+        this.radius = radius !== undefined ? radius : EntityDefaultConfig.DEFAULT_BALL_RADIUS;
 
-        //默认的球的半径是1，现在半径为r，相当于缩放为原来的r倍
-        this.group.scale.setScalar(this.radius);
+        this.loadModel();
     }
 
-    setRadius(radius) {
-        if (this.radius !== radius) {
-            this.radius = radius;
-            this.group.scale.setScalar(this.radius);
-        }
+    loadModel() {
+        // TODO: ball model
     }
 
 }

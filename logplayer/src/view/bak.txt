@@ -11,11 +11,8 @@ import { toRaw } from 'vue';
 import { Player } from "../js/player.js";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TeamDescription } from "@/js/game/description/TeamDescription.js";
-import { GameType, EntityName, TeamSide } from "@/js/util/Constants.js";
+import { EntityName, TeamSide } from "@/js/util/Constants.js";
 import { MeshFactory } from "@/js/model/loader/MeshFactory";
-import { World } from "@/js/model/World";
-import { GameDescription } from "@/js/game/description/GameDescription";
-import { AgentDescription } from "@/js/game/description/AgentDescription";
 
 let controls;
 let geometry;
@@ -31,8 +28,11 @@ export default {
       // 渲染器
       renderer: null,
       // 灯光
-      /**@type {World} */
-      world: null,
+      light: null,
+      //
+      cube: null,
+
+      cube2: null,
 
     };
   },
@@ -41,7 +41,7 @@ export default {
   },
   mounted() {
     this.load();
-    //this.test();
+    this.test();
   },
   methods: {
     test() {
@@ -63,55 +63,15 @@ export default {
       console.log(teamDescription.color);
     },
     init() {
-      this.glinit();
-      this.worldinit();
-      this.scene.add(this.world.group);
-    },
-    worldinit() {
-      let gameDes = new GameDescription(GameType.TWO_D, {}, {}, []);
-      let agentDesArr1 = [];
-      let agentDesArr2 = [];
-      for (let i = 0; i < 11; i++) {
-        agentDesArr1.push(new AgentDescription(i + 1, TeamSide.LEFT));
-      }
-      for (let i = 0; i < 11; i++) {
-        agentDesArr2.push(new AgentDescription(i + 1, TeamSide.RIGHT));
-      }
-      let leftteam = new TeamDescription("ll", TeamSide.LEFT, new THREE.Color("#00B7FF"), agentDesArr1);
-      let rightteam = new TeamDescription("rr", TeamSide.RIGHT, new THREE.Color("#AC3B3B"), agentDesArr2);
-      this.world = new World(gameDes, leftteam, rightteam);
-
-      this.world.createSkyBox();
-      this.world.createField();
-      this.world.createTeams();
-
-      let ambientLight = MeshFactory.createAmbientLight("light", new THREE.Color("#FFFFFF"), 1.5);
-      let directionalLight = new THREE.DirectionalLight("#FFFFFF");
-      // 平行光配置
-      directionalLight.position.set(-40, 60, -10);
-      directionalLight.castShadow = true;
-      directionalLight.shadow.camera.near = 2;
-      directionalLight.shadow.camera.far = 200;
-      directionalLight.shadow.camera.left = -50;
-      directionalLight.shadow.camera.right = 50;
-      directionalLight.shadow.camera.top = 50;
-      directionalLight.shadow.camera.bottom = -50;
-      // 距离和强度
-      directionalLight.distance = 1;
-      directionalLight.intensity = 1.5;
-      // 设置阴影的分辨率
-      directionalLight.shadow.mapSize.width = 1024;
-      directionalLight.shadow.mapSize.height = 1024;
-
-      this.world.addLight("am", ambientLight);
-      this.world.addLight("sun", directionalLight);
-    },
-    glinit() {
       this.scene = new THREE.Scene();
+
+      //scenel =this.scene;
       //this.camera = new THREE.OrthographicCamera(-window.innerWidth, window.innerWidth, window.innerHeight, -window.innerHeight, 0.1, 5000)
       this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 5000);
+
       this.camera.position.set(0, 50, 70);
       this.camera.lookAt(new THREE.Vector3(0, 0, -30));
+      //this.camera.updateMatrix();
       this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       this.renderer.setSize(window.innerWidth, window.innerHeight);
       this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -131,10 +91,24 @@ export default {
       //this.renderer.toneMappingWhitePoint = 1.0;
 
       document.body.appendChild(this.renderer.domElement);
+      //this.$refs.container.appendChild(this.renderer.domElement);
 
       const x = new THREE.MeshBasicMaterial({ color: "rgb(255, 0, 0)" });
       const y = new THREE.MeshBasicMaterial({ color: "rgb(0, 255, 0)" });
       const z = new THREE.MeshBasicMaterial({ color: "rgb(0, 0, 255)" });
+      geometry = new THREE.BoxGeometry(1, 1, 1);
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      this.cube = new THREE.Mesh(geometry, material);
+      this.cube2 = new THREE.Mesh(geometry, material);
+      this.cube.position.set(10, 0, 0);
+      this.cube2.position.set(0, 0, 10);
+      //this.cube.rotation.x = 1;
+      //this.cube2.rotation.x = 1;
+      //cube = this.cube;
+      //cube = new THREE.Mesh(geometry, material);
+      this.scene.add(this.cube);
+      this.scene.add(this.cube2);
+
       let a = new Float32Array([0, 0, 0, 10, 0, 0]);
       let b = new Float32Array([0, 0, 0, 0, 10, 0]);
       let c = new Float32Array([0, 0, 0, 0, 0, 10]);
@@ -151,7 +125,37 @@ export default {
       this.scene.add(lineb);
       this.scene.add(linec);
 
+      this.scene.add(MeshFactory.createSkyBox(512, 512, 512));
+      this.scene.add(MeshFactory.createAmbientLight("light", new THREE.Color("#FFFFFF"), 1.5));
+      let directionalLight = new THREE.DirectionalLight("#FFFFFF");
+
+      // 平行光配置
+      directionalLight.position.set(-40, 60, -10);
+      directionalLight.castShadow = true;
+      directionalLight.shadow.camera.near = 2;
+      directionalLight.shadow.camera.far = 200;
+      directionalLight.shadow.camera.left = -50;
+      directionalLight.shadow.camera.right = 50;
+      directionalLight.shadow.camera.top = 50;
+      directionalLight.shadow.camera.bottom = -50;
+
+      // 距离和强度
+      directionalLight.distance = 1;
+      directionalLight.intensity = 1.5;
+
+      // 设置阴影的分辨率
+      directionalLight.shadow.mapSize.width = 1024;
+      directionalLight.shadow.mapSize.height = 1024;
+      this.scene.add(directionalLight);
+      this.scene.add(MeshFactory.createField());
+      this.scene.add(MeshFactory.createBorder());
+      //this.scene.add(MeshFactory.createFieldLines());
+      this.scene.add(MeshFactory.createFieldLine());
+      this.scene.add(MeshFactory.createGoal());
+      this.scene.add(MeshFactory.createAgents());
+
       controls = new OrbitControls(this.camera, this.renderer.domElement);
+
       controls.enableRotate = true; //启用旋转
       controls.enablePan = true; //启用平移
       controls.enableZoom = true;//启用缩放
@@ -159,14 +163,27 @@ export default {
       controls.update();
 
       this.scene.background = new THREE.Color("skyblue")
+
     },
     load() {
+
       this.animate();
     },
     animate() {
       requestAnimationFrame(this.animate);
       let scene = toRaw(this.scene);
       controls.update();
+      let cube = toRaw(this.cube);
+      let cube2 = toRaw(this.cube2);
+      //cube.rotation.y += 0.01;
+      cube2.rotation.y += 0.1;
+      cube.rotateY(0.1);
+      //cube2.rotateY(+0.1);
+      //cube.position.x += 0.1;
+      //cube2.position.z += 0.1;
+      //cube.translateX(+0.1);
+      //cube2.translateZ(+0.1);
+      geometry.position;
       this.renderer.render(scene, this.camera);
     }
   }

@@ -9,7 +9,7 @@ export { Team }
 
 import { TeamDescription } from "@/js/game/description/TeamDescription.js"
 import { AgentDiscription } from "@/js/game/description/AgentDescription.js"
-import { TeamSide } from "@/js/util/Constants.js";
+import { TeamSide, EntityName } from "@/js/util/Constants.js";
 import { Group } from "three";
 import { Agent } from "./Agent";
 
@@ -21,7 +21,7 @@ class Team {
     constructor(description) {
         this.description = description;
         this.group = new Group();
-        this.group.name = this.name();
+        this.group.name = EntityName.Team(this.side);
 
         /**@type {Array<Agent>} */
         this.agents;
@@ -38,8 +38,23 @@ class Team {
         this.agents = new Array(length);
         let i = 0;
         agentDiscriptions.forEach(ad => {
-            this.agents[i++] = new Agent(ad);
+            let agent = new Agent(ad);
+            this.agents[i++] = agent;
+            this.group.add(agent.obj);
         })
+    }
+
+    /**
+    * @description: 
+    * @param {Array<AgentState>} state
+    * @param {Array<AgentState>} nextState
+    * @param {number} t
+    * @return {*}
+     */
+    updateState(state, nextState, t) {
+        this.agents.forEach(agent => {
+            agent.updateState(state[agent.num - 1], nextState[agent.num - 1], t);
+        });
     }
 
     get name() {

@@ -3,7 +3,7 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-27 16:27:13
-* @LastEditTime 2023-03-29 18:19:15
+* @LastEditTime 2023-03-30 16:32:02
  */
 export { }
 
@@ -11,7 +11,7 @@ export { MeshFactory }
 
 import * as THREE from 'three'
 import { GeoMatFactory } from '@/js/util/GeoMatFactory'
-import { Entity } from '@/js/util/Constants'
+import { EntityDefaultConfig } from '@/js/util/Constants'
 import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 class MeshFactory {
@@ -33,39 +33,194 @@ class MeshFactory {
         return mesh;
     }
 
-    static createField() {
-        let size = new THREE.Vector2(105, 68);
-        //let centerRadius = 9.15;
-        //let goalSize = new THREE.Vector3(1.2, 14.64, 1.5);
-        //let goalAreaSize = new THREE.Vector2(5.5, 18.32);//球门区
-        //let penaltyAreaSize = new THREE.Vector3(16.5, 40.3, 11);//禁区
+    static createAgent() {
+        const redius = 0.6;
+        const topredius = Math.sqrt(3) / 2 * redius;
+        const bottomredius = 2 * topredius;
+        const height = 3 / 2 * redius;
+        const group = new THREE.Group();
+        const geo1 = new THREE.CylinderGeometry(topredius, bottomredius, height, 32, 32);
+        const geo2 = new THREE.SphereGeometry(redius, 32, 32);
+        geo1.translate(0, 3 / 4 * redius, 0);
+        geo2.translate(0, redius, 0);
 
-        let geometry = new THREE.PlaneGeometry(size.x, size.y);
+        const arr = new Array();
+        arr.push(geo1);
+        arr.push(geo2);
 
-        let texture = GeoMatFactory.loadTexture('field.png');
+
+        const geo = mergeBufferGeometries(arr);
+
+        const mat = new THREE.MeshMatcapMaterial({ color: "#C5DEF7" });
+
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.name = "main";
+
+
+        const geo3 = new THREE.CylinderGeometry(topredius, topredius, height, 3, 32);
+        geo3.rotateY(Math.PI / 2);
+        geo3.translate((Math.sqrt(3) + 3) / 6 * redius, 3 / 4 * redius, 0);
+        const mesh2 = new THREE.Mesh(geo3, new THREE.MeshMatcapMaterial({ color: "#436780" }));
+        mesh2.name = "toword";
+
+        group.add(mesh);
+        group.add(mesh2);
+
+        return group;
+    }
+
+    static createFieldMain(length, width) {
+
+        let geometry = new THREE.PlaneGeometry(length, width);
+
+        //TODO: 根据不同的场地大小，调整为不同尺寸的场地贴图
+        let texture = GeoMatFactory.loadTexture('field_roboviz.png');
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.x = 10;
-        texture.repeat.y = 5;
-        let material = new THREE.MeshBasicMaterial({ map: texture });
+        //texture.repeat.x = 10;
+        //texture.repeat.y = 5;
+        let material = new THREE.MeshLambertMaterial({ map: texture });
 
         //let material = new THREE.MeshBasicMaterial({ color: "#007732", side: THREE.DoubleSide });
         let mesh = new THREE.Mesh(geometry, material);
         mesh.rotation.x = -Math.PI / 2;
+
+        mesh.receiveShadow = true;
+
         return mesh;
     }
 
-    static createFieldLine() {
-        const length = 105;
-        const width = 68;
-        const radius = 9.15;
-        const penaltySpot = 11;
+    static createFieldLand(length, width) {
+        let borderLength = length + length / 6;
+        let borderWidth = width + width / 6;
+
+        let geometry = new THREE.PlaneGeometry(borderLength, borderWidth);
+        let material = new THREE.MeshLambertMaterial({ color: "#2EB845", side: THREE.DoubleSide });
+        let mesh = new THREE.Mesh(geometry, material);
+        mesh.position.y = -0.01;
+        mesh.rotation.x = -Math.PI / 2;
+
+        mesh.receiveShadow = true;
+
+        return mesh;
+
+    }
+
+    static createFieldGoal(goalWidth, goalHeight, goalradius, length = 110) {
+        const geoArray = [];
+        //const goalWidth = 7.32;
+        //const goalHeight = 2.44;
+        //const goalradius = 0.06;
+
+        let geo1 = new THREE.CylinderGeometry(goalradius, goalradius, goalWidth + 4 * goalradius, 32);
+        let geo2 = new THREE.CylinderGeometry(goalradius, goalradius, goalHeight + 2 * goalradius, 32);
+        let geo3 = new THREE.CylinderGeometry(goalradius, goalradius, goalHeight + 2 * goalradius, 32);
+        geo1.rotateX(Math.PI / 2);
+        geo1.translate(0, goalHeight + goalradius, 0);
+        geo2.translate(0, goalHeight / 2 + goalradius, -goalWidth / 2 - goalradius);
+        geo3.translate(0, goalHeight / 2 + goalradius, goalWidth / 2 + goalradius);
+        geoArray.push(geo1);
+        geoArray.push(geo2);
+        geoArray.push(geo3);
+
+        let geo = mergeBufferGeometries(geoArray);
+        let mat = new THREE.MeshLambertMaterial();
+
+        let mesh1 = new THREE.Mesh(geo, mat);
+        let mesh2 = new THREE.Mesh(geo, mat);
+
+        mesh1.translateX(-length / 2);
+        mesh2.translateX(length / 2);
+
+        mesh1.castShadow = true;
+        mesh2.castShadow = true;
+
+        let group = new THREE.Group();
+        group.add(mesh1);
+        group.add(mesh2);
+
+        group.castShadow = true;
+
+        return group;
+
+        /*
+        var poleGeo = new THREE.BoxBufferGeometry(5, 375, 5);
+        var poleMat = new THREE.MeshLambertMaterial();
+
+        var mesh = new THREE.Mesh(poleGeo, poleMat);
+        mesh.position.x = - 125;
+        mesh.position.y = - 62;
+        mesh.receiveShadow = true;
+        mesh.castShadow = true;
+        scene.add(mesh);
+
+        var mesh = new THREE.Mesh(poleGeo, poleMat);
+        mesh.position.x = 125;
+        mesh.position.y = - 62;
+        mesh.receiveShadow = true;
+        mesh.castShadow = true;
+        scene.add(mesh);
+
+        var mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(255, 5, 5), poleMat);
+        mesh.position.y = - 250 + (750 / 2);
+        mesh.position.x = 0;
+        mesh.receiveShadow = true;
+        mesh.castShadow = true;
+        scene.add(mesh);
+
+        var gg = new THREE.BoxBufferGeometry(10, 10, 10);
+        var mesh = new THREE.Mesh(gg, poleMat);
+        mesh.position.y = - 250;
+        mesh.position.x = 125;
+        mesh.receiveShadow = true;
+        mesh.castShadow = true;
+        scene.add(mesh);
+
+        var mesh = new THREE.Mesh(gg, poleMat);
+        mesh.position.y = - 250;
+        mesh.position.x = - 125;
+        mesh.receiveShadow = true;
+        mesh.castShadow = true;
+
+        var clothTexture = GeoMatFactory.loadTexture('goalnet.png'); // 加载衣服图片或者迷宫图
+
+        // anisotropy 沿着轴，通过具有最高纹素密度的像素的样本数。 默认情况下，这个值为1。设置一个较高的值将会产生比基本的mipmap更清晰的效果，代价是需要使用更多纹理样本
+        clothTexture.anisotropy = 16;
+
+        // 使用创建的clothTexture创建一种网格材质(一种非光泽表面的材质，没有镜面高光。)
+        // map: 颜色贴图  类型为Texture
+        // side: 定义将要渲染哪一面 - 正面，背面或两者
+        // alpaTest: 透明度 设置运行alphaTest时要使用的alpha值。如果不透明度低于此值，则不会渲染材质。默认值为0。
+        var clothMaterial = new THREE.MeshLambertMaterial({
+            map: clothTexture,
+            side: THREE.DoubleSide, // 两面都渲染
+            alphaTest: 0.5
+        });
+
+        // cloth geometry
+
+        let clothGeometry = new THREE.PlaneGeometry();
+
+        // cloth mesh
+
+        let object = new THREE.Mesh(clothGeometry, clothMaterial);
+        object.position.set(0, 0, 0);
+        object.castShadow = true;
+        return object;
+        */
+    }
+
+    static createFieldLines(length, width, radius, penaltySpot, penaltyLength, penaltyWidth, goalAreaLength, goalAreaWidth) {
+        //const length = 110;
+        //const width = 68;
+        //const radius = 9.15;
+        //const penaltySpot = 11;
         //const penaltyLength = 16.5;
-        const penaltyLength = 15.75;
-        const penaltyWidth = 40.3;
+        //const penaltyLength = 15.75;
+        //const penaltyWidth = 40.3;
         //const goalAreaLength = 5.5;
-        const goalAreaLength = 5.25;
-        const goalAreaWidth = 18.32;
+        //const goalAreaLength = 5.25;
+        //const goalAreaWidth = 18.32;
         const geoArray = [];
         geoArray.push(this.fieldBorderGeo(length, width));
         geoArray.push(this.fieldCirclePenaltyGeo(radius, penaltySpot, penaltyLength, penaltyWidth, length));
@@ -80,6 +235,8 @@ class MeshFactory {
 
         const mesh = new THREE.Mesh(geo, material);
         mesh.rotation.x += Math.PI / 2;
+
+        mesh.receiveShadow = true;
         return mesh;
     }
 
@@ -92,8 +249,8 @@ class MeshFactory {
         // 中线
         geoArray.push(GeoMatFactory.levelOrVerticalLine(0, 0, width, false));
         // 边线
-        geoArray.push(GeoMatFactory.levelOrVerticalLine(0, -width / 2, length + Entity.DEFAULT_LINE_WIDTH, true));
-        geoArray.push(GeoMatFactory.levelOrVerticalLine(0, width / 2, length + Entity.DEFAULT_LINE_WIDTH, true));
+        geoArray.push(GeoMatFactory.levelOrVerticalLine(0, -width / 2, length + EntityDefaultConfig.DEFAULT_LINE_WIDTH, true));
+        geoArray.push(GeoMatFactory.levelOrVerticalLine(0, width / 2, length + EntityDefaultConfig.DEFAULT_LINE_WIDTH, true));
         // 角球区
         geoArray.push(GeoMatFactory.ringLine(1, -length / 2, -width / 2, 0, Math.PI / 2));
         geoArray.push(GeoMatFactory.ringLine(1, -length / 2, width / 2, 3 * Math.PI / 2, Math.PI / 2));
@@ -105,10 +262,10 @@ class MeshFactory {
     static fieldCirclePenaltyGeo(radius, penaltySpot, penaltyLength, penaltyWidth, length) {
         const geoArray = [];
         // 禁区
-        geoArray.push(GeoMatFactory.levelOrVerticalLine(-length / 2 + penaltyLength, 0, penaltyWidth + Entity.DEFAULT_LINE_WIDTH, false));
+        geoArray.push(GeoMatFactory.levelOrVerticalLine(-length / 2 + penaltyLength, 0, penaltyWidth + EntityDefaultConfig.DEFAULT_LINE_WIDTH, false));
         geoArray.push(GeoMatFactory.levelOrVerticalLine(-length / 2 + penaltyLength / 2, penaltyWidth / 2, penaltyLength, true));
         geoArray.push(GeoMatFactory.levelOrVerticalLine(-length / 2 + penaltyLength / 2, -penaltyWidth / 2, penaltyLength, true));
-        geoArray.push(GeoMatFactory.levelOrVerticalLine(length / 2 - penaltyLength, 0, penaltyWidth + Entity.DEFAULT_LINE_WIDTH, false));
+        geoArray.push(GeoMatFactory.levelOrVerticalLine(length / 2 - penaltyLength, 0, penaltyWidth + EntityDefaultConfig.DEFAULT_LINE_WIDTH, false));
         geoArray.push(GeoMatFactory.levelOrVerticalLine(length / 2 - penaltyLength / 2, penaltyWidth / 2, penaltyLength, true));
         geoArray.push(GeoMatFactory.levelOrVerticalLine(length / 2 - penaltyLength / 2, -penaltyWidth / 2, penaltyLength, true));
 
@@ -131,20 +288,18 @@ class MeshFactory {
 
     static fieldGoalAreaGeo(goalAreaLength, goalAreaWidth, length) {
         const geoArray = [];
-        geoArray.push(GeoMatFactory.levelOrVerticalLine(-length / 2 + goalAreaLength, 0, goalAreaWidth + Entity.DEFAULT_LINE_WIDTH, false));
+        geoArray.push(GeoMatFactory.levelOrVerticalLine(-length / 2 + goalAreaLength, 0, goalAreaWidth + EntityDefaultConfig.DEFAULT_LINE_WIDTH, false));
         geoArray.push(GeoMatFactory.levelOrVerticalLine(-length / 2 + goalAreaLength / 2, goalAreaWidth / 2, goalAreaLength, true));
         geoArray.push(GeoMatFactory.levelOrVerticalLine(-length / 2 + goalAreaLength / 2, -goalAreaWidth / 2, goalAreaLength, true));
-        geoArray.push(GeoMatFactory.levelOrVerticalLine(length / 2 - goalAreaLength, 0, goalAreaWidth + Entity.DEFAULT_LINE_WIDTH, false));
+        geoArray.push(GeoMatFactory.levelOrVerticalLine(length / 2 - goalAreaLength, 0, goalAreaWidth + EntityDefaultConfig.DEFAULT_LINE_WIDTH, false));
         geoArray.push(GeoMatFactory.levelOrVerticalLine(length / 2 - goalAreaLength / 2, goalAreaWidth / 2, goalAreaLength, true));
         geoArray.push(GeoMatFactory.levelOrVerticalLine(length / 2 - goalAreaLength / 2, -goalAreaWidth / 2, goalAreaLength, true));
         return mergeBufferGeometries(geoArray);
     }
 
-    static fieldGoalGeo(goalWidth, length) {
+    static cylinderGeo(radius, width) { }
 
-    }
-
-    static createFieldLines() {
+    static createFieldLines2() {
 
         let lineWidth = 0.15;
         let fieldDimensions = new THREE.Vector2(105, 68);
@@ -321,19 +476,6 @@ class MeshFactory {
         return mesh;
     }
 
-    static createBorder() {
-        let size = new THREE.Vector2(105, 68);
-        let length = size.x + size.x / 6;
-        let weigth = size.y + size.x / 6;
-
-        let geometry = new THREE.PlaneGeometry(length, weigth);
-        let material = new THREE.MeshBasicMaterial({ color: "#2EB845", side: THREE.DoubleSide });
-        let mesh = new THREE.Mesh(geometry, material);
-        mesh.position.y = -0.1;
-        mesh.rotation.x = -Math.PI / 2;
-        return mesh;
-
-    }
 
     static createAmbientLight(name = "ambient", color = new THREE.Color("#EEEEEE"), intensity = 1) {
         let light = new THREE.AmbientLight(color, intensity);

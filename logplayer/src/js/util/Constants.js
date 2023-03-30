@@ -12,19 +12,48 @@ export const EntityName = {
     World: 'world',
     Field: 'field',
     Ball: 'ball',
-    LeftTeam: 'left',
-    RightTeam: 'right',
+    LeftTeam: 'team_left',
+    RightTeam: 'team_right',
+    Team: function (teamSide) {
+        if (teamSide === TeamSide.LEFT) {
+            return this.LeftTeam;
+        } else {
+            return this.RightTeam;
+        }
+    },
     Agent: function (teamSide, agentNum) {
-        return "agent_" + teamSide + "_" + agentNum;
+        if (teamSide === TeamSide.LEFT) {
+            return this.LeftTeam + '_' + agentNum;
+        } else {
+            return this.RightTeam + '_' + agentNum;
+        }
+    },
+    Main: function (parentName) {
+        return parentName + "_main";
+    },
+    Model: function (parentName, modelName) {
+        return parentName + "_model_" + modelName;
     }
 }
 
 /**
  * @enum {number}
  */
-export const Entity = {
+export const EntityDefaultConfig = {
     DEFAULT_BALL_RADIUS: 0.2,
     DEFAULT_LINE_WIDTH: 0.15
+}
+
+export function AngleY(x, z) {
+    if (x > 0 && z <= 0) {
+        return -Math.atan(z / x);
+    } else if (x > 0 && z >= 0) {
+        return 2 * Math.PI - Math.atan(z / x);
+    } else if (x < 0) {
+        return Math.PI - Math.atan(z / x);
+    } else if (x == 0) {
+        return Math.PI + (z / Math.abs(z)) * (Math.PI / 2);
+    }
 }
 
 /**

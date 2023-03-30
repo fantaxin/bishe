@@ -8,7 +8,7 @@
 export { GeoMatFactory }
 
 import * as THREE from 'three';
-import { Entity } from './Constants';
+import { EntityDefaultConfig } from './Constants';
 
 let TextureLoader = null;
 const TexturePath = '/textures/';
@@ -18,7 +18,7 @@ class GeoMatFactory {
     static geometryCache = new Map();
     static materialCache = new Map();
     static levelLine(x1, z1, x2, z2, mode) {
-        const lineWidth = Entity.DEFAULT_LINE_WIDTH;
+        const lineWidth = EntityDefaultConfig.DEFAULT_LINE_WIDTH;
         const length = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((z1 - z2), 2));
         const regularX = (x2 - x1) / length;
         const regularZ = (z2 - z1) / length;
@@ -53,8 +53,8 @@ class GeoMatFactory {
         //if (this.geometryCache.has(name)) {
         //    return this.geometryCache.get(name);
         //}
-        const a = isLevel ? length : Entity.DEFAULT_LINE_WIDTH;
-        const b = isLevel ? Entity.DEFAULT_LINE_WIDTH : length;
+        const a = isLevel ? length : EntityDefaultConfig.DEFAULT_LINE_WIDTH;
+        const b = isLevel ? EntityDefaultConfig.DEFAULT_LINE_WIDTH : length;
         const geo = new THREE.PlaneGeometry(a, b);
         geo.name = "levelOrVerticalLine_" + length + "_" + isLevel;
         return geo.translate(x, y, 0);
@@ -63,11 +63,11 @@ class GeoMatFactory {
 
     static ringLine(radius, x = 0, y = 0, thetaStart = 0, thetaLength = Math.PI * 2) {
         let thetaSegments = 8 + 8 * Math.pow(2, Math.floor(Math.log2(radius)));
-        const geo = new THREE.RingGeometry(radius - Entity.DEFAULT_LINE_WIDTH / 2, radius + Entity.DEFAULT_LINE_WIDTH / 2, thetaSegments, 1, thetaStart, thetaLength);
+        const geo = new THREE.RingGeometry(radius - EntityDefaultConfig.DEFAULT_LINE_WIDTH / 2, radius + EntityDefaultConfig.DEFAULT_LINE_WIDTH / 2, thetaSegments, 1, thetaStart, thetaLength);
         return geo.translate(x, y, 0);
     }
 
-    static circleSpot(x, y, radius = Entity.DEFAULT_LINE_WIDTH * 1.2) {
+    static circleSpot(x, y, radius = EntityDefaultConfig.DEFAULT_LINE_WIDTH * 1.2) {
         let segments = 16 + 8 * Math.pow(2, Math.floor(Math.log2(radius)));
         const geo = new THREE.CircleGeometry(radius, segments);
         return geo.translate(x, y, 0);

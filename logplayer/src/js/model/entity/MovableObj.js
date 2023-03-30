@@ -3,11 +3,12 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-22 10:15:44
-* @LastEditTime 2023-03-28 11:10:09
+* @LastEditTime 2023-03-30 14:39:44
  */
 export { MovableObject }
 
 import * as THREE from "three";
+import { AngleY, EntityName } from "@/js/util/Constants";
 
 class MovableObject {
     /**
@@ -25,6 +26,16 @@ class MovableObject {
         //this.group.add(this.selectObj);
     }
 
+    updateMainModel(main) {
+        this.obj.add(main);
+        main.name = EntityName.Main(this.obj.name);
+    }
+
+    addModel(model, name) {
+        model.name = EntityName.Model(this.obj.name, name);
+        this.obj.add(model);
+    }
+
     /**
      * @param {boolean} selected}
      */
@@ -38,5 +49,8 @@ class MovableObject {
      */
     updatePosition(state, nextState, t) {
         //TODO: 完成对对象坐标的更新
+        this.obj.translateX(nextState.x - state.x);
+        this.obj.translateY(nextState.y - state.y);
+        this.obj.translateZ(nextState.z - state.z);
     }
 }
