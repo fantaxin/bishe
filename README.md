@@ -83,6 +83,13 @@ javascript
 - https://www.runoob.com/js/js-tutorial.html
 - https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference
 
+model
+- https://www.aigei.com/
+- https://sketchfab.com/search?type=models
+- https://www.om.com/
+- https://3d.znzmo.com/
+- https://www.3dxia.com/
+
 vscode: 
 - JavaScript (ES6) code snippets
 - koroFileHeader
