@@ -21,19 +21,22 @@ public class LogFrame {
     // 当前帧的全局时间
     double time;
 
+    double gametime = 0.0;
+
     // 当前帧的比赛状态
-    PlayMode gameState;
+    PlayMode gameMode;
 
     // 当前帧的比分情况
-    int leftScore = -1;
-    int rightScore = -1;
+    //int leftScore = -1;
+    //int rightScore = -1;
+    LogScoreState scoreState;
 
     // 当前帧的球状态
     LogBallState ballState;
 
     // 当前帧的球员状态
-    List<LogPlayerState> l_playerStates;
-    List<LogPlayerState> r_playerStates;
+    List<LogPlayerState> leftAgentStates;
+    List<LogPlayerState> rightAgentStates;
 
 }
 

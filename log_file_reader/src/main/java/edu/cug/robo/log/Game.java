@@ -5,14 +5,13 @@ import static edu.cug.robo.LogUtil.REPLAY_VERSION_MAX;
 
 import edu.cug.robo.enums.GameType;
 import edu.cug.robo.enums.LogType;
-import java.util.LinkedList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 /**
- * edu.cug.robo.log.GameLog
+ * edu.cug.robo.log.Game
  *
  * @author wangxin
  * @version [1.0.0, 2023/03/16]
@@ -21,7 +20,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class GameLog {
+public class Game {
 
     private String logPath;
 
@@ -29,11 +28,12 @@ public class GameLog {
      * RPL 2D 1 5 (日志文件格式, 比赛类型, 版本号, 不知道)
      */
     private LogType logType;
-    private GameType gameType;
     private int logVersion = 0;
-    private String other;
+    private int frequency = 10;
+    private String[] other;
 
 
+    private GameType gameType;
     // 系统环境参数
     private LogParams environmentParams;
 
@@ -54,7 +54,7 @@ public class GameLog {
     //TODO: 后续需要分块读取以节省内存，还需要实现边读取，边解析，解析完成的Log帧可以丢弃
     private List<LogFrame> frames;
 
-    public GameLog(String logPath) {
+    public Game(String logPath) {
         this.logPath = logPath;
     }
 

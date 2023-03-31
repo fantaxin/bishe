@@ -1,5 +1,7 @@
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import edu.cug.robo.enums.PlayMode;
-import edu.cug.robo.log.GameLog;
+import edu.cug.robo.log.Game;
 import edu.cug.robo.log.LogFrame;
 import edu.cug.robo.log.LogPlayerState;
 import edu.cug.robo.log.parse.LogLoader;
@@ -18,25 +20,31 @@ public class LogLoaderTest {
     @Test
     public void testLoadLog() {
         LogLoader logLoader = new LogLoader("D:\\a11406\\project2\\bishe\\log\\2012final.replay");
-        FutureTask<GameLog> futureTask = new FutureTask<>(logLoader);
+        FutureTask<Game> futureTask = new FutureTask<>(logLoader);
         new Thread(futureTask).start();
 
         try {
             //TODO: 在此处进行处理，以便能够防止futureTask.get()阻塞主线程
-            GameLog gameLog = futureTask.get();
+            Game game = futureTask.get();
 
-            System.out.println(gameLog.getLogVersion());
-            Thread.sleep(2000);//
-            System.out.println(gameLog.getLogVersion());
-            for (LogFrame f : gameLog.getFrames()) {
-                if(f.getGameState()== PlayMode.play_on){
+            System.out.println(game.getLogVersion());
+            //Thread.sleep(4000);//
+            System.out.println(game.getLogVersion());
+
+            Game game2 = game;
+            String json = JSON.toJSONString(game2);
+
+
+
+            for (LogFrame f : game.getFrames()) {
+                if(f.getGameMode()== PlayMode.play_on){
                     continue;
                 }
-                for (LogPlayerState playerState : f.getL_playerStates()) {
+                for (LogPlayerState playerState : f.getLeftAgentStates()) {
                     if(playerState.getFlag() != 9 && playerState.getFlag() != 1)
                         System.out.println(playerState.getFlag());
                 }
-                for (LogPlayerState playerState : f.getR_playerStates()) {
+                for (LogPlayerState playerState : f.getRightAgentStates()) {
                     if(playerState.getFlag() != 9 && playerState.getFlag() != 1)
                         System.out.println(playerState.getFlag());
                 }

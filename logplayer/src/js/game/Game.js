@@ -9,7 +9,7 @@ export { Game }
 
 import { Frame } from "./state/Frame";
 import { TeamDescription } from "./description/TeamDescription.js";
-import { LogDescription } from "./description/logDescription";
+import { LogDescription } from "./description/LogDescription";
 import { GameDescription } from "./description/GameDescription";
 import { ScoreState } from "./state/ScoreState";
 import { PlayMode } from "../util/Constants.js";
@@ -36,5 +36,20 @@ class Game {
         /**@type {Map<number, PlayMode>} */
         this.stateMoment = stateMoment;
 
+    }
+
+    set logType(logType) {
+        this.logDescription.logType = logType;
+    }
+
+    get logType() {
+        return this.logDescription.logType;
+    }
+
+    set logPath(logPath) {
+        this.logDescription.logPath = logPath;
+    }
+    get logPath() {
+        return this.logDescription.logPath;
     }
 }

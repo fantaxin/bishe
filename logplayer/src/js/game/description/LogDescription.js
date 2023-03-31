@@ -1,9 +1,9 @@
 /**
-* @FilePath /src/js/game/description/logDescription.js
+* @FilePath /src/js/game/description/LogDescription.js
 * @Description 
 * @Author wangxin
 * @Date 2023-03-23 16:06:14
-* @LastEditTime 2023-03-23 16:19:52
+* @LastEditTime 2023-03-31 16:47:19
  */
 export { LogDescription }
 

@@ -1,5 +1,8 @@
 package edu.cug.robo.log;
 
+import edu.cug.robo.enums.TeamSide;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,7 +19,9 @@ import lombok.ToString;
 public class LogTeam {
 
     String name;
-    String color;
+    TeamSide side;
+    String color = "#FFFFFF";
+    List<LogAgent> agentDescriptions = new ArrayList<>();
 
     public LogTeam(String name) {
         this.name = name;

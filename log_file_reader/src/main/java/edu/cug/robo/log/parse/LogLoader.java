@@ -1,6 +1,6 @@
 package edu.cug.robo.log.parse;
 
-import edu.cug.robo.log.GameLog;
+import edu.cug.robo.log.Game;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,7 +16,7 @@ import lombok.Setter;
  * @version [1.0.0, 2023/03/16]
  */
 @Setter
-public class LogLoader implements Callable<GameLog> {
+public class LogLoader implements Callable<Game> {
 
     private String logPath;
 
@@ -25,10 +25,10 @@ public class LogLoader implements Callable<GameLog> {
     }
 
     @Override
-    public GameLog call() {
+    public Game call() {
 
         // 日志解析线程会持续修改该对象，直至解析完成
-        GameLog gameLog = new GameLog(logPath);
+        Game gameLog = new Game(logPath);
 
         // 当日志解析线程完成第一部分解析时，释放信号量，该线程结束，日志解析线程继续执行
         Semaphore semaphore = new Semaphore(0);

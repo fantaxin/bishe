@@ -1,6 +1,6 @@
 package edu.cug.robo.log.parse;
 
-import edu.cug.robo.log.GameLog;
+import edu.cug.robo.log.Game;
 import java.io.BufferedReader;
 import java.util.concurrent.Semaphore;
 
@@ -15,12 +15,12 @@ import lombok.SneakyThrows;
 //@Slf4j
 public class LogParser implements Runnable{
 
-    GameLog gameLog;
+    Game gameLog;
     BufferedReader br;
 
     Semaphore semaphore;
 
-    public LogParser(GameLog gameLog, BufferedReader br, Semaphore semaphore) {
+    public LogParser(Game gameLog, BufferedReader br, Semaphore semaphore) {
         this.gameLog = gameLog;
         this.br = br;
         this.semaphore = semaphore;
@@ -37,11 +37,12 @@ public class LogParser implements Runnable{
         System.out.println("第一部分日志体解析完成");
         line = LogParseUtil.parseLogBody(gameLog,line,br,300);
 
-        semaphore.release();
 
         // TODO: 进行剩余日志体的解析
         LogParseUtil.parseLogBody(gameLog,line,br,9000);
         System.out.println("剩余日志体解析完成");
+
+        semaphore.release();
 
     }
 

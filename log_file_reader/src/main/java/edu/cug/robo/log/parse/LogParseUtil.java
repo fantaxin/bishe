@@ -2,6 +2,7 @@ package edu.cug.robo.log.parse;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.sun.javaws.IconUtil;
 import edu.cug.robo.enums.*;
 import edu.cug.robo.log.*;
 import java.io.BufferedReader;
@@ -19,7 +20,7 @@ import java.util.Map;
  */
 public class LogParseUtil {
 
-    public static String parseFileHeader(GameLog gameLog, BufferedReader br) throws IOException {
+    public static String parseFileHeader(Game gameLog, BufferedReader br) throws IOException {
         String line = readValidLine("", br, false);
 
         // 第3部分之后的数据，不需要进行解析，全部存入other中(包含空格)
@@ -34,7 +35,7 @@ public class LogParseUtil {
             gameLog.setLogType(fileLogType);
             gameLog.setGameType(GameType.TWO_D);
             gameLog.setLogVersion(0);
-            gameLog.setOther("");
+            gameLog.setOther(new String[0]);
             // 该行数据应在下一部分进行处理
             return line;
         } else if (logType != fileLogType) {
@@ -53,14 +54,14 @@ public class LogParseUtil {
         }
         // 剩余信息
         if (lineSplit.length > 3) {
-            gameLog.setOther(lineSplit[3]);
+            gameLog.setOther(lineSplit[3].split(" "));
         }
 
         return "";
     }
 
     // line 为 null 时，代表文件已经读取完毕
-    public static String parseLogBody(GameLog gameLog, String line, BufferedReader br, int limit) throws IOException {
+    public static String parseLogBody(Game gameLog, String line, BufferedReader br, int limit) throws IOException {
         switch (gameLog.getLogType()) {
             case REPLAY:
                 return parseReplayBody(gameLog, line, br, limit);
@@ -71,17 +72,19 @@ public class LogParseUtil {
         }
     }
 
-    //private static String parseServerBody(GameLog gameLog, String line, BufferedReader br, int limit) {return null;}
+    //private static String parseServerBody(Game gameLog, String line, BufferedReader br, int limit) {return null;}
 
     // line 为 null 时，代表文件已经读取完毕
-    private static String parseReplayBody(GameLog gameLog, String line, BufferedReader br, int limit) throws IOException {
+    private static String parseReplayBody(Game gameLog, String line, BufferedReader br, int limit) throws IOException {
 
-        while (limit > 0 || line == null) {
+        boolean firstParseFrame = true;
+        while (limit > 0 && line != null) {
             line = readValidLine(line, br, false);
 
             String[] lineSplit = line.split(" ");
             LineType lineType = LineType.getType(lineSplit[0]);
 
+            System.out.println(limit);
             switch (lineType) {
                 case EnvironmentParams:
                     line = parseReplayEP(gameLog, line);
@@ -96,7 +99,8 @@ public class LogParseUtil {
                     line = parseReplayTeam(gameLog, line);
                     break;
                 case Server:
-                    line = parseReplayFrame(gameLog, line, br);
+                    line = parseReplayFrame(gameLog, line, br, firstParseFrame);
+                    firstParseFrame = false;
                     limit--;
                     break;
                 default:
@@ -109,7 +113,7 @@ public class LogParseUtil {
     /**
      * EP { "goal_width": 14.02, "inertia_moment": 5}
      */
-    private static String parseReplayEP(GameLog gameLog, String line) {
+    private static String parseReplayEP(Game gameLog, String line) {
 
         // 文件行示例：EP {"goal_width": 14.02,"team_actuator_noise": false,...}
         String[] lineSplit = line.split("\\{", 2);
@@ -120,7 +124,7 @@ public class LogParseUtil {
         return "";
     }
 
-    private static String parseReplayPP(GameLog gameLog, String line) {
+    private static String parseReplayPP(Game gameLog, String line) {
 
         String[] lineSplit = line.split("\\{", 2);
         LogParams playerParams = new LogParams(parseJsonAsMap("{" + lineSplit[1]));
@@ -130,7 +134,7 @@ public class LogParseUtil {
         return "";
     }
 
-    private static String parseReplayPT(GameLog gameLog, String line) {
+    private static String parseReplayPT(Game gameLog, String line) {
 
         // 初始化 playerTypes
         if (gameLog.getPlayerTypes() == null) {
@@ -154,12 +158,14 @@ public class LogParseUtil {
         return "";
     }
 
-    private static String parseReplayTeam(GameLog gameLog, String line) {
+    private static String parseReplayTeam(Game gameLog, String line) {
 
         String[] lineSplit = line.split(" ");
         if (lineSplit.length == 3 || lineSplit.length == 5) {
             LogTeam leftTeam = new LogTeam(lineSplit[1]);
             LogTeam rightTeam = new LogTeam(lineSplit[2]);
+            rightTeam.setSide(TeamSide.RIGHT);
+            leftTeam.setSide(TeamSide.LEFT);
             if (lineSplit.length == 5) {
                 leftTeam.setColor(lineSplit[3]);
                 rightTeam.setColor(lineSplit[4]);
@@ -179,7 +185,7 @@ public class LogParseUtil {
     //   L        1    -20  0        165           -105        #8000
     //{l|L|r|R} <unum> <x> <y> <heading-angle>[ <neck-angle> <stamina>]
     //L 1 0 0x9 -52 0 1.46 (j 0) (s 8000)
-    private static String parseReplayFrame(GameLog gameLog, String line, BufferedReader br) throws IOException {
+    private static String parseReplayFrame(Game gameLog, String line, BufferedReader br, boolean firstParseFrame) throws IOException {
         //line = readValidLine(line, br, true);
 
         // 初始化 frames
@@ -193,12 +199,16 @@ public class LogParseUtil {
         String[] lineSplit = line.split(" ");
         LogFrame frame = new LogFrame();
         gameLog.getFrames().add(frame);
+
+        LogScoreState scoreState = new LogScoreState();
         if (lineSplit.length == 3 || lineSplit.length >= 5) {
             frame.setTime(Double.parseDouble(lineSplit[1]));
-            frame.setGameState(PlayMode.valueOf(lineSplit[2]));
+            frame.setGameMode(PlayMode.valueOf(lineSplit[2]));
             if (lineSplit.length >= 5) {
-                frame.setLeftScore(Integer.parseInt(lineSplit[3]));
-                frame.setRightScore(Integer.parseInt(lineSplit[4]));
+                scoreState.setGoalsLeft(Integer.parseInt(lineSplit[3]));
+                scoreState.setGoalsRight(Integer.parseInt(lineSplit[4]));
+                //frame.setLeftScore(Integer.parseInt(lineSplit[3]));
+                //frame.setRightScore(Integer.parseInt(lineSplit[4]));
             }
         } else {
             //TODO: 应该在哪里处理
@@ -227,8 +237,8 @@ public class LogParseUtil {
         List<LogPlayerState> l_playerStates = new ArrayList<>();
         List<LogPlayerState> r_playerStates = new ArrayList<>();
 
-        frame.setL_playerStates(l_playerStates);
-        frame.setR_playerStates(r_playerStates);
+        frame.setLeftAgentStates(l_playerStates);
+        frame.setRightAgentStates(r_playerStates);
 
         while (true) {
             line = readValidLine(line, br, true);
@@ -244,13 +254,13 @@ public class LogParseUtil {
             } else {
                 break;
             }
-            line = parseReplayPlayerState(gameLog, playerState, line);
+            line = parseReplayPlayerState(gameLog, playerState, line, firstParseFrame);
         }
 
         return line;
     }
 
-    private static String parseReplayPlayerState(GameLog gameLog, LogPlayerState playerState, String line) {
+    private static String parseReplayPlayerState(Game gameLog, LogPlayerState playerState, String line, boolean firstParseFrame) {
         boolean version1 = gameLog.getLogVersion() == 1;
 
         //LogPlayerState playerState = new LogPlayerState();
@@ -260,12 +270,30 @@ public class LogParseUtil {
         int index = 0;
         int indexOffset = 0;
 
-        playerState.setSide(TeamSide.getTeamSide(paramSplit[index++]));
-        playerState.setNumber(Integer.parseInt(paramSplit[index++]));
+        LogAgent logAgent = null;
+
+        if(firstParseFrame){
+            logAgent = new LogAgent();
+
+            logAgent.setSide(TeamSide.getTeamSide(paramSplit[index++]));
+            logAgent.setNum(Integer.parseInt(paramSplit[index++]));
+        }else{
+            //playerState.setSide(TeamSide.getTeamSide(paramSplit[index++]));
+            //playerState.setNumber(Integer.parseInt(paramSplit[index++]));
+            index++;
+            index++;
+        }
 
         if (version1) {
             if(paramSplit[0].equals("R") || paramSplit[0].equals("L")){
-                playerState.setPlayerTypeIdx(Integer.parseInt(paramSplit[index + indexOffset++]));
+                //playerState.setPlayerTypeIdx(Integer.parseInt(paramSplit[index + indexOffset++]));
+                logAgent.setAgentTypeIdx(Integer.parseInt(paramSplit[index + indexOffset++]));
+                //logAgent.setOtherAgentParam();
+                if(paramSplit[0].equals("R")){
+                    gameLog.getRightTeam().getAgentDescriptions().add(logAgent);
+                }else{
+                    gameLog.getLeftTeam().getAgentDescriptions().add(logAgent);
+                }
             }
             playerState.setFlag(Integer.decode(paramSplit[index + indexOffset++]));
         } else if (paramSplit[0].equals("R") || paramSplit[0].equals("L")) {
@@ -275,15 +303,23 @@ public class LogParseUtil {
 
         playerState.setX(Double.parseDouble(paramSplit[indexOffset+index++]));
         playerState.setY(Double.parseDouble(paramSplit[indexOffset+index++]));
-        playerState.setHeading_angle(Double.parseDouble(paramSplit[indexOffset+index++]));
+
+        List<Double> angles = playerState.getAngles();
+        angles.add(Double.parseDouble(paramSplit[indexOffset+index++]));
+        //playerState.setHeading_angle(Double.parseDouble(paramSplit[indexOffset+index++]));
 
         if (version1) {
-            playerState.setJoint_angle(Double.parseDouble(lineSplit[1].split("\\)")[0].split(" ")[1]));
+            angles.add(Double.parseDouble(lineSplit[1].split("\\)")[0].split(" ")[1]));
+            angles.add(0.0);
+            //playerState.setJoint_angle(Double.parseDouble(lineSplit[1].split("\\)")[0].split(" ")[1]));
             playerState.setStamina(Double.parseDouble(lineSplit[1].split("\\)")[0].split(" ")[1]));
         } else {
-            playerState.setNeck_angle(Double.parseDouble(paramSplit[index++]));
+            angles.add(0.0);
+            angles.add(Double.parseDouble(paramSplit[index++]));
+            //playerState.setNeck_angle(Double.parseDouble(paramSplit[index++]));
             playerState.setStamina(Double.parseDouble(paramSplit[index].split("#")[1]));
         }
+
 
         return "";
     }
@@ -309,7 +345,7 @@ public class LogParseUtil {
 
 /*
     // 如果未进行处理，则返回改行
-    private static String parseLog(GameLog gameLog, String line, BufferedReader br) throws IOException {
+    private static String parseLog(Game gameLog, String line, BufferedReader br) throws IOException {
 
         if (line.isEmpty()) {
             line = br.readLine();
@@ -346,7 +382,7 @@ public class LogParseUtil {
         return line;
     }
 
-    private static void parse2DLog(GameLog gameLog, BufferedReader br) throws IOException {
+    private static void parse2DLog(Game gameLog, BufferedReader br) throws IOException {
 
         switch (gameLog.getLogVersion()) {
             case 0:
@@ -360,7 +396,7 @@ public class LogParseUtil {
         }
     }
 
-    private static void parse2DLogV0(GameLog gameLog, BufferedReader br) {
+    private static void parse2DLogV0(Game gameLog, BufferedReader br) {
 
         try {
             //EP {"goal_width": 14.02,"team_actuator_noise": false,...}
@@ -389,11 +425,11 @@ public class LogParseUtil {
         }
     }
 
-    private static void parse2DLogV1(GameLog gameLog, BufferedReader br) {
+    private static void parse2DLogV1(Game gameLog, BufferedReader br) {
 
     }
 
-    private static void parse3DLog(GameLog gameLog, BufferedReader br) throws IOException {
+    private static void parse3DLog(Game gameLog, BufferedReader br) throws IOException {
 
         throw new IOException("不支持3D游戏日志解析");
     }

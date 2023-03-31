@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * edu.cug.robo.other.GameLog
+ * edu.cug.robo.other.Game
  *
  * @author wangxin
  * @version [1.0.0, 2023/03/14]

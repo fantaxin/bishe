@@ -5,7 +5,7 @@ import { GameDescription } from "@/js/game/description/GameDescription";
 * @Description 
 * @Author wangxin
 * @Date 2023-03-22 09:50:19
-* @LastEditTime 2023-03-30 17:41:32
+* @LastEditTime 2023-03-31 14:57:40
  */
 import { Group, Object3D } from "three"
 import { MeshFactory } from "../loader/MeshFactory"

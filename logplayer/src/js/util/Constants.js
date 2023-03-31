@@ -69,7 +69,18 @@ export const GameType = {
  */
 export const LogType = {
     REPLAY: "replay",
-    RCG: "rcg"
+    RCG: "rcg",
+    UNKNOWN: "__unknown",
+    getLogType: function (type) {
+        switch (type) {
+            case this.REPLAY:
+                return this.REPLAY;
+            case this.RCG:
+                return this.RCG;
+            default:
+                return this.UNKNOWN;
+        }
+    }
 }
 
 /**
