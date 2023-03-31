@@ -1,9 +1,9 @@
 /**
-* @FilePath /src/js/state/ScoreState.js
+* @FilePath /logplayer/src/js/game/state/ScoreState.js
 * @Description 
 * @Author wangxin
 * @Date 2023-03-22 15:53:41
-* @LastEditTime 2023-03-23 13:41:30
+* @LastEditTime 2023-03-31 01:13:31
  */
 export { ScoreState }
 

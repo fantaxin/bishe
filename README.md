@@ -100,6 +100,9 @@ vscode:
 - Vue Language Features (Volar)
 - quokka
 
+npm install vue
+npm install three
+
 ``` json
 {
     "tabnine.experimentalAutoImports": true,

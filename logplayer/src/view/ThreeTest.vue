@@ -1,5 +1,5 @@
 <template>
-    <div>123</div>
+  <div></div>
 </template>
 <script>
 import * as THREE from "three";
@@ -14,217 +14,213 @@ import { MeshFactory } from "@/js/model/loader/MeshFactory";
 import { World } from "@/js/model/World";
 import { GameDescription } from "@/js/game/description/GameDescription";
 import { AgentDescription } from "@/js/game/description/AgentDescription";
+import { test } from "@/js/test/test";
 
 let controls;
 let geometry;
 let n = 0.1;
 export default {
-    name: "ThreeTest",
-    data() {
-        return {
-            // 三维场景
-            scene: null,
-            // 相机
-            camera: null,
-            // 渲染器
-            renderer: null,
-            // 灯光
-            /**@type {World} */
-            world: null,
-        };
+  name: "ThreeTest",
+  data() {
+    return {
+      // 三维场景
+      scene: null,
+      // 相机
+      camera: null,
+      // 渲染器
+      renderer: null,
+      // 灯光
+      /**@type {World} */
+      world: null,
+    };
+  },
+  created() {
+    this.init();
+  },
+  mounted() {
+    this.load();
+    //this.test();
+    test();
+  },
+  methods: {
+    test() {
+      let map1 = new Map();
+      map1.set(1.1, "string1");
+      map1.set(2.1, "string2");
+      map1.set(3.1, "string3");
+      map1.forEach((element) => {
+        console.log(element);
+      });
+
+      let world = EntityName.World;
+      console.log(world);
+
+      let agent = EntityName.Agent(TeamSide.LEFT, "10");
+      console.log(agent);
+
+      let teamDescription = new TeamDescription("team1", "team2", "team3");
+      console.log(teamDescription.color);
     },
-    created() {
-        this.init();
+    init() {
+      this.glinit();
+      this.worldinit();
+      this.scene.add(this.world.group);
     },
-    mounted() {
-        this.load();
-        //this.test();
+    worldinit() {
+      let gameDes = new GameDescription(GameType.TWO_D, {}, {}, []);
+      let agentDesArr1 = [];
+      let agentDesArr2 = [];
+      for (let i = 0; i < 11; i++) {
+        agentDesArr1.push(new AgentDescription(i + 1, TeamSide.LEFT));
+      }
+      for (let i = 0; i < 11; i++) {
+        agentDesArr2.push(new AgentDescription(i + 1, TeamSide.RIGHT));
+      }
+      let leftteam = new TeamDescription(
+        "ll",
+        TeamSide.LEFT,
+        new THREE.Color("#00B7FF"),
+        agentDesArr1
+      );
+      let rightteam = new TeamDescription(
+        "rr",
+        TeamSide.RIGHT,
+        new THREE.Color("#AC3B3B"),
+        agentDesArr2
+      );
+      this.world = new World(gameDes, leftteam, rightteam);
+
+      this.world.createSkyBox();
+      this.world.createField();
+      this.world.createTeams();
+
+      let ambientLight = MeshFactory.createAmbientLight(
+        "light",
+        new THREE.Color("#FFFFFF"),
+        1.5
+      );
+      let directionalLight = new THREE.DirectionalLight("#FFFFFF");
+      // 平行光配置
+      directionalLight.position.set(-40, 60, -10);
+      directionalLight.castShadow = true;
+      directionalLight.shadow.camera.near = 2;
+      directionalLight.shadow.camera.far = 200;
+      directionalLight.shadow.camera.left = -50;
+      directionalLight.shadow.camera.right = 50;
+      directionalLight.shadow.camera.top = 50;
+      directionalLight.shadow.camera.bottom = -50;
+      // 距离和强度
+      directionalLight.distance = 1;
+      directionalLight.intensity = 1.5;
+      // 设置阴影的分辨率
+      directionalLight.shadow.mapSize.width = 1024;
+      directionalLight.shadow.mapSize.height = 1024;
+
+      this.world.addLight("am", ambientLight);
+      this.world.addLight("sun", directionalLight);
     },
-    methods: {
-        test() {
-            let map1 = new Map();
-            map1.set(1.1, "string1");
-            map1.set(2.1, "string2");
-            map1.set(3.1, "string3");
-            map1.forEach((element) => {
-                console.log(element);
-            });
+    glinit() {
+      this.scene = new THREE.Scene();
+      //this.camera = new THREE.OrthographicCamera(-window.innerWidth, window.innerWidth, window.innerHeight, -window.innerHeight, 0.1, 5000)
+      this.camera = new THREE.PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        5000
+      );
+      this.camera.position.set(0, 50, 70);
+      this.camera.lookAt(new THREE.Vector3(0, 0, -30));
+      this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+      this.renderer.gammaOutput = true;
+      this.renderer.gammaFactor = 2.2;
+      this.renderer.autoClear = false;
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      this.renderer.shadowMapSoft = true;
+      this.renderer.shadowMapAutoUpdate = true;
+      this.renderer.sortObjects = false;
+      this.renderer.localClippingEnabled = true;
+      this.renderer.physicallyCorrectLights = true;
+      this.renderer.setClearColor(new THREE.Color(0x000000), 0);
+      //this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      //this.renderer.toneMappingExposure = 1.25;
+      //this.renderer.toneMappingWhitePoint = 1.0;
 
-            let world = EntityName.World;
-            console.log(world);
+      document.body.appendChild(this.renderer.domElement);
 
-            let agent = EntityName.Agent(TeamSide.LEFT, "10");
-            console.log(agent);
+      const x = new THREE.MeshBasicMaterial({ color: "rgb(255, 0, 0)" });
+      const y = new THREE.MeshBasicMaterial({ color: "rgb(0, 255, 0)" });
+      const z = new THREE.MeshBasicMaterial({ color: "rgb(0, 0, 255)" });
+      let a = new Float32Array([0, 0, 0, 10, 0, 0]);
+      let b = new Float32Array([0, 0, 0, 0, 10, 0]);
+      let c = new Float32Array([0, 0, 0, 0, 0, 10]);
+      var line1 = new THREE.BufferGeometry();
+      line1.setAttribute("position", new THREE.BufferAttribute(a, 3));
+      var line2 = new THREE.BufferGeometry();
+      line2.setAttribute("position", new THREE.BufferAttribute(b, 3));
+      var line3 = new THREE.BufferGeometry();
+      line3.setAttribute("position", new THREE.BufferAttribute(c, 3));
+      var linea = new THREE.Line(line1, x);
+      var lineb = new THREE.Line(line2, y);
+      var linec = new THREE.Line(line3, z);
+      this.scene.add(linea);
+      this.scene.add(lineb);
+      this.scene.add(linec);
 
-            let teamDescription = new TeamDescription(
-                "team1",
-                "team2",
-                "team3"
-            );
-            console.log(teamDescription.color);
-        },
-        init() {
-            this.glinit();
-            this.worldinit();
-            this.scene.add(this.world.group);
-        },
-        worldinit() {
-            let gameDes = new GameDescription(GameType.TWO_D, {}, {}, []);
-            let agentDesArr1 = [];
-            let agentDesArr2 = [];
-            for (let i = 0; i < 11; i++) {
-                agentDesArr1.push(new AgentDescription(i + 1, TeamSide.LEFT));
-            }
-            for (let i = 0; i < 11; i++) {
-                agentDesArr2.push(new AgentDescription(i + 1, TeamSide.RIGHT));
-            }
-            let leftteam = new TeamDescription(
-                "ll",
-                TeamSide.LEFT,
-                new THREE.Color("#00B7FF"),
-                agentDesArr1
-            );
-            let rightteam = new TeamDescription(
-                "rr",
-                TeamSide.RIGHT,
-                new THREE.Color("#AC3B3B"),
-                agentDesArr2
-            );
-            this.world = new World(gameDes, leftteam, rightteam);
+      controls = new OrbitControls(this.camera, this.renderer.domElement);
+      controls.enableRotate = true; //启用旋转
+      controls.enablePan = true; //启用平移
+      controls.enableZoom = true;//启用缩放
+      controls.autoRotate = false;//是否自动旋转
+      controls.update();
 
-            this.world.createSkyBox();
-            this.world.createField();
-            this.world.createTeams();
-
-            let ambientLight = MeshFactory.createAmbientLight(
-                "light",
-                new THREE.Color("#FFFFFF"),
-                1.5
-            );
-            let directionalLight = new THREE.DirectionalLight("#FFFFFF");
-            // 平行光配置
-            directionalLight.position.set(-40, 60, -10);
-            directionalLight.castShadow = true;
-            directionalLight.shadow.camera.near = 2;
-            directionalLight.shadow.camera.far = 200;
-            directionalLight.shadow.camera.left = -50;
-            directionalLight.shadow.camera.right = 50;
-            directionalLight.shadow.camera.top = 50;
-            directionalLight.shadow.camera.bottom = -50;
-            // 距离和强度
-            directionalLight.distance = 1;
-            directionalLight.intensity = 1.5;
-            // 设置阴影的分辨率
-            directionalLight.shadow.mapSize.width = 1024;
-            directionalLight.shadow.mapSize.height = 1024;
-
-            this.world.addLight("am", ambientLight);
-            this.world.addLight("sun", directionalLight);
-        },
-        glinit() {
-            this.scene = new THREE.Scene();
-            //this.camera = new THREE.OrthographicCamera(-window.innerWidth, window.innerWidth, window.innerHeight, -window.innerHeight, 0.1, 5000)
-            this.camera = new THREE.PerspectiveCamera(
-                45,
-                window.innerWidth / window.innerHeight,
-                0.1,
-                5000
-            );
-            this.camera.position.set(0, 50, 70);
-            this.camera.lookAt(new THREE.Vector3(0, 0, -30));
-            this.renderer = new THREE.WebGLRenderer({
-                antialias: true,
-                alpha: true,
-            });
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
-            this.renderer.setPixelRatio(window.devicePixelRatio);
-            this.renderer.gammaOutput = true;
-            this.renderer.gammaFactor = 2.2;
-            this.renderer.autoClear = false;
-            this.renderer.shadowMap.enabled = true;
-            this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            this.renderer.shadowMapSoft = true;
-            this.renderer.shadowMapAutoUpdate = true;
-            this.renderer.sortObjects = false;
-            this.renderer.localClippingEnabled = true;
-            this.renderer.physicallyCorrectLights = true;
-            this.renderer.setClearColor(new THREE.Color(0x000000), 0);
-            //this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            //this.renderer.toneMappingExposure = 1.25;
-            //this.renderer.toneMappingWhitePoint = 1.0;
-
-            document.body.appendChild(this.renderer.domElement);
-
-            const x = new THREE.MeshBasicMaterial({ color: "rgb(255, 0, 0)" });
-            const y = new THREE.MeshBasicMaterial({ color: "rgb(0, 255, 0)" });
-            const z = new THREE.MeshBasicMaterial({ color: "rgb(0, 0, 255)" });
-            let a = new Float32Array([0, 0, 0, 10, 0, 0]);
-            let b = new Float32Array([0, 0, 0, 0, 10, 0]);
-            let c = new Float32Array([0, 0, 0, 0, 0, 10]);
-            var line1 = new THREE.BufferGeometry();
-            line1.setAttribute("position", new THREE.BufferAttribute(a, 3));
-            var line2 = new THREE.BufferGeometry();
-            line2.setAttribute("position", new THREE.BufferAttribute(b, 3));
-            var line3 = new THREE.BufferGeometry();
-            line3.setAttribute("position", new THREE.BufferAttribute(c, 3));
-            var linea = new THREE.Line(line1, x);
-            var lineb = new THREE.Line(line2, y);
-            var linec = new THREE.Line(line3, z);
-            this.scene.add(linea);
-            this.scene.add(lineb);
-            this.scene.add(linec);
-
-            controls = new OrbitControls(this.camera, this.renderer.domElement);
-            controls.enableRotate = true; //启用旋转
-            controls.enablePan = true; //启用平移
-            controls.enableZoom = true; //启用缩放
-            controls.autoRotate = false; //是否自动旋转
-            controls.update();
-
-            this.scene.background = new THREE.Color("skyblue");
-        },
-        load() {
-            this.animate();
-        },
-        animate() {
-            requestAnimationFrame(this.animate);
-            let scene = toRaw(this.scene);
-            controls.update();
-            this.renderer.render(scene, this.camera);
-        },
+      this.scene.background = new THREE.Color("skyblue")
     },
+    load() {
+      this.animate();
+    },
+    animate() {
+      requestAnimationFrame(this.animate);
+      let scene = toRaw(this.scene);
+      controls.update();
+      this.renderer.render(scene, this.camera);
+    }
+  }
 };
+
 </script>
 <style>
 .wrap {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
 }
 
 #container {
-    height: 100%;
+  height: 100%;
 }
 
 .label {
-    margin-top: -20px;
-    color: #fff;
-    font-size: 12px;
-    border: 1px solid #dbeca4;
-    padding: 3px 5px;
-    background: rgba(0, 0, 0, 0.6);
-    min-width: 80px;
+  margin-top: -20px;
+  color: #fff;
+  font-size: 12px;
+  border: 1px solid #dbeca4;
+  padding: 3px 5px;
+  background: rgba(0, 0, 0, 0.6);
+  min-width: 80px;
 }
 
 .pressure {
-    width: 115px;
+  width: 115px;
 }
 
 .text_Num {
-    color: red;
-    margin-right: 5px;
+  color: red;
+  margin-right: 5px;
 }
 </style>

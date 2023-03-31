@@ -1,28 +1,28 @@
 <template>
-    <PlayerP />
-    <ThreeTest />
+  <PlayerP />
+  <ThreeTest />
 </template>
 
 <script>
-import PlayerP from './view/PlayerP.vue';
 import ThreeTest from './view/ThreeTest.vue'
+import PlayerP from './view/PlayerP.vue'
 
 export default {
-    name: 'App',
-    components: {
-        ThreeTest,
-        PlayerP
-    }
+  name: 'App',
+  components: {
+    ThreeTest,
+    PlayerP
+  }
 }
 </script>
 
 <style>
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
 }
 </style>
