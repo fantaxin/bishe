@@ -1,31 +1,12 @@
 <template>
-  <div class="Player">
-    <div>
-      <!-- header -->
-      header
-      <div>
-        <!-- logo -->
-      </div>
-      <div>
-        <!-- title -->
-      </div>  
- 
-    </div>
-    <div>
-      <!-- video list -->
-
-    </div>
-    <div>
-      <!-- video player --> 
-      <div id="viewport">
-        <span id="welcome-text">Loading JaSMIn player...</span>
-      </div>
-    </div>
+  <div>
+    <input type="file" id="fileInput" accept=".replay" onchange="" />
   </div>
-
 </template>
-
-
-<style scoped>
-
-</style>
+<script>
+const inputElement = document.getElementById("input");
+inputElement.addEventListener("change", handleFiles, false);
+function handleFiles() {
+  const fileList = this.files; /* now you can work with the file list */
+}
+</script>

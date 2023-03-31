@@ -1,14 +1,17 @@
 <template>
+  <PlayerP />
   <ThreeTest />
 </template>
 
 <script>
 import ThreeTest from './view/ThreeTest.vue'
+import PlayerP from './view/PlayerP.vue'
 
 export default {
   name: 'App',
   components: {
-    ThreeTest
+    ThreeTest,
+    PlayerP
   }
 }
 </script>

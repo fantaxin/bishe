@@ -3,7 +3,7 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-23 13:46:32
-* @LastEditTime 2023-03-24 13:38:40
+* @LastEditTime 2023-03-31 03:28:42
  */
 export { Game }
 
@@ -15,26 +15,26 @@ import { ScoreState } from "./state/ScoreState";
 import { PlayMode } from "../util/Constants.js";
 
 class Game {
-    constructor(logDescription, gameDescription, leftTeam, rightTeam, frames, scoreMoment, stateMoment) {
+    constructor(logPath) {
+        this.logPath = logPath;
 
         /**@type {LogDescription} */
-        this.logDescription = logDescription;
+        this.logDescription;
 
         /**@type {GameDescription} */
-        this.gameDescription = gameDescription;
+        this.gameDescription;
 
         /**@type {TeamDescription} */
-        this.leftTeam = leftTeam;
+        this.leftTeam;
         /**@type {TeamDescription} */
-        this.rightTeam = rightTeam;
+        this.rightTeam;
 
         /**@type {Array<Frame>} */
-        this.frames = frames;
+        this.frames;
 
         /**@type {Map<number, ScoreState>} */
-        this.scoreMoment = scoreMoment;
+        this.scoreMoment;
         /**@type {Map<number, PlayMode>} */
-        this.stateMoment = stateMoment;
-
+        this.stateMoment;
     }
 }

@@ -7,6 +7,8 @@
  */
 export { CameraController }
 
+import { Vector3 } from "three";
+
 class CameraController {
     /**
     * @description: 
@@ -18,7 +20,7 @@ class CameraController {
         this.camera = camera;
         this.canvas = canvas;
         const scope = this;
-        this.targetPos = new THREE.Vector3(0, 105, 0);
+        this.targetPos = new Vector3(0, 105, 0);
     }
 
 }

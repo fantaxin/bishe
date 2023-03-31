@@ -1,21 +1,20 @@
 <template>
-  <div>
-    123
-  </div>
+  <div></div>
 </template>
 <script>
 import * as THREE from "three";
 //import { reactive } from 'vue';
-import { toRaw } from 'vue';
+import { toRaw } from "vue";
 //const scenel = reactive({ count: 0 })
 import { Player } from "../js/player.js";
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { TeamDescription } from "@/js/game/description/TeamDescription.js";
 import { GameType, EntityName, TeamSide } from "@/js/util/Constants.js";
 import { MeshFactory } from "@/js/model/loader/MeshFactory";
 import { World } from "@/js/model/World";
 import { GameDescription } from "@/js/game/description/GameDescription";
 import { AgentDescription } from "@/js/game/description/AgentDescription";
+import { test } from "@/js/test/test";
 
 let controls;
 let geometry;
@@ -33,7 +32,6 @@ export default {
       // 灯光
       /**@type {World} */
       world: null,
-
     };
   },
   created() {
@@ -42,6 +40,7 @@ export default {
   mounted() {
     this.load();
     //this.test();
+    test();
   },
   methods: {
     test() {
@@ -49,7 +48,7 @@ export default {
       map1.set(1.1, "string1");
       map1.set(2.1, "string2");
       map1.set(3.1, "string3");
-      map1.forEach(element => {
+      map1.forEach((element) => {
         console.log(element);
       });
 
@@ -77,15 +76,29 @@ export default {
       for (let i = 0; i < 11; i++) {
         agentDesArr2.push(new AgentDescription(i + 1, TeamSide.RIGHT));
       }
-      let leftteam = new TeamDescription("ll", TeamSide.LEFT, new THREE.Color("#00B7FF"), agentDesArr1);
-      let rightteam = new TeamDescription("rr", TeamSide.RIGHT, new THREE.Color("#AC3B3B"), agentDesArr2);
+      let leftteam = new TeamDescription(
+        "ll",
+        TeamSide.LEFT,
+        new THREE.Color("#00B7FF"),
+        agentDesArr1
+      );
+      let rightteam = new TeamDescription(
+        "rr",
+        TeamSide.RIGHT,
+        new THREE.Color("#AC3B3B"),
+        agentDesArr2
+      );
       this.world = new World(gameDes, leftteam, rightteam);
 
       this.world.createSkyBox();
       this.world.createField();
       this.world.createTeams();
 
-      let ambientLight = MeshFactory.createAmbientLight("light", new THREE.Color("#FFFFFF"), 1.5);
+      let ambientLight = MeshFactory.createAmbientLight(
+        "light",
+        new THREE.Color("#FFFFFF"),
+        1.5
+      );
       let directionalLight = new THREE.DirectionalLight("#FFFFFF");
       // 平行光配置
       directionalLight.position.set(-40, 60, -10);
@@ -109,7 +122,12 @@ export default {
     glinit() {
       this.scene = new THREE.Scene();
       //this.camera = new THREE.OrthographicCamera(-window.innerWidth, window.innerWidth, window.innerHeight, -window.innerHeight, 0.1, 5000)
-      this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 5000);
+      this.camera = new THREE.PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        5000
+      );
       this.camera.position.set(0, 50, 70);
       this.camera.lookAt(new THREE.Vector3(0, 0, -30));
       this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -154,11 +172,11 @@ export default {
       controls = new OrbitControls(this.camera, this.renderer.domElement);
       controls.enableRotate = true; //启用旋转
       controls.enablePan = true; //启用平移
-      controls.enableZoom = true;//启用缩放
-      controls.autoRotate = false;//是否自动旋转 
+      controls.enableZoom = true; //启用缩放
+      controls.autoRotate = false; //是否自动旋转
       controls.update();
 
-      this.scene.background = new THREE.Color("skyblue")
+      this.scene.background = new THREE.Color("skyblue");
     },
     load() {
       this.animate();
@@ -168,10 +186,9 @@ export default {
       let scene = toRaw(this.scene);
       controls.update();
       this.renderer.render(scene, this.camera);
-    }
-  }
+    },
+  },
 };
-
 </script>
 <style>
 .wrap {

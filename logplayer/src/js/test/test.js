@@ -3,12 +3,22 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-24 10:07:25
-* @LastEditTime 2023-03-29 14:10:02
+* @LastEditTime 2023-03-31 02:42:48
  */
-export { }
 
 import { TeamDescription } from "@/js/game/description/TeamDescription.js";
 import { EntityName, TeamSide, AngleY } from "@/js/util/Constants.js";
+import { Entity } from "./Entity.js";
+
+export function test() {
+    let entity = new Entity("123");
+    entity.addEventListener("click", (
+        (event) => {
+            console.log(this.name + " : " + event.type + " : " + event.mag);
+        })
+    );
+    entity.dispatchEvent({ type: "click", mag: 1 });
+}
 
 let map1 = new Map();
 map1.set(1.1, "string1");
@@ -44,3 +54,15 @@ if (x > 0 && z <= 0) {
 } else if (x == 0) {
     console.log(Math.PI + (z / Math.abs(z)) * (Math.PI / 2));
 }
+
+let entity = new Entity("123");
+
+a = function (event) {
+    console.log(this.name + " : " + event.type + " : " + event.msg);
+}
+
+entity.addEventListener("click", function (event) {
+    console.log(this.name + " : " + event.type + " : " + event.msg);
+});
+
+entity.dispatchEvent({ type: "click", msg: 1 });
