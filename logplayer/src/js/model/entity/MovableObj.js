@@ -49,8 +49,9 @@ class MovableObject {
      */
     updatePosition(state, nextState, t) {
         //TODO: 完成对对象坐标的更新
-        this.obj.translateX(nextState.x - state.x);
-        this.obj.translateY(nextState.y - state.y);
-        this.obj.translateZ(nextState.z - state.z);
+        this.obj.position.setX(state.x)
+        //this.obj.translateX(nextState.x - state.x);
+        //this.obj.translateY(nextState.y - state.y);
+        //this.obj.translateZ(nextState.z - state.z);
     }
 }

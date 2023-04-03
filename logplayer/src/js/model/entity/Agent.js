@@ -50,10 +50,11 @@ class Agent extends MovableObject {
      */
     updateState(state, nextState, t) {
         this.updatePosition(state, nextState);
+        // TODO: 这里的角度不对 应该是 (x2-x1,z2-z1) 的角度
         const diffAngleY = AngleY(nextState.x, nextState.z) - AngleY(state.x, state.z);
         let main = this.obj.getObjectByName(EntityName.Main(this.obj.name));
         //let towards = main.getObjectByName("towards");
-        main.rotateY(diffAngleY);
+        //main.rotateY(diffAngleY);
 
         this.state = nextState.flag;
         this.stamina = nextState.stamina;
