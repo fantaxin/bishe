@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +34,8 @@ public class LogFrame {
 
     // 当前帧的球状态
     LogBallState ballState;
+
+    List<String> agentChange = new ArrayList<>();
 
     // 当前帧的球员状态
     List<LogPlayerState> leftAgentStates;

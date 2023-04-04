@@ -3,6 +3,7 @@ package edu.cug.robo.log;
 import edu.cug.robo.enums.TeamSide;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * edu.cug.robo.log.LogAgent
@@ -12,6 +13,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 public class LogAgent {
     int num;
     TeamSide side;

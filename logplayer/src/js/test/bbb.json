@@ -1,0 +1,188 @@
+{
+    "environmentParams": {},
+    "frames": [
+        {
+            "agentChange": [],
+            "ballState": {
+                "vx": 0.0,
+                "vy": 0.0,
+                "x": 0.0,
+                "y": 0.0
+            },
+            "gameMode": "kick_off_l",
+            "gametime": 0.0,
+            "leftAgentStates": [
+                {
+                    "angles": [
+                        0.25,
+                        0.0,
+                        0.0
+                    ],
+                    "flag": 9,
+                    "playerTypeIdx": 0,
+                    "stamina": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.0,
+                    "x": -49.0,
+                    "y": 0.0
+                },
+                {
+                    "angles": [
+                        12.48,
+                        -90.0,
+                        0.0
+                    ],
+                    "flag": 1,
+                    "playerTypeIdx": 1,
+                    "stamina": -90.0,
+                    "vx": 0.0,
+                    "vy": 0.0,
+                    "x": -25.0,
+                    "y": -5.0
+                },
+                {
+                    "angles": [
+                        -1.7,
+                        -76.0,
+                        0.0
+                    ],
+                    "flag": 1,
+                    "playerTypeIdx": 6,
+                    "stamina": -76.0,
+                    "vx": 0.0,
+                    "vy": 0.0,
+                    "x": -25.0,
+                    "y": 5.0
+                },
+                {
+                    "angles": [
+                        45.74,
+                        -39.0,
+                        0.0
+                    ],
+                    "flag": 1,
+                    "playerTypeIdx": 12,
+                    "stamina": -39.0,
+                    "vx": 0.0,
+                    "vy": 0.0,
+                    "x": -24.0,
+                    "y": -18.0
+                },
+                {
+                    "angles": [
+                        3.13,
+                        12.0,
+                        0.0
+                    ],
+                    "flag": 1,
+                    "playerTypeIdx": 17,
+                    "stamina": 12.0,
+                    "vx": 0.0,
+                    "vy": 0.0,
+                    "x": -24.0,
+                    "y": 18.0
+                },
+                {
+                    "angles": [
+                        13.93,
+                        0.0,
+                        0.0
+                    ],
+                    "flag": 1,
+                    "playerTypeIdx": 16,
+                    "stamina": 0.0,
+                    "vx": 0.0,
+                    "vy": 0.0,
+                    "x": -10.0,
+                    "y": 0.0
+                },
+                {
+                    "angles": [
+                        45.34,
+                        -35.0,
+                        0.0
+                    ],
+                    "flag": 1,
+                    "playerTypeIdx": 7,
+                    "stamina": -35.0,
+                    "vx": 0.0,
+                    "vy": 0.0,
+                    "x": -15.0,
+                    "y": -9.0
+                },
+                {
+                    "angles": [
+                        -14.65,
+                        -76.0,
+                        0.0
+                    ],
+                    "flag": 1,
+                    "playerTypeIdx": 14,
+                    "stamina": -76.0,
+                    "vx": 0.0,
+                    "vy": 0.0,
+                    "x": -15.0,
+                    "y": 9.0
+                },
+                {
+                    "angles": [
+                        99.06,
+                        -88.0,
+                        0.0
+                    ],
+                    "flag": 1,
+                    "playerTypeIdx": 8,
+                    "stamina": -88.0,
+                    "vx": 0.0,
+                    "vy": 0.0,
+                    "x": -3.0,
+                    "y": -24.0
+                },
+                {
+                    "angles": [
+                        -94.59,
+                        -90.0,
+                        0.0
+                    ],
+                    "flag": 1,
+                    "playerTypeIdx": 5,
+                    "stamina": -90.0,
+                    "vx": 0.0,
+                    "vy": 0.0,
+                    "x": -3.0,
+                    "y": 24.0
+                },
+                {
+                    "angles": [
+                        177.16,
+                        90.0,
+                        0.0
+                    ],
+                    "flag": 1,
+                    "playerTypeIdx": 9,
+                    "stamina": 90.0,
+                    "vx": 0.0,
+                    "vy": 0.0,
+                    "x": -0.385,
+                    "y": 0.0
+                }
+            ],
+            "rightAgentStates": [
+                {
+                    "angles": [
+                        -91.36,
+                        -90.0,
+                        0.0
+                    ],
+                    "flag": 9,
+                    "playerTypeIdx": 14,
+                    "stamina": -90.0,
+                    "vx": 0.0,
+                    "vy": 0.0,
+                    "x": 47.5,
+                    "y": 0.0
+                }
+            ]
+        }
+    ]
+}

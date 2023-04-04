@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.sun.javaws.IconUtil;
 import edu.cug.robo.enums.*;
 import edu.cug.robo.log.*;
+import edu.cug.robo.state.Frame;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -83,8 +85,10 @@ public class LogParseUtil {
 
             String[] lineSplit = line.split(" ");
             LineType lineType = LineType.getType(lineSplit[0]);
-
-            System.out.println(limit);
+            //System.out.println(limit);
+            if(limit==3432){
+                //System.out.println(1);
+            }
             switch (lineType) {
                 case EnvironmentParams:
                     line = parseReplayEP(gameLog, line);
@@ -254,13 +258,22 @@ public class LogParseUtil {
             } else {
                 break;
             }
-            line = parseReplayPlayerState(gameLog, playerState, line, firstParseFrame);
+            int idx = parseReplayPlayerState(gameLog, playerState, line, firstParseFrame);
+            if(idx!=-1){
+                int agentNum = lineType.equals(LineType.Left)?l_playerStates.size():r_playerStates.size();
+                LogAgent agent = (lineType.equals(LineType.Left)? gameLog.getLeftTeam(): gameLog.getRightTeam()).getAgentDescriptions().get(agentNum-1);
+                int pre_idx = agent.getAgentTypeIdx();
+                agent.setAgentTypeIdx(idx);
+                frame.getAgentChange().add(lineType +"_"+agentNum+"_"+pre_idx+"_"+idx);
+            }
+
+            line = "";
         }
 
         return line;
     }
 
-    private static String parseReplayPlayerState(Game gameLog, LogPlayerState playerState, String line, boolean firstParseFrame) {
+    private static int parseReplayPlayerState(Game gameLog, LogPlayerState playerState, String line, boolean firstParseFrame) {
         boolean version1 = gameLog.getLogVersion() == 1;
 
         //LogPlayerState playerState = new LogPlayerState();
@@ -284,17 +297,24 @@ public class LogParseUtil {
             index++;
         }
 
+        int playerTypeIdx = -1;
         if (version1) {
-            if(paramSplit[0].equals("R") || paramSplit[0].equals("L")){
-                //playerState.setPlayerTypeIdx(Integer.parseInt(paramSplit[index + indexOffset++]));
-                logAgent.setAgentTypeIdx(Integer.parseInt(paramSplit[index + indexOffset++]));
-                //logAgent.setOtherAgentParam();
-                if(paramSplit[0].equals("R")){
-                    gameLog.getRightTeam().getAgentDescriptions().add(logAgent);
+            //int playerTypeIdx = -1;
+            if((paramSplit[0].equals("R") || paramSplit[0].equals("L"))){
+                playerTypeIdx = Integer.parseInt(paramSplit[index+indexOffset++]);
+                if(!firstParseFrame){
+
                 }else{
-                    gameLog.getLeftTeam().getAgentDescriptions().add(logAgent);
+                    logAgent.setAgentTypeIdx(playerTypeIdx);
+                    //logAgent.setOtherAgentParam();
+                    if(paramSplit[0].equals("R")){
+                        gameLog.getRightTeam().getAgentDescriptions().add(logAgent);
+                    }else{
+                        gameLog.getLeftTeam().getAgentDescriptions().add(logAgent);
+                    }
                 }
             }
+            playerState.setPlayerTypeIdx(playerTypeIdx);
             playerState.setFlag(Integer.decode(paramSplit[index + indexOffset++]));
         } else if (paramSplit[0].equals("R") || paramSplit[0].equals("L")) {
             // 现在还不知道这什么意思
@@ -304,24 +324,26 @@ public class LogParseUtil {
         playerState.setX(Double.parseDouble(paramSplit[indexOffset+index++]));
         playerState.setY(Double.parseDouble(paramSplit[indexOffset+index++]));
 
-        List<Double> angles = playerState.getAngles();
-        angles.add(Double.parseDouble(paramSplit[indexOffset+index++]));
+        Double[] angles = playerState.getAngles();
+        //List<Double> angles = new ArrayList<>();
+        angles[0]=(Double.parseDouble(paramSplit[indexOffset+index++]));
+        //angles.add(Double.parseDouble(paramSplit[indexOffset+index++]));
         //playerState.setHeading_angle(Double.parseDouble(paramSplit[indexOffset+index++]));
 
         if (version1) {
-            angles.add(Double.parseDouble(lineSplit[1].split("\\)")[0].split(" ")[1]));
-            angles.add(0.0);
+            angles[1]=(Double.parseDouble(lineSplit[1].split("\\)")[0].split(" ")[1]));
+            //angles.add(0.0);
             //playerState.setJoint_angle(Double.parseDouble(lineSplit[1].split("\\)")[0].split(" ")[1]));
-            playerState.setStamina(Double.parseDouble(lineSplit[1].split("\\)")[0].split(" ")[1]));
+            playerState.setStamina(Double.parseDouble(lineSplit[2].split("\\)")[0].split(" ")[1]));
         } else {
-            angles.add(0.0);
-            angles.add(Double.parseDouble(paramSplit[index++]));
+            //angles.add(0.0);
+            angles[2]=(Double.parseDouble(paramSplit[index++]));
             //playerState.setNeck_angle(Double.parseDouble(paramSplit[index++]));
             playerState.setStamina(Double.parseDouble(paramSplit[index].split("#")[1]));
         }
+        //playerState.setAngles(angles);
 
-
-        return "";
+        return firstParseFrame?-1:playerTypeIdx;
     }
 
     /**

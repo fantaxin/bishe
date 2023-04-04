@@ -86,7 +86,7 @@ javascript
 model
 - https://www.aigei.com/
 - https://sketchfab.com/search?type=models
-- https://www.om.com/
+- https://www.om.cn/
 - https://3d.znzmo.com/
 - https://www.3dxia.com/
 

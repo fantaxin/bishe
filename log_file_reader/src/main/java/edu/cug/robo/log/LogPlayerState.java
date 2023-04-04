@@ -20,14 +20,14 @@ public class LogPlayerState {
 
     //TeamSide side;
     //int number = 0;
-    //int playerTypeIdx = -1;
+    int playerTypeIdx = -1;
     int flag = 0x0;
     double x = 0.0;
     double y = 0.0;
     //double z = 0.0;
     double vx = 0.0;
     double vy = 0.0;
-    List<Double> angles = new ArrayList<>();
+    Double[] angles = new Double[3];
     //double heading_angle = 0.0;
     //double neck_angle = 0.0;
     //double joint_angle = 0.0;
