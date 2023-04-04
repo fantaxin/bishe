@@ -1,3 +1,8 @@
+import { AgentState } from "../game/state/AgentState";
+import { BallState } from "../game/state/BallState";
+import { Frame } from "../game/state/Frame";
+import { ScoreState } from "../game/state/ScoreState";
+
 /**
  * @enum {string}
  */
@@ -146,4 +151,38 @@ export function isRight(str) {
         return true;
     }
     return false;
+}
+
+export function frames(num = 104) {
+    let num2 = num / 2;
+    const frames = [];
+    for (let i = 0; i < num; i++) {
+        const gameMode = PlayMode.PLAY_ON;
+        const scoreState = new ScoreState(0, 0, 0, 0, 0, 0);
+        const ballState = new BallState(-num2 + i, 2, 0, 0, 0, 0, 0);
+        const leftAgentStates = [];
+        for (let j = 0; j < 11; j++) {
+            leftAgentStates.push(new AgentState(0, -num2 + i, 2, 1 + 3 * (2 * j), 0, 0, 0, 0, [], 7000));
+        }
+        const rightAgentStates = [];
+        for (let j = 0; j < 11; j++) {
+            rightAgentStates.push(new AgentState(0, num2 - i, 2, 1 + 3 * (2 * j + 1), 0, 0, 0, 0, [], 7000));
+        }
+        frames.push(new Frame(i, i, gameMode, scoreState, ballState, leftAgentStates, rightAgentStates));
+    }
+    for (let i = 0; i < num; i++) {
+        const gameMode = PlayMode.PLAY_ON;
+        const scoreState = new ScoreState(0, 0, 0, 0, 0, 0);
+        const ballState = new BallState(num2 - i, 2, 0, 0, 0, 0, 0);
+        const leftAgentStates = [];
+        for (let j = 0; j < 11; j++) {
+            leftAgentStates.push(new AgentState(0, num2 - i, 2, 1 + 3 * (2 * j), 0, 0, 0, 0, [], 7000));
+        }
+        const rightAgentStates = [];
+        for (let j = 0; j < 11; j++) {
+            rightAgentStates.push(new AgentState(0, -num2 + i, 2, 1 + 3 * (2 * j + 1), 0, 0, 0, 0, [], 7000));
+        }
+        frames.push(new Frame(i, i, gameMode, scoreState, ballState, leftAgentStates, rightAgentStates));
+    }
+    return frames;
 }

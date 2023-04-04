@@ -3,7 +3,7 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-24 10:07:25
-* @LastEditTime 2023-03-31 02:42:48
+* @LastEditTime 2023-04-03 10:27:36
  */
 
 import { TeamDescription } from "@/js/game/description/TeamDescription.js";
@@ -14,7 +14,7 @@ export function test() {
     let entity = new Entity("123");
     entity.addEventListener("click", (
         (event) => {
-            console.log(this.name + " : " + event.type + " : " + event.mag);
+            //console.log(this.name + " : " + event.type + " : " + event.mag);
         })
     );
     entity.dispatchEvent({ type: "click", mag: 1 });

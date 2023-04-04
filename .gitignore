@@ -32,5 +32,8 @@ build/
 .vscode/
 
 node_modules/
+/logplayer/src/js/test/ddd.json
+logplayer/src/js/test/eee.json
+
 
 temp/

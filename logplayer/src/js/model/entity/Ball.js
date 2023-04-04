@@ -3,7 +3,7 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-22 09:50:13
-* @LastEditTime 2023-03-30 17:11:50
+* @LastEditTime 2023-04-03 10:02:54
  */
 export { Ball }
 
@@ -22,6 +22,7 @@ class Ball extends MovableObject {
 
         this.loadModel();
     }
+
 
     loadModel() {
         // TODO: ball model

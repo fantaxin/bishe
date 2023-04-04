@@ -4,7 +4,7 @@
 *              可以递归创建Entity，但不涉及对Object3D的更新和创建
 * @Author wangxin
 * @Date 2023-03-22 13:32:13
-* @LastEditTime 2023-03-30 17:31:33
+* @LastEditTime 2023-04-03 10:13:37
  */
 export { World }
 
@@ -102,9 +102,18 @@ class World {
     }
 
     //TODO: 对world进行状态更新
-    updateWorld(frame) {
-        this.group.getObjectByName(EntityName.Ball).position = 0;
-        this.group.getObjectByName()
+    /**
+    * @description: 
+    * @param {Frame} frame
+    * @param {Frame} nextFrame
+    * @return {*}
+     */
+    updateWorld(frame, nextFrame, t) {
+        //this.ball.updatePosition(frame.ballState, nextFrame.ballState);
+        this.leftTeam.updateState(frame.leftAgentStates, nextFrame.leftAgentStates, t);
+        this.rightTeam.updateState(frame.rightAgentStates, nextFrame.rightAgentStates, t);
+        //this.group.getObjectByName(EntityName.Ball).position = 0;
+        //this.group.getObjectByName()
 
     }
 }
