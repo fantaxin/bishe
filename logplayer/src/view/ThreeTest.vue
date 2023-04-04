@@ -15,11 +15,12 @@ import { World } from "@/js/model/World";
 import { GameDescription } from "@/js/game/description/GameDescription";
 import { AgentDescription } from "@/js/game/description/AgentDescription";
 import { test } from "@/js/test/test";
+import { request } from "@/js/test/request";
 
 let controls;
 let geometry;
 let n = 0.1;
-let i = 0;
+let i = 0.1;
 export default {
     name: "ThreeTest",
     data() {
@@ -34,18 +35,26 @@ export default {
             /**@type {World} */
             world: null,
 
-            frames: null
+            frames: null,
+
+            log: null
         };
     },
     created() {
+
         this.init();
+        request.get('eee.json', {}).then(res => {
+            this.log = res.data;
+        })
+        //test();
     },
     mounted() {
         this.load();
         //this.test();
-        test();
+
     },
     methods: {
+
         test() {
             let map1 = new Map();
             map1.set(1.1, "string1");
@@ -67,7 +76,7 @@ export default {
         init() {
             this.glinit();
             this.worldinit();
-            this.frames = frames();
+            //this.frames = frames();
             this.scene.add(this.world.group);
         },
         gameinit() {
@@ -125,6 +134,13 @@ export default {
 
             this.world.addLight("am", ambientLight);
             this.world.addLight("sun", directionalLight);
+            //let r = 5;
+            //let cube = new THREE.Mesh(new THREE.BoxGeometry(r, r, r), new THREE.MeshBasicMaterial({ color: "#0E7728" }))
+            //cube.rotateY(0.2);
+
+            //cube.setRotationFromAxisAngle();
+            //this.world.group.add(cube);
+            //this.scene.add(cube);
         },
         glinit() {
             this.scene = new THREE.Scene();
@@ -190,15 +206,30 @@ export default {
         },
         animate() {
             requestAnimationFrame(this.animate);
+
             let scene = toRaw(this.scene);
             controls.update();
             let world = toRaw(this.world);
-            if (i === 207) {
-                i = 0;
+            if (this.log !== null) {
+                i += 0.2;
+                let j = Math.ceil(i);
+                let frame = this.log.frames[j];
+                let nextFrame;
+                //j = 0.1;
+                if (j >= this.log.frames.length) {
+                    nextFrame = frame;
+                } else {
+                    nextFrame = this.log.frames[j];
+                }
+                world.updateWorld(frame, nextFrame)
             }
-            i = i + 1;
-            let t = Math.ceil(i);
-            world.updateWorld(this.frames[t], this.frames[t < frames.length ? t : t - 1], t - 1)
+
+            //if (i === 207) {
+            //    i = 0;
+            //}
+            //i = i + 1;
+            //let t = Math.ceil(i);
+            //world.updateWorld(this.frames[t], this.frames[t < frames.length ? t : t - 1], t - 1)
             this.renderer.render(scene, this.camera);
         }
     }

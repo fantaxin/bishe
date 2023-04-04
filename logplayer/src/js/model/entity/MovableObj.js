@@ -3,7 +3,7 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-22 10:15:44
-* @LastEditTime 2023-03-30 14:39:44
+* @LastEditTime 2023-04-04 18:14:18
  */
 export { MovableObject }
 
@@ -50,6 +50,7 @@ class MovableObject {
     updatePosition(state, nextState, t) {
         //TODO: 完成对对象坐标的更新
         this.obj.position.setX(state.x)
+        this.obj.position.setZ(state.z)
         //this.obj.translateX(nextState.x - state.x);
         //this.obj.translateY(nextState.y - state.y);
         //this.obj.translateZ(nextState.z - state.z);
