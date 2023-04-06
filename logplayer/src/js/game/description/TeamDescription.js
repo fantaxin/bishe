@@ -19,9 +19,17 @@ class TeamDescription {
     * @param {Array<AgentDescription>} agentDiscriptions
      */
     constructor(name, side, color, agentDiscriptions) {
+
+        /**@type {string} */
         this.name = name;
+
+        /**@type {TeamSide} */
         this.side = side;
+
+        /**@type {THREE.Color} */
         this.color = color;
+
+        /**@type {Array<AgentDescription>} */
         this.agentDiscriptions = agentDiscriptions;
     }
 

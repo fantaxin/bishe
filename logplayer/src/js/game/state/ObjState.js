@@ -1,33 +1,37 @@
 /**
-* @FilePath /src/js/state/ObjState.js
+* @FilePath /src/js/game/state/ObjState.js
 * @Description 
 * @Author wangxin
 * @Date 2023-03-22 16:16:29
-* @LastEditTime 2023-03-23 15:44:42
+* @LastEditTime 2023-04-06 16:34:59
  */
 export { ObjState };
 
 import { Vector3, Quaternion } from "three";
 
 class ObjState {
-    /**
-    * @description: 
-    * @param {number} x 
-    * @param {number} y
-    * @param {number} z
-    * @param {number} qx
-    * @param {number} qy
-    * @param {number} qz
-    * @param {number} qw
-    */
-    constructor(x = 0, y = 0, z = 0, qx = 0, qy = 0, qz = 0, qw = 0) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.qx = qx;
-        this.qy = qy;
-        this.qz = qz;
-        this.qw = qw;
+
+    constructor() {
+        /**@type {number} */
+        this.x;
+        /**@type {number} */
+        this.y;
+        /**@type {number} */
+        this.z;
+        /**@type {number} */
+        this.vx;
+        /**@type {number} */
+        this.vy;
+        /**@type {number} */
+        this.vz;
+        /**@type {number} */
+        this.qx;
+        /**@type {number} */
+        this.qy;
+        /**@type {number} */
+        this.qz;
+        /**@type {number} */
+        this.qw;
     }
 
     get position() {

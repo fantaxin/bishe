@@ -4,7 +4,7 @@
 *              可以递归创建Entity，但不涉及对Object3D的更新和创建
 * @Author wangxin
 * @Date 2023-03-22 13:32:13
-* @LastEditTime 2023-04-03 10:13:37
+* @LastEditTime 2023-04-06 17:42:11
  */
 export { World }
 
@@ -24,10 +24,11 @@ class World {
     * @param {GameDescription} gameDescription
     * @param {TeamDescription} teamDescription
      */
-    constructor(gameDescription, leftTeamDescription, rightTeamDescription) {
+
+    constructor(leftTeamDescription, rightTeamDescription) {
         this.group = new Group();
         this.group.name = EntityName.World;
-        this.gameDescription = gameDescription;
+
         this.leftTeamDescription = leftTeamDescription;
         this.rightTeamDescription = rightTeamDescription;
 

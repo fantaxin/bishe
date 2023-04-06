@@ -1,13 +1,13 @@
 package edu.cug.logplayer.server.utils.enums;
 
 /**
- * edu.cug.robo.enums.PlayMode
+ * edu.cug.robo.enums.GameMode
  *
  * @author wangxin
  * @version [1.0.0, 2023/03/15]
  */
 //@ToString
-public enum PlayMode {
+public enum GameMode {
     PM_Null, PM_BeforeKickOff, PM_TimeOver, PM_PlayOn, PM_KickOff_Left, PM_KickOff_Right, PM_KickIn_Left, PM_KickIn_Right, PM_FreeKick_Left,
     PM_FreeKick_Right, PM_CornerKick_Left, PM_CornerKick_Right, PM_GoalKick_Left, PM_GoalKick_Right, PM_AfterGoal_Left, PM_AfterGoal_Right,
     PM_Drop_Ball, PM_OffSide_Left, PM_OffSide_Right, PM_PK_Left, PM_PK_Right, PM_FirstHalfOver, PM_Pause, PM_Human, PM_Foul_Charge_Left,
@@ -25,7 +25,7 @@ public enum PlayMode {
     KICK_OFF_R, FOUL_CHARGE_R, FREE_KICK_R, KICK_IN_R, GOAL_R, CORNER_KICK_R, GOAL_KICK_R;
 
 
-    public PlayMode getPlayMode(String str) {
+    public GameMode getPlayMode(String str) {
         switch (str) {
             case "play_on":
                 return PLAY_ON;

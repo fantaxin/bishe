@@ -1,10 +1,11 @@
 package edu.cug.logplayer.server.log;
 
-import edu.cug.logplayer.server.LogUtil;
-import edu.cug.logplayer.server.enums.LogType;
-import edu.cug.logplayer.server.enums.GameType;
+import edu.cug.logplayer.server.utils.LogUtil;
 
 import java.util.List;
+
+import edu.cug.logplayer.server.utils.enums.GameType;
+import edu.cug.logplayer.server.utils.enums.LogType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -34,13 +35,13 @@ public class Game {
 
     private GameType gameType;
     // 系统环境参数
-    private LogParams environmentParams;
+    private ParamsMap environmentParams;
 
     // 球员参数
-    private LogParams playerParams;
+    private ParamsMap agentParams;
 
     // 球员类型 size = playerParams.getParam("player_types")
-    private List<LogParams> playerTypes;
+    private List<ParamsMap> agentTypes;
 
 
     /**

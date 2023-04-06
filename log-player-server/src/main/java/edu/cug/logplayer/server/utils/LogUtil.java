@@ -1,4 +1,4 @@
-package edu.cug.logplayer.server;
+package edu.cug.logplayer.server.utils;
 
 /**
  * edu.cug.robo.LogUtil

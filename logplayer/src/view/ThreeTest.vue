@@ -104,7 +104,7 @@ export default {
                 new THREE.Color("#AC3B3B"),
                 agentDesArr2
             );
-            this.world = new World(gameDes, leftteam, rightteam);
+            this.world = new World(leftteam, rightteam);
 
             this.world.createSkyBox();
             this.world.createField();

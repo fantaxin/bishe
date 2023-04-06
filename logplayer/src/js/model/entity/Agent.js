@@ -23,7 +23,6 @@ class Agent extends MovableObject {
         // left_10
         super(EntityName.Agent(agentDiscription.side, agentDiscription.num));
         this.agentDiscription = agentDiscription;
-        this.otherAgentParam = agentDiscription.otherAgentParam;
         this.agentType;
 
         //state

@@ -1,6 +1,6 @@
 package edu.cug.logplayer.server.log;
 
-import edu.cug.logplayer.server.enums.TeamSide;
+import edu.cug.logplayer.server.utils.enums.TeamSide;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,5 +18,5 @@ public class LogAgent {
     int num;
     TeamSide side;
     int agentTypeIdx;
-    LogParams otherAgentParam;
+    ParamsMap otherAgentParam;
 }

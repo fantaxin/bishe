@@ -12,20 +12,40 @@ import { TeamDescription } from "./description/TeamDescription.js";
 import { LogDescription } from "./description/LogDescription";
 import { GameDescription } from "./description/GameDescription";
 import { ScoreState } from "./state/ScoreState";
-import { PlayMode } from "../util/Constants.js";
+import { GameMode } from "../util/Constants.js";
 
 class Game {
-    constructor(logPath) {
-        this.logPath = logPath;
+    constructor() {
 
-        /**@type {LogDescription} */
-        this.logDescription;
+        this.logPath;
 
-        /**@type {GameDescription} */
-        this.gameDescription;
+        /**@type {LogType} */
+        this.logType;
+
+        /**@type {int} */
+        this.logVersion;
+
+        /**@type {number} 播放的速度，每秒多少frame*/
+        this.frequency;
+
+        /**@type {Array<string>} */
+        this.other;
+
+        /**@type {GameType} 2d还是3d*/
+        this.gameType;
+
+        /**@type {Map<string, number|string>} */
+        this.environmentParams;
+
+        /**@type {Map<string, number|string>} */
+        this.agentParams;
+
+        /**@type {Array<Map<string, number|string>>} */
+        this.agentTypes;
 
         /**@type {TeamDescription} */
         this.leftTeam;
+
         /**@type {TeamDescription} */
         this.rightTeam;
 
@@ -34,22 +54,8 @@ class Game {
 
         /**@type {Map<number, ScoreState>} */
         this.scoreMoment;
-        /**@type {Map<number, PlayMode>} */
+
+        /**@type {Map<number, GameMode>} */
         this.stateMoment;
-    }
-
-    set logType(logType) {
-        this.logDescription.logType = logType;
-    }
-
-    get logType() {
-        return this.logDescription.logType;
-    }
-
-    set logPath(logPath) {
-        this.logDescription.logPath = logPath;
-    }
-    get logPath() {
-        return this.logDescription.logPath;
     }
 }

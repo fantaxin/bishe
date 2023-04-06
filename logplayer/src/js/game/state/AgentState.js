@@ -25,8 +25,13 @@ class AgentState extends ObjState {
      */
     constructor(flag = 0, x = 0, y = 0, z = 0, qx = 0, qy = 0, qz = 0, qw = 0, angles, stamina = 0) {
         super(x, y, z, qx, qy, qz, qw);
+        /**@type {string} */
+        this.agentTypeIdx;
+        /**@type {string} */
         this.flag = flag;
+        /**@type {string} */
         this.angles = angles;
+        /**@type {string} */
         this.stamina = stamina;
     }
 

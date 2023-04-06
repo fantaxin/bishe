@@ -1,6 +1,6 @@
 package edu.cug.logplayer.server.log;
 
-import edu.cug.logplayer.server.enums.TeamSide;
+import edu.cug.logplayer.server.utils.enums.TeamSide;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;

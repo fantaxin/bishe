@@ -1,12 +1,12 @@
 package edu.cug.logplayer.server.utils.enums;
 
 /**
- * edu.cug.robo.enums.PlayerState
+ * edu.cug.robo.enums.AgentState
  *
  * @author wangxin
  * @version [1.0.0, 2023/03/15]
  */
-public enum PlayerState {
+public enum AgentState {
     DISABLE,
     STAND,
     KICK,

@@ -1,6 +1,6 @@
 package edu.cug.logplayer.server.log;
 
-import edu.cug.logplayer.server.enums.PlayMode;
+import edu.cug.logplayer.server.utils.enums.GameMode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,7 +25,7 @@ public class LogFrame {
     double gametime = 0.0;
 
     // 当前帧的比赛状态
-    PlayMode gameMode;
+    GameMode gameMode;
 
     // 当前帧的比分情况
     //int leftScore = -1;
@@ -38,8 +38,8 @@ public class LogFrame {
     List<String> agentChange = new ArrayList<>();
 
     // 当前帧的球员状态
-    List<LogPlayerState> leftAgentStates;
-    List<LogPlayerState> rightAgentStates;
+    List<LogAgentState> leftAgentStates;
+    List<LogAgentState> rightAgentStates;
 
 }
 

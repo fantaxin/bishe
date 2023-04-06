@@ -1,42 +1,33 @@
 package edu.cug.logplayer.server.log;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * edu.cug.robo.log.LogParams
+ * edu.cug.robo.log.ParamsMap
  *
  * @author wangxin
  * @version [1.0.0, 2023/03/16]
  */
-public class LogParams {
+public class ParamsMap extends HashMap<String, Object> {
 
-    private final Map<String, Object> params;
-
-    public LogParams(Map<String, Object> params) {
-        this.params = params;
+    public ParamsMap(){
+        super();
     }
 
-    public void addParam(String key, Object value) {
-        params.put(key, value);
+    public ParamsMap(Map<String, Object> map){
+        super(map);
     }
 
-    public Object getParam(String key) {
+    public <T> T get(String key, Class<T> clazz) {
 
-        if (!params.containsKey(key)) {
+        if (!this.containsKey(key)) {
             return null;
         }
-        return params.get(key);
-    }
-
-    public <T> T getParam(String key, Class<T> clazz) {
-
-        if (!params.containsKey(key)) {
+        if(!clazz.isInstance(this.get(key))) {
             return null;
         }
-        if(!clazz.isInstance(params.get(key))) {
-            return null;
-        }
-        return clazz.cast(params.get(key));
+        return clazz.cast(this.get(key));
     }
 
 }

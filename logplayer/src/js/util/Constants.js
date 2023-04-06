@@ -90,7 +90,7 @@ export const LogType = {
 /**
  * @enum {string}
  */
-export const PlayMode = {
+export const GameMode = {
     PLAY_ON: "play_on",
     TIME_OVER: "time_over",
     OFFSIDE_L: "offside_l",
@@ -157,7 +157,7 @@ export function frames(num = 104) {
     let num2 = num / 2;
     const frames = [];
     for (let i = 0; i < num; i++) {
-        const gameMode = PlayMode.PLAY_ON;
+        const gameMode = GameMode.PLAY_ON;
         const scoreState = new ScoreState(0, 0, 0, 0, 0, 0);
         const ballState = new BallState(-num2 + i, 2, 0, 0, 0, 0, 0);
         const leftAgentStates = [];
@@ -171,7 +171,7 @@ export function frames(num = 104) {
         frames.push(new Frame(i, i, gameMode, scoreState, ballState, leftAgentStates, rightAgentStates));
     }
     for (let i = 0; i < num; i++) {
-        const gameMode = PlayMode.PLAY_ON;
+        const gameMode = GameMode.PLAY_ON;
         const scoreState = new ScoreState(0, 0, 0, 0, 0, 0);
         const ballState = new BallState(num2 - i, 2, 0, 0, 0, 0, 0);
         const leftAgentStates = [];

@@ -1,4 +1,4 @@
-package edu.cug.logplayer.server.enums;
+package edu.cug.logplayer.server.utils.enums;
 
 /**
  * edu.cug.robo.enums.LineType
@@ -9,8 +9,8 @@ package edu.cug.logplayer.server.enums;
 public enum LineType {
 
     EnvironmentParams,
-    PlayerParams,
-    PlayerType,
+    AgentParams,
+    AgentType,
     Team,
     Server,
     Ball,
@@ -23,9 +23,9 @@ public enum LineType {
             case "EP":
                 return EnvironmentParams;
             case "PP":
-                return PlayerParams;
+                return AgentParams;
             case "PT":
-                return PlayerType;
+                return AgentType;
             case "T":
                 return Team;
             // 下面四个感觉用不到

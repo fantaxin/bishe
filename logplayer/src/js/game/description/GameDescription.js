@@ -10,7 +10,7 @@ export { GameDescription }
 import { GameType } from "@/js/util/Constants.js";
 
 class GameDescription {
-    constructor(gameType, environmentParams, playerParams, playerTypes) {
+    constructor(gameType, environmentParams, agentParams, agentTypes) {
 
         /**@type {GameType} 2d还是3d*/
         this.gameType = gameType;
@@ -18,9 +18,9 @@ class GameDescription {
         /**@type {Map<string, number|string>} */
         this.environmentParams = environmentParams;
         /**@type {Map<string, number|string>} */
-        this.playerParams = playerParams;
+        this.agentParams = agentParams;
 
         /**@type {Array<Map<string, number|string>>} */
-        this.playerTypes = playerTypes;
+        this.agentTypes = agentTypes;
     }
 }

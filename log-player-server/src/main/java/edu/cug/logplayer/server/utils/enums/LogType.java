@@ -1,6 +1,6 @@
-package edu.cug.logplayer.server.enums;
+package edu.cug.logplayer.server.utils.enums;
 
-import edu.cug.logplayer.server.LogUtil;
+import edu.cug.logplayer.server.utils.LogUtil;
 import java.io.IOException;
 
 /**
