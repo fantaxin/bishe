@@ -1,4 +1,4 @@
-package edu.cug.logplayer.server.enums;
+package edu.cug.logplayer.server.utils.enums;
 
 /**
  * edu.cug.robo.enums.PlayerState
