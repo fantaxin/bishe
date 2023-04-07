@@ -3,12 +3,21 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-24 10:07:25
-* @LastEditTime 2023-04-03 10:27:36
+* @LastEditTime 2023-04-07 15:31:40
  */
 
 import { TeamDescription } from "@/js/game/description/TeamDescription.js";
 import { EntityName, TeamSide, AngleY } from "@/js/util/Constants.js";
 import { Entity } from "./Entity.js";
+
+export class AAA {
+    constructor() {
+
+    }
+    static abc() {
+        return "aaa";
+    }
+}
 
 export function test() {
     let entity = new Entity("123");

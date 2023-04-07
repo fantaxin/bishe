@@ -3,16 +3,17 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-27 16:27:13
-* @LastEditTime 2023-03-30 16:32:02
+* @LastEditTime 2023-04-07 16:01:34
  */
 export { }
 
 export { MeshFactory }
 
 import * as THREE from 'three'
-import { GeoMatFactory } from '@/js/util/GeoMatFactory'
+import { GeoMatFactory } from '@/js/model/loader/GeoMatFactory'
 import { EntityDefaultConfig } from '@/js/util/Constants'
 import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { b64_md5 } from '@/js/util/MD5';
 
 class MeshFactory {
 
@@ -20,16 +21,17 @@ class MeshFactory {
 
     }
 
-    static geometryCache = new Map();
-    static materialCache = new Map();
+    static Cache = new Map();
 
-    static createSkyBox(width = 1024, height = 1024, depth = 1024) {
-        let name = "skyBox";
-        const geometry = this.geometryCache.has(name) ? this.geometryCache.get(name) : new THREE.BoxGeometry(width, height, depth);
+    static createSkyBox(name, width = 1024, height = 1024, depth = 1024) {
+
+        let geometry = this.getGeoMat(THREE.BoxGeometry, [width, height, depth]);
+
+        switch (name) {
+            //TODO: 根据名称创建不同的天空盒
+        }
         const material = GeoMatFactory.skyBoxMaterial();
-
         const mesh = new THREE.Mesh(geometry, material);
-        mesh.name = name;
         return mesh;
     }
 
@@ -71,7 +73,7 @@ class MeshFactory {
 
     static createFieldMain(length, width) {
 
-        let geometry = new THREE.PlaneGeometry(length, width);
+        let geometry = this.getGeoMat(THREE.PlaneGeometry, [length, width]);
 
         //TODO: 根据不同的场地大小，调整为不同尺寸的场地贴图
         let texture = GeoMatFactory.loadTexture('field_roboviz.png');
@@ -94,7 +96,7 @@ class MeshFactory {
         let borderLength = length + length / 6;
         let borderWidth = width + width / 6;
 
-        let geometry = new THREE.PlaneGeometry(borderLength, borderWidth);
+        let geometry = this.getGeoMat(THREE.PlaneGeometry, [borderLength, borderWidth]);
         let material = new THREE.MeshLambertMaterial({ color: "#2EB845", side: THREE.DoubleSide });
         let mesh = new THREE.Mesh(geometry, material);
         mesh.position.y = -0.01;
@@ -499,6 +501,28 @@ class MeshFactory {
         light.shadow.mapSize.width = shadowWidth;
         light.shadow.mapSize.height = shadowHeight;
         return light;
+    }
+
+    /**
+    * @description: 
+    * @param {new(...params) => any} geoType
+    * @param {*} params
+    * @return {geoType}
+     */
+    static getGeoMat(type, params) {
+        const key = b64_md5(type.name + params.toString());
+        if (!this.Cache.has(key)) {
+            this.Cache.set(key, Reflect.construct(type, params));
+        }
+        return this.Cache.get(key);
+    }
+
+    static getMultiGeoMat(func, params) {
+        const key = b64_md5(func.toString() + params.toString());
+        if (!this.Cache.has(key)) {
+            this.Cache.set(key, Reflect.apply(func, undefined, params));
+        }
+        return this.Cache.get(key);
     }
 
 }

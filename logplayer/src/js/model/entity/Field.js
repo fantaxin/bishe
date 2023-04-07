@@ -16,14 +16,9 @@ export { Field }
 class Field {
     /**
     * @description: 
-    * @param {GameDescription} gameDescription
+    * @param {Map<string, number|string>} environmentParams
      */
-    constructor(gameDescription) {
-        //let centerRadius = 9.15;
-        //let goalSize = new THREE.Vector3(1.2, 14.64, 1.5);
-        //let goalAreaSize = new THREE.Vector2(5.5, 18.32);//球门区
-        //let penaltyAreaSize = new THREE.Vector3(16.5, 40.3, 11);//禁区
-
+    constructor(environmentParams) {
         this.group = new Group();
         this.group.name = EntityName.Field;
         this.length = 105;

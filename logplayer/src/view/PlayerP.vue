@@ -1,13 +1,21 @@
 <template>
-  <div>
-    <el-upload action="" class="upload-demo" ref="upload" :on-change="handleChange" :auto-upload="false" :limit="1">
-      点击上传
-    </el-upload>
-  </div>
+  <el-upload class="avatar-uploader" ref="upload" action :on-change="handleChange" :file-list="fileList"
+    :auto-upload="false" show-file-list="false">
+    <el-button type="primary">Click to upload</el-button>
+  </el-upload>
 </template>
 <script>
-function handleFiles() {
-  const fileList = this.files; /* now you can work with the file list */
-  console.log(fileList[0].name);
+export default {
+  name: "PlayerP",
+  data() {
+    return {
+      fileList: []
+    };
+  },
+  methods: {
+    handleChange(file, fileList) {
+      console.log(file, fileList);
+    },
+  }
 }
 </script>

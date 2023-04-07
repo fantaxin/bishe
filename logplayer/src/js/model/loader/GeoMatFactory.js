@@ -1,22 +1,41 @@
 /**
-* @FilePath /src/js/util/GeoMatFactory.js
+* @FilePath /src/js/model/loader/GeoMatFactory.js
 * @Description 
 * @Author wangxin
 * @Date 2023-03-27 16:36:11
-* @LastEditTime 2023-03-29 17:37:06
+* @LastEditTime 2023-04-07 16:00:52
  */
 export { GeoMatFactory }
 
 import * as THREE from 'three';
-import { EntityDefaultConfig } from './Constants';
+import { EntityDefaultConfig } from '../../util/Constants';
+import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 let TextureLoader = null;
 const TexturePath = '/textures/';
 
 class GeoMatFactory {
     constructor() { }
-    static geometryCache = new Map();
-    static materialCache = new Map();
+    /** @type {Map} */
+
+    static fieldGoalGeo(goalWidth, goalHeight, goalradius){
+        const geoArray = [];
+        //球门横梁
+        let geo1 = new THREE.CylinderGeometry(goalradius, goalradius, goalWidth + 4 * goalradius, 32);
+
+        //左右球门柱
+        let geo2 = new THREE.CylinderGeometry(goalradius, goalradius, goalHeight + 2 * goalradius, 32);
+        let geo3 = new THREE.CylinderGeometry(goalradius, goalradius, goalHeight + 2 * goalradius, 32);
+        geo1.rotateX(Math.PI / 2);
+        geo1.translate(0, goalHeight + goalradius, 0);
+        geo2.translate(0, goalHeight / 2 + goalradius, -goalWidth / 2 - goalradius);
+        geo3.translate(0, goalHeight / 2 + goalradius, goalWidth / 2 + goalradius);
+        geoArray.push(geo1);
+        geoArray.push(geo2);
+        geoArray.push(geo3);
+        return mergeBufferGeometries(geoArray);
+    }
+
     static levelLine(x1, z1, x2, z2, mode) {
         const lineWidth = EntityDefaultConfig.DEFAULT_LINE_WIDTH;
         const length = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((z1 - z2), 2));

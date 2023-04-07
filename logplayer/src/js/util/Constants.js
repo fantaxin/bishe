@@ -15,7 +15,8 @@ export const TeamSide = {
  */
 export const EntityName = {
     World: 'world',
-    Field: 'field',
+    Environment: 'environment',
+    Entity: 'entity',
     Ball: 'ball',
     LeftTeam: 'team_left',
     RightTeam: 'team_right',
@@ -33,12 +34,39 @@ export const EntityName = {
             return this.RightTeam + '_' + agentNum;
         }
     },
+    Field: function (fieldName) {
+        return "field_" + fieldName;
+    },
+    Light: function (lightName) {
+        return "light_" + lightName;
+    },
+    SkyBox: function (skyBoxName) {
+        return "skybox_" + skyBoxName;
+    },
     Main: function (parentName) {
         return parentName + "_main";
     },
     Model: function (parentName, modelName) {
         return parentName + "_model_" + modelName;
     }
+}
+
+/**
+ * @enum {string}
+ */
+export const GeoMatName = {
+    /**
+    * @description: 
+    * @param {THREE.} geoType
+    * @param {*} geoParams
+    * @return {*}
+     */
+    Geo: function (geoType, geoParams) {
+
+    },
+    Mat: function (teamSide, agentNum) {
+
+    },
 }
 
 /**
