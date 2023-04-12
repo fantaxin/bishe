@@ -13,7 +13,7 @@ import { GameDescription } from "../game/description/GameDescription";
 import { TeamDescription } from "../game/description/TeamDescription.js";
 import { EntityName } from "../util/Constants.js";
 import { Ball } from "./entity/Ball";
-import { Field } from "./entity/Field";
+import { Field } from "./environment/Field";
 import { Team } from "./entity/Team";
 import { Frame } from "../game/state/Frame";
 import { MeshFactory } from "./loader/MeshFactory";

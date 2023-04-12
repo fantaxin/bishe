@@ -34,20 +34,27 @@ export const EntityName = {
             return this.RightTeam + '_' + agentNum;
         }
     },
+    BasicField: 'field',
+    BasicLight: 'light',
+    BasicSkyBox: 'skybox',
+    BasicStadium: 'stadium',
     Field: function (fieldName) {
-        return "field_" + fieldName;
+        return this.BasicField + "_" + fieldName;
     },
     Light: function (lightName) {
-        return "light_" + lightName;
+        return this.BasicLight + "_" + lightName;
     },
     SkyBox: function (skyBoxName) {
-        return "skybox_" + skyBoxName;
+        return this.BasicSkyBox + "_" + skyBoxName;
     },
     Main: function (parentName) {
         return parentName + "_main";
     },
     Model: function (parentName, modelName) {
         return parentName + "_model_" + modelName;
+    },
+    BasicName: function (name) {
+        return name.split("_", 1)[0];
     }
 }
 

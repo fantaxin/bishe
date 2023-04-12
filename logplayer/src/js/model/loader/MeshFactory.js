@@ -3,7 +3,7 @@
 * @Description 
 * @Author wangxin
 * @Date 2023-03-27 16:27:13
-* @LastEditTime 2023-04-07 16:01:34
+* @LastEditTime 2023-04-12 16:57:49
  */
 export { }
 
@@ -17,10 +17,7 @@ import { b64_md5 } from '@/js/util/MD5';
 
 class MeshFactory {
 
-    constructor() {
-
-    }
-
+    /** @type {Map<String, THREE.BufferGeometry|THREE.Material>} 用于缓存Mesh级别的Geo和Mat*/
     static Cache = new Map();
 
     static createSkyBox(name, width = 1024, height = 1024, depth = 1024) {
