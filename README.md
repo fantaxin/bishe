@@ -64,6 +64,11 @@ https://github.com/algoz098/vue-player
 https://github.com/core-player/vue-core-video-player
 https://github.com/vmllab-js/vue-frame-player
 
+[Three.js指定路径漫游（站走切换、路径动画、展示路线、开始、暂停、继续、退出、镜头跟随）_threejs路径漫游_-道不虚行只在人-的博客-CSDN博客](https://blog.csdn.net/u010657801/article/details/129754337)
+
+https://www.cnblogs.com/zdz8207/p/vue-ui-framework.html
+
+
 
 **p5.js** **creat.js** three.js **two.js** fabric.js 
 javafx jfoenix jxbrowser 

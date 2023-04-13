@@ -1,5 +1,7 @@
 <template>
-    <div></div>
+    <div id="video">
+        123
+    </div>
 </template>
 <script>
 import * as THREE from "three";
@@ -41,20 +43,18 @@ export default {
         };
     },
     created() {
-
         this.init();
         request.get('eee.json', {}).then(res => {
             this.log = res.data;
         })
-        //test();
     },
     mounted() {
+        document.getElementById("video").appendChild(this.renderer.domElement);
         this.load();
         //this.test();
 
     },
     methods: {
-
         test() {
             let map1 = new Map();
             map1.set(1.1, "string1");
@@ -206,7 +206,6 @@ export default {
         },
         animate() {
             requestAnimationFrame(this.animate);
-
             let scene = toRaw(this.scene);
             controls.update();
             let world = toRaw(this.world);
@@ -223,13 +222,9 @@ export default {
                 }
                 world.updateWorld(frame, nextFrame)
             }
-
-            //if (i === 207) {
-            //    i = 0;
-            //}
-            //i = i + 1;
-            //let t = Math.ceil(i);
-            //world.updateWorld(this.frames[t], this.frames[t < frames.length ? t : t - 1], t - 1)
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            this.camera.aspect = window.innerWidth / window.innerHeight;
+            this.camera.updateProjectionMatrix();
             this.renderer.render(scene, this.camera);
         }
     }

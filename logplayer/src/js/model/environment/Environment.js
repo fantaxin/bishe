@@ -1,14 +1,14 @@
 import { EntityName } from "@/js/util/Constants";
-import { Group, Light } from "three";
+import { Group, Light, Mesh, Object3D } from "three";
 import { MeshFactory } from "../loader/MeshFactory";
 import { Field } from "./Field";
 
 /**
 * @FilePath /src/js/model/environment/Environment.js
-* @Description 
+* @Description
 * @Author wangxin
 * @Date 2023-04-07 11:25:57
-* @LastEditTime 2023-04-12 18:28:14
+* @LastEditTime 2023-04-13 14:11:24
  */
 export { Environment }
 
@@ -35,138 +35,134 @@ class Environment {
         this.active.add(EntityName.BasicLight, new Set());
         this.active.add(EntityName.BasicStadium, null);
         this.active.add(EntityName.BasicField, null);
-
-        /**@type {string} 正在活动的天空盒*/
-        this.activeSkyBox;
-
-        /**@type {Set<string>} 正在活动的光的集合*/
-        this.activeLights = new Set();
-
-        /**@type {string>} 正在活动的场地*/
-        this.activeField;
-
-        /**@type {string>} 正在活动的球场*/
-        this.activeStadium;
     }
 
-    createSkyBox(width, height, depth, skyBoxName) {
-        let name = EntityName.SkyBox(skyBoxName);
-        if (this.skyBoxes.has(name)) {
+    /**
+     * @description: 创建环境Entity, 除第一次创建的以外, 默认不显示该Entity
+     * @example createEntity(EntityName.SkyBox, xx.createSkyBox, [width, height, depth, fullName])
+     * @param {string} fullName
+     * @param {(obj:THREE.Object3D)=>void} func
+     * @param {Array} params
+     * @return {*}
+     */
+    createEntity(fullName, func, params) {
+        if (fullName === undefined || fullName === null) {
+            return false;
+        }
+        const basicName = EntityName.BasicName(fullName);
+        if (!this.active.has(basicName)) {
+            return false;
+        }
+        const map = this.belongToMap(fullName);
+        if (map.has(fullName)) {
             return true;
         }
-        let skyBox = MeshFactory.createSkyBox(width, height, depth, name);
-        if (skyBox === undefined) {
-
+        func.apply(this, params);
+        if (map.size() === 1) {
+            this.active.set(EntityName.BasicSkyBox, fullName);
+        } else {
+            map.get(fullName).visible = false;
         }
-        skyBox.name = name;
+    }
+
+    /** 通过createEntity调用 */
+    createSkyBox(width, height, depth, fullName) {
+        let skyBox = MeshFactory.createSkyBox(width, height, depth, fullName);
+        skyBox.name = fullName;
+
         this.group.add(skyBox);
-        if (this.skyBoxes.size() === 1) {
-            this.activeSkyBox = name
-        }
+        this.skyBoxes.set(fullName, skyBox);
     }
 
-    setActiveSkyBox(skyBoxName) {
-        if (this.activeSkyBox === undefined) {
+    //TODO: 根据需要选择不同的skybox/更换skybox的材质
 
-        }
+    /** 通过createEntity调用 */
+    createStadiums(fullName) {
+        //TODO: 加载球场模型
     }
 
-    addLight(name, light) {
-        if (!(light instanceof Light) || this.lights.has(name)) {
+    /** 通过createEntity调用 */
+    createField(length = 105, width = 68, radius = 9.15, penaltyLength = 16.5, penaltyWidth = 40.3, penaltySpot = 11,
+        goalAreaLength = 5.5, goalAreaWidth = 18.32, goalWidth = 7.32, goalHeight = 2.44, goalradius = 0.06, fullName) {
+        //goalWidth = 14.02;
+        let field = new Field(length, width, radius, penaltyLength, penaltyWidth, penaltySpot,
+            goalAreaLength, goalAreaWidth, goalWidth, goalHeight, goalradius, fullName);
+        this.group.add(field.group);
+        this.fields.set(fullName, field);
+    }
+
+    /**
+    * @description: 在外部创建Light，通过createEntity调用本方法
+    * @param {THREE.Light} light
+    * @param {string} fullName
+    * @return {*}
+     */
+    addLight(light, fullName) {
+        if (!(light instanceof Light)) {
             return false;
         } else {
-            light.name = EntityName.Model(this.group.name, name);
-            this.lights.set(name, light);
+            light.name = fullName;
             this.group.add(light);
+            this.lights.set(fullName, light);
         }
     }
 
-    addActiveLight(name) {
-        this.lights.get()
-    }
-
-    removeActiveObj(name) {
-        const obj = this.getObj(name);
-        const activeName = EntityName.BasicName(name);
-        if (obj !== null) {
-            obj.visible = false;
-            if (activeName === EntityName.BasicLight) {
-                this.active.get(activeName).delete(name);
-            } else {
-                this.active.get(activeName)
-            }
+    /**
+    * @description:
+    * @example activeOpt(fullName, xx.updateActive)
+    * @param {string} fullName
+    * @param {(string)=>boolean} func
+    * @return {boolean}
+     */
+    activeOpt(fullName, func) {
+        if (fullName === undefined || fullName === null) {
+            return false;
         }
+        const basicName = EntityName.BasicName(fullName);
+        if (!this.active.has(basicName)) {
+            return false;
+        }
+        return func.apply(this, [fullName]);
     }
 
-    getLight(name) {
-        if (this.lights.has(name)) {
-            return this.lights.get(name);
+    /** 通过activeOpt调用 */
+    isActive(fullName) {
+        const basicName = EntityName.BasicName(fullName);
+        if (basicName === EntityName.BasicLight) {
+            return this.active.get(basicName).has(fullName);
+        }
+        return this.active.get(basicName) === fullName;
+    }
+
+    /** 通过activeOpt调用 */
+    updateActive(fullName) {
+        const basicName = EntityName.BasicName(fullName);
+        const obj = this.getObj(fullName);
+        if (obj === null) {
+            return false;
+        }
+        if (basicName === EntityName.BasicLight) {
+            this.active.get(basicName).add(fullName);
         } else {
-            return null;
+            const aobj = this.getActiveObj(basicName);
+            if (aobj !== null) {
+                this.getActiveObj(basicName).visible = false;
+            }
+            this.active.set(basicName, fullName);
         }
-    }
-
-    deleteLight(name) {
-        if (this.lights.has(name)) {
-            this.lights.delete(name);
-            this.group.remove()
-        }
-    }
-
-    createField() {
-        this.field = new Field(this.gameDescription);
-        this.group.add(this.field.group);
-
-    }
-
-    getObj(name) {
-        const map = this.belongToMap(name);
-        if (map.has(name)) {
-            return map.get(name);
-        }
-        return null;
-    }
-
-    isActive(name) {
-        if (name === null) {
-            return false;
-        }
-        const basicName = EntityName.getBasicName(name);
-        if (!this.active.has(basicName)) {
-            return false;
-        }
-        if (basicName === EntityName.BasicLight) {
-            return this.active.get(basicName).has(name);
-
-        }
-        return this.active.get(basicName) === name;
-    }
-
-    addActive(name) {
-        if (name === null) {
-            return false;
-        }
-        const basicName = EntityName.getBasicName(name);
-        if (!this.active.has(basicName)) {
-            return false;
-        }
-        if (basicName === EntityName.BasicLight) {
-            this.active.get(basicName).add(name);
-        }
-        this.active.set(basicName, name);
+        obj.visible = true;
         return true;
     }
 
-    removeActive(name) {
-        if (name === null) {
-            return false;
-        }
-        const basicName = EntityName.getBasicName(name);
-        if (!this.active.has(basicName)) {
-            return false;
+    /** 通过activeOpt调用 */
+    removeActive(fullName) {
+        const basicName = EntityName.BasicName(fullName);
+        const aobj = this.getActiveObj(basicName);
+        if (aobj !== null) {
+            this.getActiveObj(basicName).visible = false;
         }
         if (basicName === EntityName.BasicLight) {
-            return this.active.get(basicName).delete(name);
+            return this.active.get(basicName).delete(fullName);
         }
         this.active.set(basicName, null);
         return true;
@@ -188,17 +184,36 @@ class Environment {
         }
     }
 
-    /**
-    * @description: 
-    * @param {string} name
-    * @param {(obj:THREE.Object3D)} func
-    * @param {Array} params
-    * @return {*}
-     */
-    getAndOperate(name, func, params) {
-        if (!this.map.has(name)) {
-            return;
-        }
-        return func.apply(this, params);
+    getActiveName(basicName) {
+        return this.active.get(basicName);
     }
+
+    getActiveObj(basicName) {
+        const map = this.belongToMap(basicName);
+        if (basicName === EntityName.BasicLight) {
+            let lightmap = new Map();
+            this.active.get(EntityName.BasicLight).forEach(
+                (key) => {
+                    lightmap.set(key, map.get(key));
+                }
+            )
+            return lightmap;
+        } else {
+            return map.get(this.active.get(basicName));
+        }
+    }
+
+    /**
+     * @description:
+     * @param {string} fullName
+     * @return {THREE.Mesh|THREE.Light}
+     */
+    getObj(fullName) {
+        const map = this.belongToMap(fullName);
+        if (map.has(fullName)) {
+            return map.get(fullName);
+        }
+        return null;
+    }
+
 }

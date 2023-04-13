@@ -1,11 +1,9 @@
-import { GameDescription } from "@/js/game/description/GameDescription";
-
 /**
-* @FilePath /src/js/model/entity/Field.js
-* @Description 
+* @FilePath /src/js/model/environment/Field.js
+* @Description
 * @Author wangxin
 * @Date 2023-03-22 09:50:19
-* @LastEditTime 2023-03-31 14:57:40
+* @LastEditTime 2023-04-13 10:57:51
  */
 import { Group, Object3D } from "three"
 import { MeshFactory } from "../loader/MeshFactory"
@@ -15,24 +13,36 @@ export { Field }
 
 class Field {
     /**
-    * @description: 
-    * @param {Map<string, number|string>} environmentParams
+     * @description:
+     * @param {number} length 球场长（边线）
+     * @param {number} width 球场宽（底线）
+     * @param {number} radius 中圈和罚球弧的半径
+     * @param {number} penaltyLength 禁区长（与边线平行）
+     * @param {number} penaltyWidth 禁区宽（与底线平行）
+     * @param {number} penaltySpot 点球点距底线距离
+     * @param {number} goalAreaLength 球门区长（与边线平行）
+     * @param {number} goalAreaWidth 球门区宽（与底线平行）
+     * @param {number} goalWidth 球门宽
+     * @param {number} goalHeight 球门高
+     * @param {number} goalradius 球门柱半径
+     * @param {string} name fullName
+     * @return {number}
      */
-    constructor(environmentParams) {
+    constructor(length , width, radius, penaltyLength, penaltyWidth, penaltySpot,
+                goalAreaLength, goalAreaWidth, goalWidth, goalHeight, goalradius, name) {
         this.group = new Group();
-        this.group.name = EntityName.Field;
-        this.length = 105;
-        this.width = 68;
-        this.centerCircleRadius = 9.15;
-        this.penaltyLength = 16.5;
-        this.penaltyWidth = 40.3;
-        this.penaltySpot = 11;
-        this.goalAreaLength = 5.5;
-        this.goalAreaWidth = 18.32;
-        this.goalWidth = 7.32;
-        //this.goalWidth = 14.02;
-        this.goalHeight = 2.44;
-        this.goalradius = 0.06;
+        this.group.name = name;
+        this.length = length;
+        this.width = width;
+        this.radius = radius;
+        this.penaltyLength = penaltyLength;
+        this.penaltyWidth = penaltyWidth;
+        this.penaltySpot = penaltySpot;
+        this.goalAreaLength = goalAreaLength;
+        this.goalAreaWidth = goalAreaWidth;
+        this.goalWidth = goalWidth;
+        this.goalHeight = goalHeight;
+        this.goalradius = goalradius;
         this.loadModel();
     }
 

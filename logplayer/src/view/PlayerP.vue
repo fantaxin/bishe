@@ -3,6 +3,7 @@
     :auto-upload="false" show-file-list="false">
     <el-button type="primary">Click to upload</el-button>
   </el-upload>
+  <p v-text="123"></p>
 </template>
 <script>
 export default {

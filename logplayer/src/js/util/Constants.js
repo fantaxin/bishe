@@ -62,26 +62,17 @@ export const EntityName = {
  * @enum {string}
  */
 export const GeoMatName = {
-    /**
-    * @description: 
-    * @param {THREE.} geoType
-    * @param {*} geoParams
-    * @return {*}
-     */
-    Geo: function (geoType, geoParams) {
-
-    },
-    Mat: function (teamSide, agentNum) {
-
-    },
+    Mat_default: "mat_default",
+    Mat_Skybox_blueCloud: "mat_skybox_blueCloud",
+    Mat_Field_default: "mat_field_default"
 }
 
 /**
  * @enum {number}
  */
 export const EntityDefaultConfig = {
-    DEFAULT_BALL_RADIUS: 0.2,
-    DEFAULT_LINE_WIDTH: 0.15
+    Default_Ball_Radius: 0.2,
+    Default_Line_Width: 0.15
 }
 export function AngleY(x, z) {
     if (x > 0 && z <= 0) {
@@ -147,11 +138,10 @@ export const GameMode = {
 };
 
 /**
- * An enum providing meaning the indices for the different elements in the agent flags bitfield for 2D games.
  * @enum {number}
  */
 export const AgentFlag = {
-    DISABLE: 0x00000000,// 0
+    DISABLE: 0x00000000,// 00
     STAND: 0x00000001,// 0
     KICK: 0x00000002,// 1
     KICK_FAULT: 0x00000004,// 2
@@ -172,6 +162,23 @@ export const AgentFlag = {
     FOUL_CHARGED: 0x00020000,// 17
     YELLOW_CARD: 0x00040000,// 18
     RED_CARD: 0x00080000,// 19
+    get: function (flag) {
+        const res = new Array();
+        if (flag === this.DISABLE) {
+            res.push(this.DISABLE);
+            return res;
+        }
+        let val = 1;
+        let i = 0;
+        do {
+            if (flag & 1) {
+                res.push(val << i);
+            }
+            flag = flag >> 1;
+            i++;
+        } while (flag > 0)
+        return res;
+    }
 };
 
 export function isLeft(str) {
