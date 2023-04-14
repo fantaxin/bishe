@@ -245,3 +245,65 @@ npm install three
     },
 }
 ```
+
+```
+<script src="//unpkg.com/vue@2/dist/vue.js"></script>
+<script src="//unpkg.com/element-ui@2.15.13/lib/index.js"></script>
+<div id="app">
+<template>
+  <div class="block">
+    <span class="demonstration">默认</span>
+    <el-slider v-model="value"
+               :marks="marks"
+               :min="min"
+               :max="max"
+               :format-tooltip="formatTooltip">
+               </el-slider>
+               <i id="football" class="el-icon-football"  @click="click1"></i>
+  </div>
+</template>
+</div>
+
+var Main = {
+    data() {
+      return {
+        value: 10,
+        min:0,
+        max:3600,
+        marks: {
+          1137: {
+            style: {
+              color: '#000000',
+            },
+          },
+          2500: {
+            style: {
+              color: '#000000',
+            },
+            label: this.$createElement('i',{ class: 'el-icon-football', onclick:"click1()"})
+          }
+        }
+      }
+    },
+    methods: {
+      formatTooltip(val) {
+        let h = Math.floor(val/3600);
+        let m = Math.floor((val%3600)/60);
+        let s = Math.floor(val%60);
+        return h+':'+m+':'+s;
+      },
+      click1(){
+        console.log("000")
+        this.value = 0;
+        this.marks["1137"] = { style: { color: "#000000" }, label: this.$createElement('i',{class: 'el-icon-football'})}
+        this.$getElementsByClass("el-icon-football")[1].addEventListener('click',function() {
+		        alert('绑定事件监听函数')
+	      })
+        console.log("000")
+}
+    }
+  }
+var Ctor = Vue.extend(Main)
+new Ctor().$mount('#app')
+```
+

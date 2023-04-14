@@ -1,17 +1,16 @@
 <template>
-  <PlayerP />
-  <ThreeTest />
+  <Dashboard :controls="true" :muted="true" />
 </template>
 
 <script>
 import ThreeTest from './view/ThreeTest.vue'
 import PlayerP from './view/PlayerP.vue'
+import Dashboard from './player/dashboard/dashboard.vue'
 
 export default {
   name: 'App',
   components: {
-    ThreeTest,
-    PlayerP
+    Dashboard
   }
 }
 </script>

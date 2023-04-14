@@ -16,9 +16,9 @@
         "curly": "warn",
         "no-extra-bind": "warn",
         "no-unused-vars": "warn",
-        "semi-style": [
-            "error",
-            "last"
+        "vue/multi-word-component-names": "off",
+        "semi": [
+            "off"
         ]
     }
 }
