@@ -1,16 +1,17 @@
 <template>
-  <Dashboard :controls="true" :muted="true" />
+  <HelloWorld />
 </template>
 
 <script>
 import ThreeTest from './view/ThreeTest.vue'
 import PlayerP from './view/PlayerP.vue'
-import Dashboard from './player/dashboard/dashboard.vue'
+import HelloWorld from './view/HelloWorld.vue'
 
 export default {
   name: 'App',
   components: {
-    Dashboard
+    //Dashboard
+    HelloWorld
   }
 }
 </script>
