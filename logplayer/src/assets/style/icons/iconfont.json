@@ -1,0 +1,16 @@
+{
+  "id": "4031788",
+  "name": "football",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "444315",
+      "name": "运动，足球",
+      "font_class": "yundongzuqiu",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    }
+  ]
+}
