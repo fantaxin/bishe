@@ -305,6 +305,6 @@ var Main = {
   }
 var Ctor = Vue.extend(Main)
 new Ctor().$mount('#app')
-&
+
 ```
 

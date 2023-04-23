@@ -2,7 +2,7 @@
  * @Author: fantasy 820438873@qq.com
  * @Date: 2023-04-22 14:03:51
  * @LastEditors: fantasy 820438873@qq.com
- * @LastEditTime: 2023-04-23 00:44:15
+ * @LastEditTime: 2023-04-23 22:43:28
  * @FilePath: \logplayer\src\view\HelloWorld.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -21,7 +21,7 @@
     <div div class="bottom">
       <!-- 此处做一个渐变暗的效果 -->
       <div class="ctrl-top">
-        <el-slider v-model="value" :min="min" :max="max" :marks="marks" :format-tooltip="formatTooltip" />
+        <el-slider v-model="value" :min="min" :max="max" :marks="marks" :format-tooltip="timeFormat" />
       </div>
       <div class="ctrl-bottom">
         <div class="player-state">
@@ -36,9 +36,9 @@
         </div>
         <div>
           <!-- 当前时间/总时长 -->
-          <span class="time-current">{{ formatTooltip(value) }}</span>
+          <span class="time-current">{{ timeFormat(value) }}</span>
           <span class="time-split"> / </span>
-          <span class="time-duration">{{ formatTooltip(max) }}</span>
+          <span class="time-duration">{{ timeFormat(max) }}</span>
         </div>
         <!-- 跳转（下一个进球点） -->
         <div @click="nextGoal">
@@ -79,39 +79,33 @@ export default {
   },
   mounted() {
     this.createLabel();
+    //this.click1();
   },
 
   methods: {
     click1() {
       console.log("123123")
-      //Object.assign(this.marks["1200"], { label: h('i', { class: 'iconfont icon-yundongzuqiu' }) })
-      //this.marks["1200"].label = h('i', { class: 'iconfont icon-yundongzuqiu' })
-      //document.getElementById("label") = document.getElementById("icon").cloneNode(true);
       Object.keys(this.marks).forEach(key => {
-        //console.log(this.marks[key]);
-        Object.assign(this.marks[key], { label: h('i', { class: 'iconfont icon-yundongzuqiu' }) });
+        Object.assign(this.marks[key], { label: h('i', { class: 'iconfont icon-yundongzuqiu', onClick: this.click(1500) }) });
         //this.marks[key] = {style: { color: '#006AFF'}, label: h('i', { class: 'iconfont icon-yundongong', onClick: this.click(value) })};
       })
     },
     createLabel() {
       Object.keys(this.marks).forEach(key => {
-        console.log(key);
-        Object.assign(this.marks[key], { label: h('i', { class: 'iconfont icon-yundongongzuqiu' }) });
-        //this.marks[key] = {style: { color: '#006AFF'}, label: h('i', { class: 'iconfont icon-yundongong', onClick: this.click(value) })};
+        Object.assign(this.marks[key], { label: h('i', { class: 'iconfont icon-yundongzuqiu', onClick: () => { this.value = Number.parseInt(key) } }) });
       })
-      //return h('i', { class: 'iconfont icon-yundongong', onClick:this.click(value)});
     },
     click(value) {
       this.value = value;
     },
-    formatTooltip(val) {
+    timeFormat(val) {
       let h = Math.floor(val / 3600);
       let m = Math.floor((val % 3600) / 60);
       let s = Math.floor(val % 60);
 
-      return this.timeFormat(h) + ':' + this.timeFormat(m) + ':' + this.timeFormat(s);
+      return this.numberFormat(h) + ':' + this.numberFormat(m) + ':' + this.numberFormat(s);
     },
-    timeFormat(val) {
+    numberFormat(val) {
       if (val < 10) {
         return '0' + val;
       } else {
