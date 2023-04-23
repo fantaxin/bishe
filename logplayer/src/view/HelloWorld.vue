@@ -11,25 +11,43 @@
     <div class="top">
       <!-- 此处做一个渐变暗的效果 -->
     </div>
-    <div class="playstate">
-
+    <div class="mid">
+      <div class="">
+        <!-- 当前的比赛时间，比赛状态，比分等 -->
+      </div>
+      <div class="">
+      </div>
     </div>
     <div div class="bottom">
       <!-- 此处做一个渐变暗的效果 -->
-      <div class="ctrol">
-        <div class="ctrol-top">
-          <el-slider v-model="value" :min="min" :max="max" :marks="marks" :format-tooltip="formatTooltip" />
-        </div>
-        <div class="ctrol-bottom">
+      <div class="ctrl-top">
+        <el-slider v-model="value" :min="min" :max="max" :marks="marks" :format-tooltip="formatTooltip" />
+      </div>
+      <div class="ctrl-bottom">
+        <div class="player-state">
           <!-- 小的播放状态图标 -->
-          <!-- 当前时间/总时长 -->
-          <!-- 跳转（下一个进球点） -->
-          <!-- 倍速 -->
-          <!-- 全屏 -->
+          <div v-if="isPlaying" class="btn-control btn-pause" @click="pause">
+            <!-- <i class="iconfont icon-kaishi"></i> -->
+            <i>pause</i>
+          </div>
+          <div v-else class="btn-control btn-play" @click="play">
+            <i>play</i>
+          </div>
         </div>
+        <div>
+          <!-- 当前时间/总时长 -->
+          <span class="time-current">{{ formatTooltip(value) }}</span>
+          <span class="time-split"> / </span>
+          <span class="time-duration">{{ formatTooltip(max) }}</span>
+        </div>
+        <!-- 跳转（下一个进球点） -->
+        <div @click="nextGoal">
+          <i>next</i>
+        </div>
+        <!-- 倍速 -->
+        <!-- 全屏 -->
       </div>
     </div>
-
   </div>
   <el-icon :size="20" @click="click1" id="icon">
     <Edit />
@@ -43,6 +61,7 @@ export default {
 
   data() {
     return {
+      isPlaying: true,
       value: 0,
       min: 0,
       max: 3600,
@@ -89,8 +108,39 @@ export default {
       let h = Math.floor(val / 3600);
       let m = Math.floor((val % 3600) / 60);
       let s = Math.floor(val % 60);
-      return h + ':' + m + ':' + s;
+
+      return this.timeFormat(h) + ':' + this.timeFormat(m) + ':' + this.timeFormat(s);
     },
+    timeFormat(val) {
+      if (val < 10) {
+        return '0' + val;
+      } else {
+        return val;
+      }
+    },
+    pause() {
+      this.isPlaying = false;
+    },
+    play() {
+      this.isPlaying = true;
+    },
+    nextGoal() {
+      // TODO: 循环，到达最后一个时刻后回到第一个时刻 
+      let nextTime = this.max;
+      let firstTime = this.max;
+      Object.keys(this.marks).forEach(key => {
+        let time = Number.parseInt(key);
+        if (this.value < time) {
+          nextTime = nextTime > time ? time : nextTime;
+        }
+        firstTime = firstTime > time ? time : firstTime;
+      })
+      if (nextTime === this.max) {
+        this.value = firstTime;
+      } else {
+        this.value = nextTime;
+      }
+    }
   }
 };
 
