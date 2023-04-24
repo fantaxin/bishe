@@ -1,61 +1,76 @@
-<!--
- * @Author: fantasy 820438873@qq.com
- * @Date: 2023-04-22 14:03:51
- * @LastEditors: fantasy 820438873@qq.com
- * @LastEditTime: 2023-04-23 22:43:28
- * @FilePath: \logplayer\src\view\HelloWorld.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
 <template>
-  <div class="aaa">
-    <div class="top">
+  <div class="ctrl">
+    <div class="ctrl-top">
       <!-- 此处做一个渐变暗的效果 -->
     </div>
-    <div class="mid">
+    <div class="ctrl-mid">
       <div class="">
         <!-- 当前的比赛时间，比赛状态，比分等 -->
       </div>
+      <!-- loading... -->
       <div class="">
       </div>
     </div>
-    <div div class="bottom">
+    <div class="ctrl-bottom">
       <!-- 此处做一个渐变暗的效果 -->
-      <div class="ctrl-top">
-        <el-slider v-model="value" :min="min" :max="max" :marks="marks" :format-tooltip="timeFormat" />
-      </div>
-      <div class="ctrl-bottom">
-        <div class="player-state">
-          <!-- 小的播放状态图标 -->
-          <div v-if="isPlaying" class="btn-control btn-pause" @click="pause">
-            <!-- <i class="iconfont icon-kaishi"></i> -->
-            <i>pause</i>
+      <div class="ctrl-bar">
+
+        <div class="bar-left">
+          <div class="player-state">
+            <!-- 小的播放状态图标 -->
+            <div v-if="isPlaying" class="btn-pause" @click="pause">
+              <!-- <i class="iconfont icon-kaishi"></i> -->
+              <i>pa</i>
+            </div>
+            <div v-else class="btn-play" @click="play">
+              <i>pl</i>
+            </div>
           </div>
-          <div v-else class="btn-control btn-play" @click="play">
-            <i>play</i>
+          <!-- 跳转（下一个进球点） -->
+          <div class="pre-goal" @click="getGoalTime(false)">
+            <i>p</i>
+          </div>
+          <div class="next-goal" @click="getGoalTime(true)">
+            <i>n</i>
+          </div>
+          <div class="left player-time">
+            <!-- 当前时间 -->
+            <span class="time-current">{{ timeFormat(value) }}</span>
           </div>
         </div>
-        <div>
-          <!-- 当前时间/总时长 -->
-          <span class="time-current">{{ timeFormat(value) }}</span>
-          <span class="time-split"> / </span>
-          <span class="time-duration">{{ timeFormat(max) }}</span>
+
+        <div class="bar-mid">
+          <el-slider v-model="value" :min="min" :max="max" :marks="marks" :format-tooltip="timeFormat" size="small" style="color: #222222" @input="sliderInput" @change="sliderChange"/>
         </div>
-        <!-- 跳转（下一个进球点） -->
-        <div @click="nextGoal">
-          <i>next</i>
+
+        <div class="bar-right">
+          <!-- 倍速 -->
+          <div class="player-speed">
+            <i>bs</i>
+          </div>
+          <!-- 全屏 -->
+          <div class="player-full">
+            <i>qp</i>
+          </div>
+          <div class="right player-time">
+            <!-- 总时长 -->
+            <span class="time-duration">{{ timeFormat(max) }}</span>
+          </div>
         </div>
-        <!-- 倍速 -->
-        <!-- 全屏 -->
+
       </div>
     </div>
   </div>
-  <el-icon :size="20" @click="click1" id="icon">
-    <Edit />
-  </el-icon>
+<!--  <el-icon :size="20" @click="click1" id="icon">-->
+<!--    <Edit />-->
+<!--  </el-icon>-->
 </template>
 
 <script>
 import { h } from 'vue'
+
+let sliderBtn;
+
 export default {
   name: 'HelloWorld',
 
@@ -64,46 +79,92 @@ export default {
       isPlaying: true,
       value: 0,
       min: 0,
-      max: 3600,
+      max: 3599,
       marks: {
         1200: {},
         2037: {
           style: {
             color: '#006AFF',
           },
-          //label: this.createLabel(2037)
-          //label: h('i', { class: 'iconfont icon-yundongzuqiu', id: "label", onClick: () => { this.value = 2037 } })
         },
       }
     }
   },
   mounted() {
-    this.createLabel();
+    this.createSliderLabel();
+    this.changeSliderBtnStyle();
     //this.click1();
   },
 
   methods: {
-    click1() {
-      console.log("123123")
-      Object.keys(this.marks).forEach(key => {
-        Object.assign(this.marks[key], { label: h('i', { class: 'iconfont icon-yundongzuqiu', onClick: this.click(1500) }) });
-        //this.marks[key] = {style: { color: '#006AFF'}, label: h('i', { class: 'iconfont icon-yundongong', onClick: this.click(value) })};
-      })
+    playerStateChange(){
+
     },
-    createLabel() {
+    playerTimeChange(){
+
+    },
+    playerSpeedChange(){
+
+    },
+    playerFull(){
+
+    },
+    pause() {
+      this.isPlaying = false;
+    },
+    play() {
+      this.isPlaying = true;
+    },
+    sliderInput() {
+      sliderBtn.style.opacity = 1;
+    },
+    sliderChange(){
+      sliderBtn.style.opacity = 0;
+    },
+    createSliderLabel() {
       Object.keys(this.marks).forEach(key => {
         Object.assign(this.marks[key], { label: h('i', { class: 'iconfont icon-yundongzuqiu', onClick: () => { this.value = Number.parseInt(key) } }) });
       })
     },
-    click(value) {
-      this.value = value;
+    changeSliderBtnStyle() {
+      sliderBtn = document.getElementsByClassName("el-slider__button")[0];
+      sliderBtn.style.opacity = 0;
+      sliderBtn.style.width = "10px";
+      sliderBtn.style.height = "10px";
+      sliderBtn.style.borderColor = "#9b4e4e"
+    },
+    getGoalTime(isNext) {
+      let firstGoal = this.max;
+      let lastGoal = this.min;
+      let preGoal = this.min;
+      let nextGoal = this.max;
+      Object.keys(this.marks).forEach(key => {
+        let time = Number.parseInt(key);
+        if (this.value < time) {
+          nextGoal = nextGoal < time ? nextGoal : time;
+        }else if(this.value > time){
+          preGoal = preGoal > time ? preGoal : time;
+        }
+        firstGoal = firstGoal < time ? firstGoal : time;
+        lastGoal = lastGoal > time ? lastGoal : time;
+      })
+      nextGoal = nextGoal === this.max ? firstGoal : nextGoal;
+      preGoal = preGoal === this.min ? lastGoal : preGoal;
+      if (isNext) {
+        this.value = nextGoal;
+      } else {
+        this.value = preGoal;
+      }
     },
     timeFormat(val) {
       let h = Math.floor(val / 3600);
       let m = Math.floor((val % 3600) / 60);
       let s = Math.floor(val % 60);
-
-      return this.numberFormat(h) + ':' + this.numberFormat(m) + ':' + this.numberFormat(s);
+      let res = "";
+      if(h>=1){
+        res += this.numberFormat(h) + ':';
+      }
+      return res + this.numberFormat(m) + ':' + this.numberFormat(s);
     },
     numberFormat(val) {
       if (val < 10) {
@@ -112,36 +173,87 @@ export default {
         return val;
       }
     },
-    pause() {
-      this.isPlaying = false;
-    },
-    play() {
-      this.isPlaying = true;
-    },
-    nextGoal() {
-      // TODO: 循环，到达最后一个时刻后回到第一个时刻 
-      let nextTime = this.max;
-      let firstTime = this.max;
-      Object.keys(this.marks).forEach(key => {
-        let time = Number.parseInt(key);
-        if (this.value < time) {
-          nextTime = nextTime > time ? time : nextTime;
-        }
-        firstTime = firstTime > time ? time : firstTime;
-      })
-      if (nextTime === this.max) {
-        this.value = firstTime;
-      } else {
-        this.value = nextTime;
-      }
-    }
-  }
+  },
+
 };
 
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.ctrl {
+  width: 90vw;
+  height: 90vh;
+  display:inline-block;
+  border-style: solid;
+}
+
+.ctrl-bottom {
+  position: absolute;
+  width: inherit;
+  bottom: 0;
+}
+.ctrl-bar {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 100px 1fr 60px;
+  grid-gap: 5px;
+  position: relative;
+}
+.bar-left {
+  display: grid;
+  grid-template-columns: 40% 30% 30%;
+  grid-template-rows: 60% 40%;
+  grid-gap: 1px;
+  position: relative;
+}
+.player-state {
+  grid-row: 1 / 2;
+  grid-column: 1;
+}
+.pre-goal{
+  grid-row: 1;
+  grid-column: 2;
+}
+.next-goal {
+  grid-row: 1;
+  grid-column: 3;
+}
+.left.player-time {
+  grid-row: 2;
+  grid-column: 2 / 3;
+}
+
+.bar-right {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 60% 40%;
+  grid-gap: 1px;
+  position: relative;
+}
+.player-speed {
+  grid-row: 1;
+  grid-column: 1;
+}
+.player-full {
+  grid-row: 1;
+  grid-column: 2;
+}
+.right.player-time {
+  grid-row: 2;
+  grid-column: 1 / 2;
+}
+
+
+.player-time {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
+/deep/ .el-slider__bar{
+  background-color: #ff4bba;
+}
+
+
 h3 {
   margin: 40px 0 0;
 }

@@ -70,6 +70,14 @@ https://www.cnblogs.com/zdz8207/p/vue-ui-framework.html
 
 
 
+跨组件通信：
+
+[(67条消息) Vue中监听vuex数据变化（a组件修改vuex内数据，b组件内触发相应函数）_杰瑞是个胖子的博客-CSDN博客](https://blog.csdn.net/sinat_42684420/article/details/104809875)
+
+[(67条消息) Vue跨组件通信8种方式汇总_豆腐oh的博客-CSDN博客](https://blog.csdn.net/passWordEnterX/article/details/120525304)
+
+
+
 **p5.js** **creat.js** three.js **two.js** fabric.js 
 javafx jfoenix jxbrowser 
 fxgl lwjgl 
