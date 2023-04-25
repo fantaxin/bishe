@@ -1,17 +1,20 @@
 <template>
   <HelloWorld />
+  <Test />
 </template>
 
 <script>
 import ThreeTest from './view/ThreeTest.vue'
 import PlayerP from './view/PlayerP.vue'
 import HelloWorld from './view/HelloWorld.vue'
+import Test from './view/Test.vue'
 
 export default {
   name: 'App',
   components: {
     //Dashboard
-    HelloWorld
+    HelloWorld,
+    Test
   }
 }
 </script>

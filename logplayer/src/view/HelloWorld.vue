@@ -97,8 +97,11 @@ export default {
   },
 
   methods: {
-    playerStateChange(){
-
+    playerStateChange(isPlaying){
+      if(this.isPlaying !== isPlaying){
+        this.isPlaying = isPlaying;
+        this.$store.commit('changePlayingState', this.isPlaying);
+      }
     },
     playerTimeChange(){
 
@@ -108,12 +111,6 @@ export default {
     },
     playerFull(){
 
-    },
-    pause() {
-      this.isPlaying = false;
-    },
-    play() {
-      this.isPlaying = true;
     },
     sliderInput() {
       sliderBtn.style.opacity = 1;
