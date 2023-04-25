@@ -11,7 +11,7 @@ import { toRaw } from "vue";
 import { Player } from "../js/player.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { TeamDescription } from "@/js/game/description/TeamDescription.js";
-import { GameType, EntityName, TeamSide, frames } from "@/js/util/Constants.js";
+import { GameType, EntityName, TeamSide, frames, PlayState } from "@/js/util/Constants.js";
 import { MeshFactory } from "@/js/model/loader/MeshFactory";
 import { World } from "@/js/model/World";
 import { GameDescription } from "@/js/game/description/GameDescription";
@@ -23,6 +23,11 @@ let controls;
 let geometry;
 let n = 0.1;
 let i = 0.1;
+let startFrameTime;
+let lastFrameTime;
+let callNum = 0;
+let freshTime = 0;//距离上一次更新frame到现在的有效时间差
+
 export default {
     name: "ThreeTest",
     data() {
@@ -43,45 +48,18 @@ export default {
         };
     },
     created() {
-        this.init();
+        this.glinit();
+        this.worldinit();
+        this.scene.add(this.world.group);
         request.get('eee.json', {}).then(res => {
             this.log = res.data;
         })
     },
     mounted() {
         document.getElementById("video").appendChild(this.renderer.domElement);
-        this.load();
-        //this.test();
-
+        this.animate();
     },
     methods: {
-        test() {
-            let map1 = new Map();
-            map1.set(1.1, "string1");
-            map1.set(2.1, "string2");
-            map1.set(3.1, "string3");
-            map1.forEach((element) => {
-                console.log(element);
-            });
-
-            let world = EntityName.World;
-            console.log(world);
-
-            let agent = EntityName.Agent(TeamSide.LEFT, "10");
-            console.log(agent);
-
-            let teamDescription = new TeamDescription("team1", "team2", "team3");
-            console.log(teamDescription.color);
-        },
-        init() {
-            this.glinit();
-            this.worldinit();
-            //this.frames = frames();
-            this.scene.add(this.world.group);
-        },
-        gameinit() {
-            let json;
-        },
         worldinit() {
             let gameDes = new GameDescription(GameType.TWO_D, {}, {}, []);
             let agentDesArr1 = [];
@@ -201,9 +179,6 @@ export default {
 
             this.scene.background = new THREE.Color("skyblue")
         },
-        load() {
-            this.animate();
-        },
         animate() {
             requestAnimationFrame(this.animate);
             let scene = toRaw(this.scene);
@@ -226,7 +201,39 @@ export default {
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
             this.renderer.render(scene, this.camera);
+        },
+        nextFrameIdx(oldFrameIdx) {
+            if (this.$store.state.playState !== PlayState.ONUSE) {
+                return oldFrameIdx;
+            }
+            freshTime += 1000 / this.$store.state.frameNum;
+            const millSecPerUpdate = 100 / this.$store.state.speed;
+            let newFrameIdx = oldFrameIdx;
+            if (freshTime >= millSecPerUpdate) {
+                let addFrameIdx = freshTime / millSecPerUpdate;
+                newFrameIdx += addFrameIdx;
+                freshTime -= addFrameIdx * millSecPerUpdate;
+            }
+
+        },
+        getFrameNum() {
+            if (this.$store.state.playState !== PlayState.LOADING && this.$store.state.playerState !== PlayState.ONUSE) {
+                this.startFrameTime = Date.now();
+                this.lastFrameTime = Date.now();
+                this.$store.state.playState = PlayState.LOADING;
+                return this.$store.state.frameNum;
+            }
+            callNum++;
+            let nowFrameTime = Date.now();
+            if (nowFrameTime - startFrameTime < 1000) {
+                this.$store.state.frameNum = (callNum * 1000 / (nowFrameTime - lastFrameTime)).toFixed(1);
+            } else if (nowFrameTime - lastFrameTime >= 1000) {
+                this.$store.state.frameNum = (callNum * 1000 / (nowFrameTime - lastFrameTime)).toFixed(1);
+                lastFrameTime = nowFrameTime;
+            }
+            return this.$store.state.frameNum;
         }
+
     }
 };
 

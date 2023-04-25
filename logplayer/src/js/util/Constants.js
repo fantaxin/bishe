@@ -3,6 +3,13 @@ import { BallState } from "../game/state/BallState";
 import { Frame } from "../game/state/Frame";
 import { ScoreState } from "../game/state/ScoreState";
 
+export const PlayState = {
+    NOTUSED: 0,
+    CHANGED: 1,
+    LOADING: 2,
+    ONUSE: 3,
+    END: 4
+}
 /**
  * @enum {string}
  */

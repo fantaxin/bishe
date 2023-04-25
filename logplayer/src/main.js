@@ -1,46 +1,48 @@
 import { createApp } from 'vue'
-import { createStore  } from 'vuex'
+import { createStore } from 'vuex'
 import App from './App.vue'
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import './assets/style/icons/iconfont.css'
+import { PlayState } from './js/util/Constants'
 //import 'element-plus/theme-chalk/dark/css-vars.css'
 
 
-const store = new createStore ({
+const store = new createStore({
     state() {
         return {
-            playerState: "",
+            playState: PlayState.NOTUSED,
             isPlaying: false,
             isNight: false,
             isFull: false,
-            playerTime: 0,
-            playerSpeed: 1,
+            time: 0,
+            speed: 1,
+            frameNum: 60,
         }
 
     },
     mutations: {
-        changePlayerState(playerState){
+        changePlayerState(playState) {
             // not use
             // loading
             // playing
             // changed
         },
-        changePlayingState(state, isPlaying){
+        changePlayingState(state, isPlaying) {
             state.isPlaying = isPlaying;
         },
-        changeLightState(state, isNight){
+        changeLightState(state, isNight) {
             state.isNight = isNight;
         },
-        changeScreenState(state, isFull){
+        changeScreenState(state, isFull) {
             state.isFull = isFull;
         },
-        changeTimeState(state, playerTime){
-            state.playerTime = playerTime;
+        changeTimeState(state, playerTime) {
+            state.time = playerTime;
         },
-        changeSpeedState(state, playerSpeed){
-            state.playerSpeed = playerSpeed;
+        changeSpeedState(state, playerSpeed) {
+            state.speed = playerSpeed;
         },
     },
     actions: {}
