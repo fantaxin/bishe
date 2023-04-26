@@ -23,6 +23,7 @@ let controls;
 let geometry;
 let n = 0.1;
 let i = 0.1;
+let frameIdx = 0;
 let startFrameTime;
 let lastFrameTime;
 let callNum = 0;
@@ -181,59 +182,78 @@ export default {
         },
         animate() {
             requestAnimationFrame(this.animate);
-            let scene = toRaw(this.scene);
             controls.update();
+
+            this.updateFrameNum();
+
+            let scene = toRaw(this.scene);
             let world = toRaw(this.world);
             if (this.log !== null) {
-                i += 0.2;
-                let j = Math.ceil(i);
-                let frame = this.log.frames[j];
-                let nextFrame;
-                //j = 0.1;
-                if (j >= this.log.frames.length) {
-                    nextFrame = frame;
-                } else {
-                    nextFrame = this.log.frames[j];
-                }
-                world.updateWorld(frame, nextFrame)
+                // i += 0.2;
+                // let j = Math.ceil(i);
+                // let frame = this.log.frames[j];
+                // let nextFrame;
+                // //j = 0.1;
+                // if (j >= this.log.frames.length) {
+                //     nextFrame = frame;
+                // } else {
+                //     nextFrame = this.log.frames[j];
+                // }
+                this.updateFrameIdx();
+                let frame = this.log.frames[frameIdx];
+                let nextFrame = this.log.frames[frameIdx+1];
+                world.updateWorld(frame, nextFrame);
             }
             this.renderer.setSize(window.innerWidth, window.innerHeight);
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
             this.renderer.render(scene, this.camera);
         },
-        nextFrameIdx(oldFrameIdx) {
-            if (this.$store.state.playState !== PlayState.ONUSE) {
-                return oldFrameIdx;
-            }
+        updateFrameIdx(frameIdx) {
+            // if (this.$store.state.playState !== PlayState.ONUSE) {
+            //     return frameIdx;
+            // }
             freshTime += 1000 / this.$store.state.frameNum;
             const millSecPerUpdate = 100 / this.$store.state.speed;
-            let newFrameIdx = oldFrameIdx;
             if (freshTime >= millSecPerUpdate) {
                 let addFrameIdx = freshTime / millSecPerUpdate;
-                newFrameIdx += addFrameIdx;
+                frameIdx += addFrameIdx;
                 freshTime -= addFrameIdx * millSecPerUpdate;
             }
-
+            return frameIdx;
         },
-        getFrameNum() {
+        updateFrameNum() {
             if (this.$store.state.playState !== PlayState.LOADING && this.$store.state.playerState !== PlayState.ONUSE) {
-                this.startFrameTime = Date.now();
-                this.lastFrameTime = Date.now();
+                startFrameTime = Date.now();
+                lastFrameTime = Date.now();
                 this.$store.state.playState = PlayState.LOADING;
-                return this.$store.state.frameNum;
             }
             callNum++;
             let nowFrameTime = Date.now();
             if (nowFrameTime - startFrameTime < 1000) {
-                this.$store.state.frameNum = (callNum * 1000 / (nowFrameTime - lastFrameTime)).toFixed(1);
+                this.$store.state.frameNum = (callNum * 1000 / (nowFrameTime - startFrameTime)).toFixed(1);
             } else if (nowFrameTime - lastFrameTime >= 1000) {
                 this.$store.state.frameNum = (callNum * 1000 / (nowFrameTime - lastFrameTime)).toFixed(1);
+                callNum = 0;
                 lastFrameTime = nowFrameTime;
             }
-            return this.$store.state.frameNum;
         }
 
+    },
+    computed:{
+        isPlaying(){
+            return this.$store.state.isPlaying;
+        }
+    },
+    watch:{
+        isPlaying (newData, oldData){
+            if(newData === oldData){
+              return;
+            }
+            if(newData){
+
+            }
+        }
     }
 };
 

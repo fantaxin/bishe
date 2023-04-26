@@ -11,7 +11,7 @@ export default {
     }
   },
   methods:{
-    changePlayingState(newData, oldData){
+    plyingStateChanged(newData, oldData){
       if(newData!==oldData){
         this.isPlaying = newData;
       }

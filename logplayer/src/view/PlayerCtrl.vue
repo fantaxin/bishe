@@ -6,6 +6,7 @@
     <div class="ctrl-mid">
       <div class="">
         <!-- 当前的比赛时间，比赛状态，比分等 -->
+        <i>{{this.frameNum}}</i>
       </div>
       <!-- loading... -->
       <div class="">
@@ -18,11 +19,11 @@
         <div class="bar-left">
           <div class="player-state">
             <!-- 小的播放状态图标 -->
-            <div v-if="isPlaying" class="btn-pause" @click="pause">
+            <div v-if="isPlaying" class="btn-pause" @click="playerStateChange(false)">
               <!-- <i class="iconfont icon-kaishi"></i> -->
               <i>pa</i>
             </div>
-            <div v-else class="btn-play" @click="play">
+            <div v-else class="btn-play" @click="playerStateChange(true)">
               <i>pl</i>
             </div>
           </div>
@@ -80,6 +81,7 @@ export default {
       value: 0,
       min: 0,
       max: 3599,
+      frameNum: 0,
       marks: {
         1200: {},
         2037: {
@@ -98,6 +100,7 @@ export default {
 
   methods: {
     playerStateChange(isPlaying){
+      console.log(isPlaying);
       if(this.isPlaying !== isPlaying){
         this.isPlaying = isPlaying;
         this.$store.commit('changePlayingState', this.isPlaying);
@@ -171,6 +174,16 @@ export default {
       }
     },
   },
+  computed:{
+    frameNum1 (){
+      return this.$store.state.frameNum;
+    }
+  },
+  watch:{
+    frameNum1 (newData, oldData){
+      this.frameNum = newData;
+    }
+  }
 
 };
 

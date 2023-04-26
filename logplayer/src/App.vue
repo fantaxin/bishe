@@ -1,20 +1,21 @@
 <template>
-  <HelloWorld />
-  <Test />
+  <PlayerCtrl />
+  <PlayerMedia />
 </template>
 
 <script>
-import ThreeTest from './view/ThreeTest.vue'
+import PlayerMedia from './view/PlayerMedia.vue'
 import PlayerP from './view/PlayerP.vue'
-import HelloWorld from './view/HelloWorld.vue'
+import PlayerCtrl from './view/PlayerCtrl.vue'
 import Test from './view/Test.vue'
 
 export default {
   name: 'App',
   components: {
     //Dashboard
-    HelloWorld,
-    Test
+    PlayerCtrl,
+    PlayerMedia
+    //Test
   }
 }
 </script>

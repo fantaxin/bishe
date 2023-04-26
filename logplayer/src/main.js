@@ -12,13 +12,17 @@ import { PlayState } from './js/util/Constants'
 const store = new createStore({
     state() {
         return {
-            playState: PlayState.NOTUSED,
+            playState: PlayState.ONUSE,
+            frameNum: 60,
             isPlaying: false,
             isNight: false,
             isFull: false,
             time: 0,
             speed: 1,
-            frameNum: 60,
+            gameTime: 0,
+            gameMode: "",
+            gameScore: "",
+
         }
 
     },
