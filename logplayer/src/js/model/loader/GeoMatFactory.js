@@ -107,8 +107,8 @@ class GeoMatFactory {
                 texture = GeoMatFactory.loadTexture('field_roboviz.jpg');
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.x = Math.floor(length/10.5);
-                texture.repeat.y = Math.round(width/13.5);
+                texture.repeat.x = 105/105;
+                texture.repeat.y = Math.round(width/68);
                 return new THREE.MeshLambertMaterial({ map: texture });
             }
             default:{

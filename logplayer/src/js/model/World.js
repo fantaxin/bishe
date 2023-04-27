@@ -20,7 +20,7 @@ import { MeshFactory } from "./loader/MeshFactory";
 
 class World {
     /**
-    * @description: 
+    * @description:
     * @param {GameDescription} gameDescription
     * @param {TeamDescription} teamDescription
      */
@@ -78,7 +78,21 @@ class World {
     }
 
     createField() {
-        this.field = new Field(this.gameDescription);
+        let fieldParams = new Map();
+        fieldParams.set("length", 105);
+        fieldParams.set("width", 68);
+        fieldParams.set("centerCircleRadius", 9.15);
+        fieldParams.set("penaltyLength", 16.5);
+        fieldParams.set("penaltyWidth", 40.3);
+        fieldParams.set("penaltySpot", 11);
+        fieldParams.set("goalAreaLength", 5.5);
+        fieldParams.set("goalAreaWidth", 18.32);
+        fieldParams.set("goalWidth", 7.32);
+        fieldParams.set("goalHeight", 2.44);
+        fieldParams.set("goalradius", 0.06);
+        //this.goalWidth = 14.02;
+        this.field = new Field(105, 68, 9.15, 16.5, 40.3, 11, 5.5,
+            18.32, 7.32, 2.44, 0.06, "mainField");
         this.group.add(this.field.group);
 
     }
@@ -104,7 +118,7 @@ class World {
 
     //TODO: 对world进行状态更新
     /**
-    * @description: 
+    * @description:
     * @param {Frame} frame
     * @param {Frame} nextFrame
     * @return {*}

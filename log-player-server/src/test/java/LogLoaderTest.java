@@ -2,8 +2,10 @@ import com.alibaba.fastjson.JSON;
 import edu.cug.logplayer.server.LogPlayerServerApplication;
 import edu.cug.logplayer.server.log.Game;
 import edu.cug.logplayer.server.log.parse.LogLoader;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.stream.Collectors;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +35,13 @@ public class LogLoaderTest {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void splitTest(){
+        String url = "e/file/replay/2012/bb/groupa/vs.replay";
+        String[] arr = url.split("/");
+        System.out.println(Arrays.stream(arr).limit(arr.length - 1).collect(Collectors.joining("/")));
     }
 
 }

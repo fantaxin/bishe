@@ -1,8 +1,3 @@
-import { AgentState } from "../game/state/AgentState";
-import { BallState } from "../game/state/BallState";
-import { Frame } from "../game/state/Frame";
-import { ScoreState } from "../game/state/ScoreState";
-
 export const PlayState = {
     NOTUSED: 0,
     CHANGED: 1,
@@ -82,17 +77,7 @@ export const EntityDefaultConfig = {
     Default_Ball_Radius: 0.2,
     Default_Line_Width: 0.15
 }
-export function AngleY(x, z) {
-    if (x > 0 && z <= 0) {
-        return -Math.atan(z / x);
-    } else if (x > 0 && z >= 0) {
-        return 2 * Math.PI - Math.atan(z / x);
-    } else if (x < 0) {
-        return Math.PI - Math.atan(z / x);
-    } else if (x == 0) {
-        return Math.PI + (z / Math.abs(z)) * (Math.PI / 2);
-    }
-}
+
 
 /**
  * @enum {string}
@@ -189,50 +174,3 @@ export const AgentFlag = {
     }
 };
 
-export function isLeft(str) {
-    if (str == 'left' || str == 'Left' || str == 'LEFT' || str == 'l' || str == 'L') {
-        return true;
-    }
-    return false;
-}
-
-export function isRight(str) {
-    if (str == 'right' || str == 'Right' || str == 'RIGHT' || str == 'r' || str == 'R') {
-        return true;
-    }
-    return false;
-}
-
-export function frames(num = 104) {
-    let num2 = num / 2;
-    const frames = [];
-    for (let i = 0; i < num; i++) {
-        const gameMode = GameMode.PLAY_ON;
-        const scoreState = new ScoreState(0, 0, 0, 0, 0, 0);
-        const ballState = new BallState(-num2 + i, 2, 0, 0, 0, 0, 0);
-        const leftAgentStates = [];
-        for (let j = 0; j < 11; j++) {
-            leftAgentStates.push(new AgentState(0, -num2 + i, 2, 1 + 3 * (2 * j), 0, 0, 0, 0, [], 7000));
-        }
-        const rightAgentStates = [];
-        for (let j = 0; j < 11; j++) {
-            rightAgentStates.push(new AgentState(0, num2 - i, 2, 1 + 3 * (2 * j + 1), 0, 0, 0, 0, [], 7000));
-        }
-        frames.push(new Frame(i, i, gameMode, scoreState, ballState, leftAgentStates, rightAgentStates));
-    }
-    for (let i = 0; i < num; i++) {
-        const gameMode = GameMode.PLAY_ON;
-        const scoreState = new ScoreState(0, 0, 0, 0, 0, 0);
-        const ballState = new BallState(num2 - i, 2, 0, 0, 0, 0, 0);
-        const leftAgentStates = [];
-        for (let j = 0; j < 11; j++) {
-            leftAgentStates.push(new AgentState(0, num2 - i, 2, 1 + 3 * (2 * j), 0, 0, 0, 0, [], 7000));
-        }
-        const rightAgentStates = [];
-        for (let j = 0; j < 11; j++) {
-            rightAgentStates.push(new AgentState(0, -num2 + i, 2, 1 + 3 * (2 * j + 1), 0, 0, 0, 0, [], 7000));
-        }
-        frames.push(new Frame(i, i, gameMode, scoreState, ballState, leftAgentStates, rightAgentStates));
-    }
-    return frames;
-}

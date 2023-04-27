@@ -1,6 +1,6 @@
 /**
 * @FilePath /src/js/model/entity/MovableObj.js
-* @Description 
+* @Description
 * @Author wangxin
 * @Date 2023-03-22 10:15:44
 * @LastEditTime 2023-04-04 18:14:18
@@ -8,12 +8,12 @@
 export { MovableObject }
 
 import * as THREE from "three";
-import { AngleY, EntityName } from "@/js/util/Constants";
+import { EntityName } from "@/js/util/Constants";
 
 class MovableObject {
     /**
      * Construct
-     * @param {string} name 
+     * @param {string} name
      */
     constructor(name) {
 

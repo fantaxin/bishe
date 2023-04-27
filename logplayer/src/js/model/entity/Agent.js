@@ -1,22 +1,24 @@
 /**
 * @FilePath /src/js/model/entity/Agent.js
-* @Description 
+* @Description
 * @Author wangxin
 * @Date 2023-03-22 09:50:05
 * @LastEditTime 2023-04-04 18:29:12
  */
+import {AngleY} from "@/js/util/util";
+
 export { Agent }
 
 import { AgentDescription } from "@/js/game/description/AgentDescription";
 import { ObjState } from "@/js/game/state/ObjState";
 import { MovableObject } from "./MovableObj";
-import { AngleY, EntityName, TeamSide } from "@/js/util/Constants";
+import { EntityName, TeamSide } from "@/js/util/Constants";
 import { MeshFactory } from "../loader/MeshFactory";
 import { Vector3 } from "three";
 
 class Agent extends MovableObject {
     /**
-    * @description: 
+    * @description:
     * @param {AgentDescription} agentDiscription
      */
     constructor(agentDiscription) {
@@ -41,7 +43,7 @@ class Agent extends MovableObject {
     }
 
     /**
-    * @description: 
+    * @description:
     * @param {AgentState} state
     * @param {AgentState} nextState
     * @param {*} t

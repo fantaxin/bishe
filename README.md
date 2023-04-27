@@ -1,3 +1,20 @@
+前端ui框架改为 http://www.quasarchs.com/
+
+|   属性名   |  类型  |                  |
+| :--------: | :----: | :--------------: |
+|     id     |  long  |   文件/目录id    |
+|    type    |  int   | 0: 目录，1: 文件 |
+|    url     | string |  文件/目录地址   |
+|   parent   |  long  |    父级目录id    |
+| createTime |  date  |                  |
+|    size    | double |                  |
+
+
+
+.replay -> .json -> .json.zip -> .json
+
+
+
 java opengl框架:
 LWJGL
 processing

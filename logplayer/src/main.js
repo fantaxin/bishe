@@ -13,15 +13,8 @@ const store = new createStore({
     state() {
         return {
             playState: PlayState.NOTUSED,
-            frameNum: 60,
             isNight: false,
             isFull: false,
-            time: 0,
-            speed: 1,
-            gameTime: 0,
-            gameMode: "",
-            gameScore: "",
-            maxTime: 0,
         }
 
     },

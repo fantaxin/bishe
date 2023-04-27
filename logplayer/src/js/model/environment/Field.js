@@ -31,7 +31,7 @@ class Field {
     constructor(length , width, radius, penaltyLength, penaltyWidth, penaltySpot,
                 goalAreaLength, goalAreaWidth, goalWidth, goalHeight, goalradius, name) {
         this.group = new Group();
-        this.group.name = name;
+        this.group.name = EntityName.Field(name);
         this.length = length;
         this.width = width;
         this.radius = radius;

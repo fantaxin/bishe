@@ -1,14 +1,15 @@
 /**
 * @FilePath /src/js/test/test.js
-* @Description 
+* @Description
 * @Author wangxin
 * @Date 2023-03-24 10:07:25
 * @LastEditTime 2023-04-07 15:31:40
  */
 
 import { TeamDescription } from "@/js/game/description/TeamDescription.js";
-import { EntityName, TeamSide, AngleY } from "@/js/util/Constants.js";
+import { EntityName, TeamSide} from "@/js/util/Constants.js";
 import { Entity } from "./Entity.js";
+import {AngleY} from "@/js/util/util";
 
 export class AAA {
     constructor() {
