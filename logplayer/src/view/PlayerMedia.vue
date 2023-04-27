@@ -54,6 +54,7 @@ export default {
         this.scene.add(this.world.group);
         request.get('eee.json', {}).then(res => {
             this.log = res.data;
+            this.$store.state.maxTime = this.log.frames[this.log.frames.length - 1].time;
         })
     },
     mounted() {
@@ -201,7 +202,8 @@ export default {
                 // }
                 this.updateFrameIdx();
                 let frame = this.log.frames[frameIdx];
-                let nextFrame = this.log.frames[frameIdx+1];
+                let nextFrame = this.log.frames[frameIdx + 1];
+                this.updateTime(frame);
                 world.updateWorld(frame, nextFrame);
             }
             this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -209,21 +211,21 @@ export default {
             this.camera.updateProjectionMatrix();
             this.renderer.render(scene, this.camera);
         },
-        updateFrameIdx(frameIdx) {
-            // if (this.$store.state.playState !== PlayState.ONUSE) {
-            //     return frameIdx;
-            // }
+        updateFrameIdx() {
+            if (this.$store.state.playState !== PlayState.PLAYING) {
+                return frameIdx;
+            }
             freshTime += 1000 / this.$store.state.frameNum;
             const millSecPerUpdate = 100 / this.$store.state.speed;
             if (freshTime >= millSecPerUpdate) {
-                let addFrameIdx = freshTime / millSecPerUpdate;
+                let addFrameIdx = Math.round(freshTime / millSecPerUpdate);
                 frameIdx += addFrameIdx;
                 freshTime -= addFrameIdx * millSecPerUpdate;
             }
-            return frameIdx;
+            // frameIdx++;
         },
         updateFrameNum() {
-            if (this.$store.state.playState !== PlayState.LOADING && this.$store.state.playerState !== PlayState.ONUSE) {
+            if (this.$store.state.playState === PlayState.NOTUSED || this.$store.state.playState === PlayState.CHANGED) {
                 startFrameTime = Date.now();
                 lastFrameTime = Date.now();
                 this.$store.state.playState = PlayState.LOADING;
@@ -237,20 +239,23 @@ export default {
                 callNum = 0;
                 lastFrameTime = nowFrameTime;
             }
+        },
+        updateTime(frame) {
+            this.$store.state.time = frame.time;
         }
 
     },
-    computed:{
-        isPlaying(){
-            return this.$store.state.isPlaying;
+    computed: {
+        playState() {
+            return this.$store.state.playState;
         }
     },
-    watch:{
-        isPlaying (newData, oldData){
-            if(newData === oldData){
-              return;
+    watch: {
+        playState(newData, oldData) {
+            if (newData === oldData) {
+                return;
             }
-            if(newData){
+            if (newData) {
 
             }
         }

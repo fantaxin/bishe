@@ -6,7 +6,7 @@
     <div class="ctrl-mid">
       <div class="">
         <!-- 当前的比赛时间，比赛状态，比分等 -->
-        <i>{{this.frameNum}}</i>
+        <i>{{ frameNum }}</i>
       </div>
       <!-- loading... -->
       <div class="">
@@ -19,11 +19,11 @@
         <div class="bar-left">
           <div class="player-state">
             <!-- 小的播放状态图标 -->
-            <div v-if="isPlaying" class="btn-pause" @click="playerStateChange(false)">
+            <div v-if="playState === PlayState.PLAYING" class="btn-pause" @click="changePlayState(PlayState.PAUSE)">
               <!-- <i class="iconfont icon-kaishi"></i> -->
               <i>pa</i>
             </div>
-            <div v-else class="btn-play" @click="playerStateChange(true)">
+            <div v-else class="btn-play" @click="changePlayState(PlayState.PLAYING)">
               <i>pl</i>
             </div>
           </div>
@@ -36,12 +36,13 @@
           </div>
           <div class="left player-time">
             <!-- 当前时间 -->
-            <span class="time-current">{{ timeFormat(value) }}</span>
+            <span class="time-current">{{ timeFormat(time) }}</span>
           </div>
         </div>
 
         <div class="bar-mid">
-          <el-slider v-model="value" :min="min" :max="max" :marks="marks" :format-tooltip="timeFormat" size="small" style="color: #222222" @input="sliderInput" @change="sliderChange"/>
+          <el-slider v-model="time" :min="min" :max="max" :marks="marks" :format-tooltip="timeFormat" size="small"
+            style="color: #222222" @input="sliderInput" @change="sliderChange" />
         </div>
 
         <div class="bar-right">
@@ -55,19 +56,20 @@
           </div>
           <div class="right player-time">
             <!-- 总时长 -->
-            <span class="time-duration">{{ timeFormat(max) }}</span>
+            <span class="time-duration">{{ timeFormat(maxTime) }}</span>
           </div>
         </div>
 
       </div>
     </div>
   </div>
-<!--  <el-icon :size="20" @click="click1" id="icon">-->
-<!--    <Edit />-->
-<!--  </el-icon>-->
+  <!--  <el-icon :size="20" @click="click1" id="icon">-->
+  <!--    <Edit />-->
+  <!--  </el-icon>-->
 </template>
 
 <script>
+import { PlayState } from '@/js/util/Constants';
 import { h } from 'vue'
 
 let sliderBtn;
@@ -77,11 +79,8 @@ export default {
 
   data() {
     return {
-      isPlaying: true,
-      value: 0,
+      PlayState: PlayState,
       min: 0,
-      max: 3599,
-      frameNum: 0,
       marks: {
         1200: {},
         2037: {
@@ -99,26 +98,22 @@ export default {
   },
 
   methods: {
-    playerStateChange(isPlaying){
-      console.log(isPlaying);
-      if(this.isPlaying !== isPlaying){
-        this.isPlaying = isPlaying;
-        this.$store.commit('changePlayingState', this.isPlaying);
-      }
+    changePlayState(playState) {
+      this.$store.commit('changePlayState', playState);
     },
-    playerTimeChange(){
+    playerTimeChange() {
 
     },
-    playerSpeedChange(){
+    playerSpeedChange() {
 
     },
-    playerFull(){
+    playerFull() {
 
     },
     sliderInput() {
       sliderBtn.style.opacity = 1;
     },
-    sliderChange(){
+    sliderChange() {
       sliderBtn.style.opacity = 0;
     },
     createSliderLabel() {
@@ -142,7 +137,7 @@ export default {
         let time = Number.parseInt(key);
         if (this.value < time) {
           nextGoal = nextGoal < time ? nextGoal : time;
-        }else if(this.value > time){
+        } else if (this.value > time) {
           preGoal = preGoal > time ? preGoal : time;
         }
         firstGoal = firstGoal < time ? firstGoal : time;
@@ -151,9 +146,9 @@ export default {
       nextGoal = nextGoal === this.max ? firstGoal : nextGoal;
       preGoal = preGoal === this.min ? lastGoal : preGoal;
       if (isNext) {
-        this.value = nextGoal;
+        this.time = nextGoal;
       } else {
-        this.value = preGoal;
+        this.time = preGoal;
       }
     },
     timeFormat(val) {
@@ -161,7 +156,7 @@ export default {
       let m = Math.floor((val % 3600) / 60);
       let s = Math.floor(val % 60);
       let res = "";
-      if(h>=1){
+      if (h >= 1) {
         res += this.numberFormat(h) + ':';
       }
       return res + this.numberFormat(m) + ':' + this.numberFormat(s);
@@ -174,14 +169,26 @@ export default {
       }
     },
   },
-  computed:{
-    frameNum1 (){
+  computed: {
+    frameNum() {
       return this.$store.state.frameNum;
+    },
+    playState() {
+      return this.$store.state.playState;
+    },
+    time() {
+      return this.$store.state.time;
+    },
+    maxTime() {
+      return this.$store.state.maxTime;
     }
   },
-  watch:{
-    frameNum1 (newData, oldData){
+  watch: {
+    frameNum(newData) {
       this.frameNum = newData;
+    },
+    playState(newData, oldData) {
+
     }
   }
 
@@ -191,11 +198,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .ctrl {
   width: 90vw;
   height: 90vh;
-  display:inline-block;
+  display: inline-block;
   border-style: solid;
 }
 
@@ -204,6 +210,7 @@ export default {
   width: inherit;
   bottom: 0;
 }
+
 .ctrl-bar {
   width: 100%;
   display: grid;
@@ -211,6 +218,7 @@ export default {
   grid-gap: 5px;
   position: relative;
 }
+
 .bar-left {
   display: grid;
   grid-template-columns: 40% 30% 30%;
@@ -218,18 +226,22 @@ export default {
   grid-gap: 1px;
   position: relative;
 }
+
 .player-state {
   grid-row: 1 / 2;
   grid-column: 1;
 }
-.pre-goal{
+
+.pre-goal {
   grid-row: 1;
   grid-column: 2;
 }
+
 .next-goal {
   grid-row: 1;
   grid-column: 3;
 }
+
 .left.player-time {
   grid-row: 2;
   grid-column: 2 / 3;
@@ -242,14 +254,17 @@ export default {
   grid-gap: 1px;
   position: relative;
 }
+
 .player-speed {
   grid-row: 1;
   grid-column: 1;
 }
+
 .player-full {
   grid-row: 1;
   grid-column: 2;
 }
+
 .right.player-time {
   grid-row: 2;
   grid-column: 1 / 2;
@@ -259,7 +274,8 @@ export default {
 .player-time {
   font-family: Avenir, Helvetica, Arial, sans-serif;
 }
-/deep/ .el-slider__bar{
+
+/deep/ .el-slider__bar {
   background-color: #ff4bba;
 }
 

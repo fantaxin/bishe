@@ -12,9 +12,8 @@ import { PlayState } from './js/util/Constants'
 const store = new createStore({
     state() {
         return {
-            playState: PlayState.ONUSE,
+            playState: PlayState.NOTUSED,
             frameNum: 60,
-            isPlaying: false,
             isNight: false,
             isFull: false,
             time: 0,
@@ -22,19 +21,13 @@ const store = new createStore({
             gameTime: 0,
             gameMode: "",
             gameScore: "",
-
+            maxTime: 0,
         }
 
     },
     mutations: {
-        changePlayerState(playState) {
-            // not use
-            // loading
-            // playing
-            // changed
-        },
-        changePlayingState(state, isPlaying) {
-            state.isPlaying = isPlaying;
+        changePlayState(state, playState) {
+            state.playState = playState;
         },
         changeLightState(state, isNight) {
             state.isNight = isNight;
@@ -42,8 +35,8 @@ const store = new createStore({
         changeScreenState(state, isFull) {
             state.isFull = isFull;
         },
-        changeTimeState(state, playerTime) {
-            state.time = playerTime;
+        changeTimeState(state, time) {
+            state.time = time;
         },
         changeSpeedState(state, playerSpeed) {
             state.speed = playerSpeed;

@@ -7,8 +7,9 @@ export const PlayState = {
     NOTUSED: 0,
     CHANGED: 1,
     LOADING: 2,
-    ONUSE: 3,
-    END: 4
+    PAUSE: 3,
+    PLAYING: 4,
+    END: 5
 }
 /**
  * @enum {string}
