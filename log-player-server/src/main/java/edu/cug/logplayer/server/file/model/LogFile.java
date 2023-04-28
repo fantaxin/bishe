@@ -2,20 +2,19 @@ package edu.cug.logplayer.server.file.model;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * edu.cug.logplayer.server.file.model.FileStruct
+ * edu.cug.logplayer.server.file.model.LogFile
  *
  * @author wangxin
  * @version [1.0.0, 2023/04/27]
  */
 @Setter
 @Getter
-public class FileStruct {
+public class LogFile {
     long id;
 
     // 0：目录，1：文件
