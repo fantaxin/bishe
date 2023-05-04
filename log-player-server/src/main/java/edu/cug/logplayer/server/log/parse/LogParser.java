@@ -37,13 +37,11 @@ public class LogParser implements Runnable{
         System.out.println("第一部分日志体解析完成");
         line = LogParseUtil.parseLogBody(gameLog,line,br,300);
 
-
         // TODO: 进行剩余日志体的解析
         LogParseUtil.parseLogBody(gameLog,line,br,9000);
         System.out.println("剩余日志体解析完成");
 
         semaphore.release();
-
     }
 
 }

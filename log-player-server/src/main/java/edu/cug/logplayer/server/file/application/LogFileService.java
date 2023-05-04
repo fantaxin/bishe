@@ -1,6 +1,5 @@
 package edu.cug.logplayer.server.file.application;
 
-import edu.cug.logplayer.server.file.domain.LogFileMgr;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -11,6 +10,9 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+
+import edu.cug.logplayer.server.file.domain.LogFileMgr;
+import edu.cug.logplayer.server.utils.LogFileUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -29,14 +31,45 @@ public class LogFileService {
     @Resource
     LogFileMgr logFileMgr;
 
+    @Resource
+    LogFileUtil logFileUtil;
+
+    public void downloadJsonFile(String url){
+        if(logFileUtil.existLocalFile(url)){
+            // 如果本地没有json文件
+            downloadLocalFile();
+            // xxutil.getjsonlog
+            // savelocal
+        }
+    }
+
+    public void downloadLocalFile(){
+        if(false){
+            //如果本地没有文件
+            downloadNetFile();
+            //savelocal
+        }
+    }
+
+    public void downloadNetFile(){
+        if(false){
+            //如果net没有文件
+            //throw
+        }
+    }
+
+    public void parseLogFile(){
+
+    }
+
     public void downloadFile(String fileName, HttpServletResponse response){
         String url = baseUrl + fileName;
         try {
             File file = new File(url);
             if(file.exists()){
-                logFileMgr.getLocalFile();
+                //logFileMgr.getLocalFile();
             }else{
-                logFileMgr.getNetFile();
+                //logFileMgr.getNetFile();
             }
             // 获取文件名
             String filename = file.getName();

@@ -6,7 +6,7 @@ package edu.cug.logplayer.server.utils;
  * @author wangxin
  * @version [1.0.0, 2023/03/16]
  */
-public class LogUtil {
+public class LogConstant {
 
     public static final int ASCII_UPPER2LOWER = 32;
 

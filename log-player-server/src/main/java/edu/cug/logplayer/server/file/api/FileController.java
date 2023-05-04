@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * edu.cug.logplayer.server.file.api.FileController
@@ -39,6 +40,8 @@ public class FileController {
      */
     @RequestMapping(value = "/downloadFile/{fileName}", method = RequestMethod.GET)
     public void downloadFile(@PathVariable("fileName") String fileName, HttpServletResponse response) {
+        logFileService.downloadLocalFile();
+        //异常处理
         try {
             String urlHead = "D:/a11406/project2/bishe/log/";
             String path = urlHead + fileName;
@@ -79,10 +82,21 @@ public class FileController {
     @RequestMapping("/a")
     public void playFile(){
         //todo: return json.gz/zip file by file url
+        // 根据url获取json文件
+        //todo: 转化为实际的url
+        logFileService.downloadJsonFile();
+        // 异常处理
     }
 
     @RequestMapping("/b")
     public void fileList(){
         //todo: return json.gz/zip file by file url
+
+    }
+
+    public void playUploadFile(){
+        // todo 接收上传的文件
+        // 解析文件为json
+        // 发送文件
     }
 }

@@ -41,8 +41,14 @@
         </div>
 
         <div class="bar-mid">
-          <el-slider v-model="playTime" :min="minTime" :max="maxTime" :marks="marks" :format-tooltip="timeFormat" size="small"
-                     style="color: #222222" @input="sliderInput" @change="sliderChange"/>
+          <q-slider class="q-mt-xl" v-model="playTime" color="deep-orange" label markers :marker-labels="markerList"
+            :min="minTime" :max="maxTime" track-size="10px">
+            <template v-slot:marker-label-group="scope">
+              <q-icon v-for="marker in scope.markerList" :key="marker.value" :class="marker.classes" :style="marker.style"
+                size="sm" color="orange" :name="'sports_soccer'" @click="click(marker)" />
+            </template>
+          </q-slider>
+
         </div>
 
         <div class="bar-right">
@@ -76,17 +82,17 @@
 </template>
 <script>
 import * as THREE from "three";
-import {h} from 'vue'
-import {toRaw} from "vue";
-import {OrbitControls} from "three/addons/controls/OrbitControls.js";
-import {World} from "@/js/model/World";
-import {MeshFactory} from "@/js/model/loader/MeshFactory";
-import {GameDescription} from "@/js/game/description/GameDescription";
-import {TeamDescription} from "@/js/game/description/TeamDescription.js";
-import {AgentDescription} from "@/js/game/description/AgentDescription";
-import {request} from "@/js/test/request";
-import {GameType, TeamSide, PlayState, GameMode} from "@/js/util/Constants.js";
-import {timeFormat} from "@/js/util/util.js"
+import { h } from 'vue'
+import { toRaw } from "vue";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { World } from "@/js/model/World";
+import { MeshFactory } from "@/js/model/loader/MeshFactory";
+import { GameDescription } from "@/js/game/description/GameDescription";
+import { TeamDescription } from "@/js/game/description/TeamDescription.js";
+import { AgentDescription } from "@/js/game/description/AgentDescription";
+import { request } from "@/js/test/request";
+import { GameType, TeamSide, PlayState, GameMode } from "@/js/util/Constants.js";
+import { timeFormat } from "@/js/util/util.js"
 
 let sliderBtn;
 let controls;
@@ -132,13 +138,13 @@ export default {
       this.log = res.data;
       this.maxTime = this.log.frames[this.log.frames.length - 1].time;
       let gamemode = "";
-      this.log.frames.forEach((frame, idx)=>{
-        if(gamemode === GameMode.GOAL_L || gamemode === GameMode.GOAL_R){
+      this.log.frames.forEach((frame, idx) => {
+        if (gamemode === GameMode.GOAL_L || gamemode === GameMode.GOAL_R) {
           return;
         }
-        if(frame.gameMode === GameMode.GOAL_L || frame.gameMode === GameMode.GOAL_R){
-          Object.assign(this.marks, { [Math.floor(idx/10)]: {}});
-          this.createSliderLabel(Math.floor(idx/10));
+        if (frame.gameMode === GameMode.GOAL_L || frame.gameMode === GameMode.GOAL_R) {
+          Object.assign(this.marks, { [Math.floor(idx / 10)]: {} });
+          this.createSliderLabel(Math.floor(idx / 10));
           gamemode = frame.gameMode;
         }
       });
@@ -162,16 +168,16 @@ export default {
         agentDesArr2.push(new AgentDescription(i + 1, TeamSide.RIGHT));
       }
       let leftteam = new TeamDescription(
-          "ll",
-          TeamSide.LEFT,
-          new THREE.Color("#00B7FF"),
-          agentDesArr1
+        "ll",
+        TeamSide.LEFT,
+        new THREE.Color("#00B7FF"),
+        agentDesArr1
       );
       let rightteam = new TeamDescription(
-          "rr",
-          TeamSide.RIGHT,
-          new THREE.Color("#AC3B3B"),
-          agentDesArr2
+        "rr",
+        TeamSide.RIGHT,
+        new THREE.Color("#AC3B3B"),
+        agentDesArr2
       );
       this.world = new World(leftteam, rightteam);
 
@@ -180,9 +186,9 @@ export default {
       this.world.createTeams();
 
       let ambientLight = MeshFactory.createAmbientLight(
-          "light",
-          new THREE.Color("#FFFFFF"),
-          1.5
+        "light",
+        new THREE.Color("#FFFFFF"),
+        1.5
       );
       let directionalLight = new THREE.DirectionalLight("#FFFFFF");
       // 平行光配置
@@ -215,14 +221,14 @@ export default {
       this.scene = new THREE.Scene();
       //this.camera = new THREE.OrthographicCamera(-window.innerWidth, window.innerWidth, window.innerHeight, -window.innerHeight, 0.1, 5000)
       this.camera = new THREE.PerspectiveCamera(
-          45,
-          window.innerWidth / window.innerHeight,
-          0.1,
-          5000
+        45,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        5000
       );
       this.camera.position.set(0, 50, 70);
       this.camera.lookAt(new THREE.Vector3(0, 0, -30));
-      this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+      this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       this.renderer.setSize(window.innerWidth, window.innerHeight);
       this.renderer.setPixelRatio(window.devicePixelRatio);
       this.renderer.gammaOutput = true;
@@ -242,9 +248,9 @@ export default {
 
       document.body.appendChild(this.renderer.domElement);
 
-      const x = new THREE.MeshBasicMaterial({color: "rgb(255, 0, 0)"});
-      const y = new THREE.MeshBasicMaterial({color: "rgb(0, 255, 0)"});
-      const z = new THREE.MeshBasicMaterial({color: "rgb(0, 0, 255)"});
+      const x = new THREE.MeshBasicMaterial({ color: "rgb(255, 0, 0)" });
+      const y = new THREE.MeshBasicMaterial({ color: "rgb(0, 255, 0)" });
+      const z = new THREE.MeshBasicMaterial({ color: "rgb(0, 0, 255)" });
       let a = new Float32Array([0, 0, 0, 10, 0, 0]);
       let b = new Float32Array([0, 0, 0, 0, 10, 0]);
       let c = new Float32Array([0, 0, 0, 0, 0, 10]);
@@ -286,10 +292,10 @@ export default {
         // 更新播放器时间
         this.updatePlayTime(Math.floor(frameIdx / 10));
         // 更新实体
-        world.updateWorld(frame, nextFrame,this.playTime);
+        world.updateWorld(frame, nextFrame, this.playTime);
       }
       // 更新画面大小
-      this.renderer.setSize(player_mid.offsetWidth,player_mid.offsetHeight);
+      this.renderer.setSize(player_mid.offsetWidth, player_mid.offsetHeight);
       // 更新摄像机画面比例
       this.camera.aspect = player_mid.clientWidth / player_mid.clientHeight;
       this.camera.updateProjectionMatrix();
@@ -353,7 +359,7 @@ export default {
       sliderBtn.style.opacity = 0;
     },
     createSliderLabel(key) {
-      Object.assign(this.marks[key], { label: h('i', { class: 'iconfont icon-yundongzuqiu'})});
+      Object.assign(this.marks[key], { label: h('i', { class: 'iconfont icon-yundongzuqiu' }) });
       // Object.keys(this.marks).forEach(key => {
       //   Object.assign(this.marks[key], { label: h('i', { class: 'iconfont icon-yundongzuqiu', onClick: () => { this.changePlayTime(Number.parseInt(key)) } }) });
       // })
@@ -409,7 +415,6 @@ export default {
 
 </script>
 <style>
-
 .player {
   width: 90vw;
   height: 90vh;
@@ -417,20 +422,24 @@ export default {
   border-style: solid;
   position: relative;
 }
+
 .game-msg {
-  position:absolute;
+  position: absolute;
   z-index: 10;
 }
+
 .player-top {
   /*position:relative;*/
   /*z-index: 10;*/
 }
+
 .player-mid {
   /*position:relative;*/
   z-index: 0;
   width: inherit;
   height: inherit;
 }
+
 .player-bottom {
   background: linear-gradient(transparent, rgba(77, 77, 77, 1));
   position: absolute;
@@ -492,15 +501,13 @@ export default {
   grid-row: 1;
   grid-column: 2;
 }
+
 .right.player-time {
   grid-row: 2;
   grid-column: 1 / 2;
 }
+
 .player-time {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-}
-
-/deep/ .el-slider__bar {
-  background-color: #ff4bba;
 }
 </style>

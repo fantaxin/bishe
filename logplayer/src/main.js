@@ -1,12 +1,17 @@
+import App from './App.vue'
 import { createApp } from 'vue'
 import { createStore } from 'vuex'
-import App from './App.vue'
-import ElementPlus from 'element-plus';
-import 'element-plus/dist/index.css'
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import './assets/style/icons/iconfont.css'
 import { PlayState } from './js/util/Constants'
-//import 'element-plus/theme-chalk/dark/css-vars.css'
+//import { Quasar } from 'quasar'
+import { Quasar } from 'quasar'
+import quasarUserOptions from './quasar-user-options'
+// import quasarIconSet from 'quasar/icon-set/svg-material-icons'
+// import '@quasar/extras/material-icons/material-icons.css'
+//import 'quasar/src/css/index.sass'
+// import './assets/style/icons/iconfont.css'
+// import ElementPlus from 'element-plus';
+// import 'element-plus/dist/index.css'
+// import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 
 const store = new createStore({
@@ -38,10 +43,10 @@ const store = new createStore({
     actions: {}
 })
 
-const app = createApp(App)
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-    app.component(key, component)
-}
-app.use(ElementPlus);
+const app = createApp(App).use(Quasar, quasarUserOptions)
+// for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+//     app.component(key, component)
+// }
+//app.use(ElementPlus);
 app.use(store);
 app.mount('#app')

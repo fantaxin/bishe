@@ -1,6 +1,6 @@
 package edu.cug.logplayer.server.log;
 
-import edu.cug.logplayer.server.utils.LogUtil;
+import edu.cug.logplayer.server.utils.LogConstant;
 
 import java.util.List;
 
@@ -62,10 +62,10 @@ public class Game {
         int maxVersion;
         switch (logType) {
             case REPLAY:
-                maxVersion = LogUtil.REPLAY_VERSION_MAX;
+                maxVersion = LogConstant.REPLAY_VERSION_MAX;
                 break;
             case SERVER:
-                maxVersion = LogUtil.RCG_VERSION_MAX;
+                maxVersion = LogConstant.RCG_VERSION_MAX;
                 break;
             default:
                 throw new IllegalArgumentException("log type error!");

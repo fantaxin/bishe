@@ -1,6 +1,6 @@
 package edu.cug.logplayer.server.utils.enums;
 
-import edu.cug.logplayer.server.utils.LogUtil;
+import edu.cug.logplayer.server.utils.LogConstant;
 import java.io.IOException;
 
 /**
@@ -19,10 +19,10 @@ public enum LogType {
 
         switch (type) {
             case "replay":
-            case LogUtil.LOG_REPLAY:
+            case LogConstant.LOG_REPLAY:
                 return REPLAY;
             case "rcg":
-            case LogUtil.LOG_RCG:
+            case LogConstant.LOG_RCG:
                 return SERVER;
             default:
                 return UNKNOWN;

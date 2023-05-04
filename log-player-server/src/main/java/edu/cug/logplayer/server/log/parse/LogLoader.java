@@ -20,8 +20,15 @@ public class LogLoader implements Callable<Game> {
 
     private String logPath;
 
+    // 带缓冲的流读取，默认缓冲区8k
+    private BufferedReader br;
+
     public LogLoader(String logPath) {
         this.logPath = logPath;
+    }
+
+    public LogLoader(BufferedReader br) {
+        this.br = br;
     }
 
     @Override
@@ -33,10 +40,10 @@ public class LogLoader implements Callable<Game> {
         // 当日志解析线程完成第一部分解析时，释放信号量，该线程结束，日志解析线程继续执行
         Semaphore semaphore = new Semaphore(0);
 
-        // 带缓冲的流读取，默认缓冲区8k
-        BufferedReader br;
         try {
-            br = Files.newBufferedReader(Paths.get(logPath));
+            if(br==null){
+                br = Files.newBufferedReader(Paths.get(logPath));
+            }
 
             //启动日志解析线程
             Thread thread = new Thread(new LogParser(gameLog, br, semaphore));
