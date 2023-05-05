@@ -1,20 +1,31 @@
 package edu.cug.logplayer.server.file.application;
 
+import cn.hutool.core.compress.Gzip;
+import edu.cug.logplayer.server.file.domain.FileMgr;
+import edu.cug.logplayer.server.utils.LogConstant;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.cug.logplayer.server.file.domain.LogFileMgr;
+import edu.cug.logplayer.server.file.domain.LogMgr;
 import edu.cug.logplayer.server.utils.LogFileUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * edu.cug.logplayer.server.file.application.LogFileService
@@ -26,40 +37,67 @@ import org.springframework.stereotype.Service;
 public class LogFileService {
 
     @Value("${file.base-local-url}")
-    String baseUrl;
+    private String baseUrl;
+
+    @Value("${file.base-net-url}")
+    private String baseNetUrl;
+
+    @Value("${file.base-net-url-root}")
+    private String baseNetUrlRoot;
 
     @Resource
-    LogFileMgr logFileMgr;
+    private LogMgr logMgr;
 
     @Resource
-    LogFileUtil logFileUtil;
+    private FileMgr fileMgr;
 
-    public void downloadJsonFile(String url){
-        if(logFileUtil.existLocalFile(url)){
-            // 如果本地没有json文件
-            downloadLocalFile();
-            // xxutil.getjsonlog
-            // savelocal
+    @Resource
+    private LogFileUtil logFileUtil;
+
+    public InputStream getJsonFile(String url) throws IOException {
+        String fileUrl = url + LogConstant.JSON_SUFFIX;
+        InputStream in = fileMgr.getLocalFile(fileUrl);
+        if(in == null){
+            InputStream fileIn = getLocalFile(url);
+            GZIPInputStream gzipIn = new GZIPInputStream(fileIn);
+            String json = fileMgr.parse2Json(gzipIn, logFileUtil.getFileName(url) + LogConstant.REPLAY_FILE_SUFFIX);
+            fileMgr.save2LocalWithZip(fileUrl, new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)));
+            in = fileMgr.getLocalFile(fileUrl);
+            gzipIn.close();
         }
+        return in;
     }
 
-    public void downloadLocalFile(){
-        if(false){
-            //如果本地没有文件
-            downloadNetFile();
-            //savelocal
+    public InputStream getLocalFile(String url) throws IOException {
+        String fileUrl = url + LogConstant.REPLAY_FILE_SUFFIX;
+        InputStream in = fileMgr.getLocalFile(fileUrl);
+        if(in == null){
+            in = getNetFile(url);
+            fileMgr.save2Local(fileUrl + LogConstant.COMPRESS_SUFFIX, in);
+            in = fileMgr.getLocalFile(fileUrl);
         }
+        return in;
     }
 
-    public void downloadNetFile(){
-        if(false){
-            //如果net没有文件
-            //throw
+    public InputStream getNetFile(String url) throws IOException {
+        InputStream in = fileMgr.getNetFile(url);
+        if(in == null){
+            throw new FileNotFoundException();
         }
+        return in;
     }
 
-    public void parseLogFile(){
-
+    public InputStream getPlayFile(MultipartFile file) throws IOException {
+        // 将上传的文件转为json
+        InputStream in = file.getInputStream();
+        String json = fileMgr.parse2Json(in, file.getName());
+        in.close();
+        // 压缩json数据
+        GZIPOutputStream gzipOut = new GZIPOutputStream(new ByteArrayOutputStream());
+        gzipOut.write(json.getBytes(StandardCharsets.UTF_8));
+        gzipOut.close();
+        // 返回输入流
+        return new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
     }
 
     public void downloadFile(String fileName, HttpServletResponse response){

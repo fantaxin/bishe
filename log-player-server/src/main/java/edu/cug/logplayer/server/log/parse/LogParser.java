@@ -2,6 +2,7 @@ package edu.cug.logplayer.server.log.parse;
 
 import edu.cug.logplayer.server.log.Game;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.concurrent.Semaphore;
 
 import lombok.SneakyThrows;
@@ -13,7 +14,7 @@ import lombok.SneakyThrows;
  * @version [1.0.0, 2023/03/16]
  */
 //@Slf4j
-public class LogParser implements Runnable{
+public class LogParser implements Runnable {
 
     Game gameLog;
     BufferedReader br;
@@ -29,18 +30,18 @@ public class LogParser implements Runnable{
     @SneakyThrows
     @Override
     public void run() {
-        // TODO: 进行日志头的解析
-        String line = LogParseUtil.parseFileHeader(gameLog, br);
-        System.out.println("日志头解析完成");
+        try {
+            String line = LogParseUtil.parseFileHeader(gameLog, br);
+            System.out.println("日志头解析完成");
 
-        // TODO: 进行第一部分日志体的解析
-        System.out.println("第一部分日志体解析完成");
-        line = LogParseUtil.parseLogBody(gameLog,line,br,300);
+            //line = LogParseUtil.parseLogBody(gameLog,line,br,Integer.MAX_VALUE);
 
-        // TODO: 进行剩余日志体的解析
-        LogParseUtil.parseLogBody(gameLog,line,br,9000);
-        System.out.println("剩余日志体解析完成");
+            LogParseUtil.parseLogBody(gameLog, line, br, Integer.MAX_VALUE);
+            System.out.println("日志体解析完成");
+        } catch (NullPointerException e) {
 
+            System.out.println(br.readLine());
+        }
         semaphore.release();
     }
 

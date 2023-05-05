@@ -16,6 +16,10 @@ public class LogConstant {
 
     public static final String RCG_FILE_SUFFIX = ".rcg";
 
+    public static final String COMPRESS_SUFFIX = ".gz";
+
+    public static final String JSON_SUFFIX = ".json";
+
     public static final String LOG_RCG = "ULG";
 
     public static final String LOG_REPLAY = "RPL";

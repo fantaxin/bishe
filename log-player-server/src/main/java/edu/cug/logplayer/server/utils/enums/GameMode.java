@@ -22,7 +22,9 @@ public enum GameMode {
     kick_off_l, foul_charge_l, free_kick_l, kick_in_l, goal_l, corner_kick_r, goal_kick_l,
     PLAY_ON, OFFSIDE, OFFSIDE_L, OFFSIDE_R, TIME_OVER,
     KICK_OFF_L, FOUL_CHARGE_L, FREE_KICK_L, KICK_IN_L, GOAL_L, CORNER_KICK_L, GOAL_KICK_L,
-    KICK_OFF_R, FOUL_CHARGE_R, FREE_KICK_R, KICK_IN_R, GOAL_R, CORNER_KICK_R, GOAL_KICK_R;
+    KICK_OFF_R, FOUL_CHARGE_R, FREE_KICK_R, KICK_IN_R, GOAL_R, CORNER_KICK_R, GOAL_KICK_R,
+
+    indirect_free_kick_r, indirect_free_kick_l;
 
 
     public GameMode getPlayMode(String str) {

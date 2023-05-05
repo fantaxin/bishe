@@ -27,8 +27,9 @@ public class LogLoader implements Callable<Game> {
         this.logPath = logPath;
     }
 
-    public LogLoader(BufferedReader br) {
+    public LogLoader(BufferedReader br, String logPath) {
         this.br = br;
+        this.logPath = logPath;
     }
 
     @Override

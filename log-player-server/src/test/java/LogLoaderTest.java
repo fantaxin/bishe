@@ -2,13 +2,18 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import edu.cug.logplayer.server.LogPlayerServerApplication;
-import edu.cug.logplayer.server.file.domain.LogFileMgr;
+import edu.cug.logplayer.server.file.domain.FileMgr;
+import edu.cug.logplayer.server.file.domain.LogMgr;
 import edu.cug.logplayer.server.file.model.LogFile;
 import edu.cug.logplayer.server.log.Game;
 import edu.cug.logplayer.server.log.parse.LogLoader;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Date;
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -46,10 +51,26 @@ public class LogLoaderTest {
     private RestTemplate restTemplate;
 
     @Resource
-    private LogFileMgr logFileMgr;
+    private LogMgr logMgr;
+
+    @Resource
+    private FileMgr fileMgr;
 
     @Resource
     private LogFileUtil logFileUtil;
+
+    @Test
+    public void downloadNetFileTest(){
+        try {
+            URL url = new URL("http://chaosscripting.net/files/replays/2DSim/RoboCup/2014/Round3/GroupH/201407231419-AUT-Parsian_1-vs-Enigma_0.replay.gz");
+            URLConnection conn = url.openConnection();
+            InputStream in = conn.getInputStream();
+            FileOutputStream out = new FileOutputStream("E:/aaa.txt");
+            fileMgr.writeStream(in, out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void RestTest() {
@@ -93,7 +114,7 @@ public class LogLoaderTest {
                         logFile.setUrl(logFileUtil.Net2LocalUrl(herf));
                         logFile.setType(0);
                         queue.add(herf);
-                        logFileMgr.addFolder(logFile);
+                        logMgr.addFile(logFile);
                         //folderRes.add(logFile);
                     }
                 } else {
@@ -104,7 +125,7 @@ public class LogLoaderTest {
                         logFile.setType(1);
                         logFile.setSize((Integer) json.get("size"));
                         logFile.setCreateTime(new Date((Long) json.get("time")));
-                        logFileMgr.addFile(logFile);
+                        logMgr.addFile(logFile);
                         //fileRes.add(logFile);
                     }
                 }
@@ -112,7 +133,7 @@ public class LogLoaderTest {
         }
     }
 
-    private MultiValueMap<> getNetParams(String herf){
+    private MultiValueMap<String, String> getNetParams(String herf){
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("action", "get");
         map.add("items", "true");
@@ -140,7 +161,6 @@ public class LogLoaderTest {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Referer", url);
         headers.set("Accept", "application/json, text/javascript, */*; q=0.01");
-//        headers.set("Accept-Encoding", "gzip");
         headers.set("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
         headers.set("Host", "chaosscripting.net");
         headers.set("Origin", "http://chaosscripting.net");

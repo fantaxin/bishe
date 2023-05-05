@@ -8,18 +8,17 @@ import edu.cug.logplayer.server.utils.LogFileUtil;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * edu.cug.logplayer.server.file.domain.LogFileMgr
+ * edu.cug.logplayer.server.file.domain.LogMgr
  * 操作数据库中的文件信息表
  *
  * @author wangxin
  * @version [1.0.0, 2023/04/28]
  */
 @Component
-public class LogFileMgr extends ServiceImpl<LogFileMapper, LogFile> {
+public class LogMgr extends ServiceImpl<LogFileMapper, LogFile> {
 
     @Resource
     private LogFileMapper logFileMapper;

@@ -83,10 +83,7 @@ public class LogParseUtil {
 
             String[] lineSplit = line.split(" ");
             LineType lineType = LineType.getType(lineSplit[0]);
-            //System.out.println(limit);
-            if(limit==3432){
-                //System.out.println(1);
-            }
+
             switch (lineType) {
                 case EnvironmentParams:
                     line = parseReplayEP(gameLog, line);
