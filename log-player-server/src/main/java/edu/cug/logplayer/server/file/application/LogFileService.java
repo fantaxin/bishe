@@ -90,7 +90,7 @@ public class LogFileService {
     public InputStream getPlayFile(MultipartFile file) throws IOException {
         // 将上传的文件转为json
         InputStream in = file.getInputStream();
-        String json = fileMgr.parse2Json(in, file.getName());
+        String json = fileMgr.parse2Json(in, file.getOriginalFilename());
         in.close();
         // 压缩json数据
         GZIPOutputStream gzipOut = new GZIPOutputStream(new ByteArrayOutputStream());

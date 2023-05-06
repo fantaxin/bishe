@@ -49,6 +49,7 @@ public class FileController {
             response.reset();
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/octet-stream");
+            response.addHeader("Access-Control-Allow-Origin", "*");//这个必须要加
             response.addHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
             OutputStream out = new BufferedOutputStream(response.getOutputStream());
             fileMgr.writeStream(in, out);
@@ -59,7 +60,7 @@ public class FileController {
 
 
     @RequestMapping(value = "/JsonFile/**", method = RequestMethod.GET)
-    public void jsonFile(HttpServletRequest request, HttpServletResponse response){
+    public void jsonFile(HttpServletRequest request, HttpServletResponse response) {
         String url = logFileUtil.getFileUrl(request.getServletPath());
         String filename = logFileUtil.getBaseFileName(url) + LogConstant.JSON_SUFFIX + LogConstant.COMPRESS_SUFFIX;
         try {
@@ -77,12 +78,13 @@ public class FileController {
     }
 
     @RequestMapping(value = "/playFile", method = RequestMethod.POST)
-    public void playFile(@RequestParam("file")MultipartFile file, HttpServletResponse response){
+    public void playFile(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
         try {
             InputStream in = logFileService.getPlayFile(file);
             response.reset();
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/octet-stream");
+            response.addHeader("Content-Length", "" + file.getSize()*2);
             response.addHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode("filename", "UTF-8"));
             OutputStream out = new BufferedOutputStream(response.getOutputStream());
             fileMgr.writeStream(in, out);
@@ -94,7 +96,7 @@ public class FileController {
     }
 
     @RequestMapping("/b")
-    public void fileList(){
+    public void fileList() {
         //todo: return json.gz/zip file by file url
 
     }

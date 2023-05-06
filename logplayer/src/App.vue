@@ -1,5 +1,5 @@
 <template>
-  <PlayerMedia />
+  <Test />
 </template>
 
 <script>
@@ -10,7 +10,8 @@ import Test from './view/Test.vue'
 export default {
   name: 'App',
   components: {
-    PlayerMedia
+    //PlayerMedia,
+    Test
   }
 }
 </script>
