@@ -28,7 +28,13 @@ public class LogFile {
     private int size; //B
     private Date createTime;
 
-    public String getFileName(){
+    private String fileName;
+
+    public void setUrl(String url){
+        this.url = url;
+        this.fileName = this.getFileNameByUrl();
+    }
+    public String getFileNameByUrl(){
         String[] arr = url.split("/");
         return arr[arr.length-1];
     }

@@ -2,21 +2,21 @@ package edu.cug.logplayer.server.file.api;
 
 import edu.cug.logplayer.server.file.application.LogFileService;
 import edu.cug.logplayer.server.file.domain.FileMgr;
+import edu.cug.logplayer.server.file.model.LogFile;
 import edu.cug.logplayer.server.utils.LogConstant;
 import edu.cug.logplayer.server.utils.LogFileUtil;
-import java.io.BufferedInputStream;
+
 import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import javax.servlet.ServletOutputStream;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.PathParam;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -95,9 +95,8 @@ public class FileController {
         // 发送文件
     }
 
-    @RequestMapping("/b")
-    public void fileList() {
-        //todo: return json.gz/zip file by file url
-
+    @RequestMapping(value = "/fileList", method = RequestMethod.GET)
+    public List<LogFile> fileList(@PathParam("id") long id) {
+        return logFileService.getFileList(id);
     }
 }

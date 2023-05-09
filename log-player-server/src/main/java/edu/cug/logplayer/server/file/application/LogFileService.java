@@ -2,6 +2,7 @@ package edu.cug.logplayer.server.file.application;
 
 import cn.hutool.core.compress.Gzip;
 import edu.cug.logplayer.server.file.domain.FileMgr;
+import edu.cug.logplayer.server.file.model.LogFile;
 import edu.cug.logplayer.server.utils.LogConstant;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import javax.annotation.Resource;
@@ -53,6 +55,10 @@ public class LogFileService {
 
     @Resource
     private LogFileUtil logFileUtil;
+
+    public List<LogFile> getFileList(long id){
+        return logMgr.getChildren(id);
+    }
 
     public InputStream getJsonFile(String url) throws IOException {
         String fileUrl = url + LogConstant.JSON_SUFFIX;

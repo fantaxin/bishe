@@ -41,8 +41,8 @@ public class LogMgr extends ServiceImpl<LogFileMapper, LogFile> {
         }
     }
 
-    public List<LogFile> getChildren(LogFile logFile){
-        return logFileMapper.selectList(Wrappers.<LogFile>query().eq("parent_id",logFile.getId()));
+    public List<LogFile> getChildren(long id){
+        return logFileMapper.selectList(Wrappers.<LogFile>query().eq("parent_id",id));
     }
 
     public LogFile getByUrl(String url){
