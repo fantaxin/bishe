@@ -1,5 +1,6 @@
 package edu.cug.logplayer.server.file.model;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -28,15 +29,16 @@ public class LogFile {
     private int size; //B
     private Date createTime;
 
+    @TableField(exist = false)
     private String fileName;
 
     public void setUrl(String url){
         this.url = url;
-        this.fileName = this.getFileNameByUrl();
+        this.setFileName();
     }
-    public String getFileNameByUrl(){
+    public void setFileName(){
         String[] arr = url.split("/");
-        return arr[arr.length-1];
+        this.fileName = arr[arr.length-1];
     }
     public String getParentUrl(){
         String[] arr = url.split("/");
