@@ -39,9 +39,19 @@ public class FileController {
 
     private final FileMgr fileMgr;
 
-    @RequestMapping(value = "/DownloadFile/**", method = RequestMethod.GET)
-    public void downloadFile(HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = "/downloadFile/**", method = RequestMethod.GET)
+    public void downloadFileByUrl(HttpServletRequest request, HttpServletResponse response) {
         String url = logFileUtil.getFileUrl(request.getServletPath());
+        downloadFile(response, url);
+    }
+
+    @RequestMapping(value = "/downloadFile", method = RequestMethod.GET)
+    public void downloadFileById(@PathParam("id") long id, HttpServletResponse response) {
+        String url = logFileService.getFileInfoById(id).getUrl();
+        downloadFile(response, url);
+    }
+
+    private void downloadFile(HttpServletResponse response, String url) {
         String filename = logFileUtil.getBaseFileName(url) + LogConstant.REPLAY_FILE_SUFFIX + LogConstant.COMPRESS_SUFFIX;
         try {
             // 获取文件输入流

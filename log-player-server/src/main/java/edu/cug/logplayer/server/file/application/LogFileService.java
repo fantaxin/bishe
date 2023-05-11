@@ -60,6 +60,10 @@ public class LogFileService {
         return logMgr.getChildren(id);
     }
 
+    public LogFile getFileInfoById(long id){
+        return logMgr.getById(id);
+    }
+
     public InputStream getJsonFile(String url) throws IOException {
         String fileUrl = url + LogConstant.JSON_SUFFIX;
         InputStream in = fileMgr.getLocalFile(fileUrl);
