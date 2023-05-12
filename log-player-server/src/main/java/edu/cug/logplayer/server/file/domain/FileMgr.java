@@ -7,6 +7,8 @@ import edu.cug.logplayer.server.utils.LogConstant;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.springframework.beans.factory.annotation.Value;
@@ -147,7 +149,8 @@ public class FileMgr {
      */
     public void writeStream(InputStream in, OutputStream out) throws IOException {
         try {
-            byte[] b = new byte[1024];
+            //TODO: 这里有坑
+            byte[] b = new byte[in.available()];
             int len;
             while ((len = in.read(b)) > 0) {
                 out.write(b, 0, len);

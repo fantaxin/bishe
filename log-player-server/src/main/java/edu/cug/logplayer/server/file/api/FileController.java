@@ -6,11 +6,9 @@ import edu.cug.logplayer.server.file.model.LogFile;
 import edu.cug.logplayer.server.utils.LogConstant;
 import edu.cug.logplayer.server.utils.LogFileUtil;
 
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +45,8 @@ public class FileController {
 
     @RequestMapping(value = "/downloadFile", method = RequestMethod.GET)
     public void downloadFileById(@PathParam("id") long id, HttpServletResponse response) {
-        String url = logFileService.getFileInfoById(id).getUrl();
+        LogFile logFile = logFileService.getFileInfoById(id);
+        String url = logFile.getUrl();
         downloadFile(response, url);
     }
 
@@ -55,14 +54,19 @@ public class FileController {
         String filename = logFileUtil.getBaseFileName(url) + LogConstant.REPLAY_FILE_SUFFIX + LogConstant.COMPRESS_SUFFIX;
         try {
             // 获取文件输入流
-            InputStream in = logFileService.getLocalFile(url);
+            InputStream in = logFileService.getLocalFile(logFileUtil.getFileUrl(url));
             response.reset();
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/octet-stream");
             response.addHeader("Access-Control-Allow-Origin", "*");//这个必须要加
             response.addHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
+            int s = in.available();
+            response.addHeader("Content-Length", ""+s);
+            response.addHeader("Accept-Encoding", "");
             OutputStream out = new BufferedOutputStream(response.getOutputStream());
             fileMgr.writeStream(in, out);
+            in.close();
+            out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -108,5 +112,9 @@ public class FileController {
     @RequestMapping(value = "/fileList", method = RequestMethod.GET)
     public List<LogFile> fileList(@PathParam("id") long id) {
         return logFileService.getFileList(id);
+    }
+    @RequestMapping(value = "/fileListUrl", method = RequestMethod.GET)
+    public List<LogFile> fileList(@PathParam("url") String url) {
+        return logFileService.getFileList(url);
     }
 }

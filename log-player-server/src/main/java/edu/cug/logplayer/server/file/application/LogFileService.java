@@ -60,6 +60,10 @@ public class LogFileService {
         return logMgr.getChildren(id);
     }
 
+    public List<LogFile> getFileList(String url){
+        return logMgr.getChildrenByUrl(url);
+    }
+
     public LogFile getFileInfoById(long id){
         return logMgr.getById(id);
     }
